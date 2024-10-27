@@ -1,0 +1,103 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap');
+
+body {
+    background: radial-gradient(ellipse at top left,#03045e, rgba(0,0,0,0) 80%), radial-gradient(ellipse at bottom right, #1F1046, rgba(0,0,0,0) 50%), linear-gradient(black, black);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    min-height: 100vh;
+    padding: 0; margin: 0;
+
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    font-weight: 500;
+
+    overflow: hidden;
+}
+
+.card {
+    --accent-color: rgba(0,150,255,.5);
+
+    background: rgba(0,0,0,0.5);
+    padding: min(10vw, 100px) min(15vw, 150px);
+    box-shadow: 2px 2px 10px #000;
+    border: none;
+    border-top: 2px var(--accent-color) solid;
+    backdrop-filter: blur(10px);
+
+    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.bigbtn {
+    padding: 1em 1.5em;
+    display: inline-block;
+    color: #fff;
+    text-decoration: none;
+    position: relative;
+    overflow: hidden;
+    text-shadow: 0 0 15px black;
+    -webkit-text-stroke: 2px black;
+    paint-order: stroke fill;
+    font-weight: 700;
+    box-shadow: 0 0 1px 1px #fff;
+    transition: box-shadow .5s ease-in-out;
+    cursor: pointer;
+    background: none;
+    border: none;
+}
+
+.bigbtn:hover,
+.bigbtn:focus {
+    box-shadow: 0 0 20px 0px white;
+}
+
+.bigbtn:hover,
+.bigbtn:focus {
+    box-shadow: 0 0 20px 0px white;
+}
+
+.bigbtn:active {
+    transition: box-shadow 0.1s ease-in-out;
+    box-shadow: 0 0 20px 0px black;
+}
+
+.bigbtn::after {
+    content: '➤';
+    margin-left: 1em;
+    display: inline-block;
+    transform: translateX(0);
+    transition: transform 0.25s ease-in-out;
+}
+
+.bigbtn:hover::after,
+.bigbtn:focus::after {
+    transform: translateX(1em);
+}
+
+.bigbtn::before {
+    content: '';
+    display: block;
+    position: absolute;
+    z-index: -1;
+    background: linear-gradient(
+        to right,
+        #e6400e 0%,
+        #9366b3 25%,
+        #0596cf 50%,
+        rgba(0, 0, 255, 0) 100%
+    );
+    top: 0;
+    left: 0;
+    width: 200%;
+    height: 100%;
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in-out;
+}
+
+.bigbtn:hover::before,
+.bigbtn:focus::before {
+    transform: translateX(0);
+}

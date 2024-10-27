@@ -1,0 +1,21 @@
+{
+  "name": "kaxing",
+  "version": "1.0.0",
+  "description": "",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "client-watch": "tsc --project ./client/tsconfig.json --watch",
+    "client-silent": "http-server ./client -s -p 3000",
+    "start": "npm-run-all --parallel client-watch client-silent"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@types/node": "^22.7.6",
+    "typescript": "^5.6.3"
+  },
+  "devDependencies": {
+    "http-server": "^14.0.0",
+    "npm-run-all": "^4.1.5"
+  }
+}

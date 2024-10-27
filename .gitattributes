@@ -1,0 +1,9 @@
+* text eol=lf
+
+*.json text
+*.md text
+*.ts text
+*.js text
+*.css text
+*.html text
+*.ts text

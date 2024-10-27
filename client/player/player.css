@@ -1,0 +1,82 @@
+.center {
+    text-align: center;
+    transform: translateY(100vh);
+
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+.center h1 {
+    margin: 0;
+    font-size: min(15vw, 150px);
+    font-weight: 900;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+input[type="text"] {
+    margin-bottom: 10px;
+    padding: 1em 1.5em;
+    text-align: center;
+}
+
+.answerwrap {
+    display: flex;
+    flex-direction: row;
+}
+
+.answer {
+    --delay-time: 0;
+    width: 45vw;
+    height: 45vh;
+    margin: min(2vw, 2vh);
+    cursor: pointer;
+    padding: min(10vw, 10vh) min(15vw, 15vh);
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    transform: scaleY(0);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) var(--delay-time);
+}
+
+.answer > div {
+    width: min(15vw, 15vh);
+    height: min(15vw, 15vh);
+    background: rgba(255, 255, 255, 0.75);
+    font-size: 0;
+}
+
+.answer.a {
+    --accent-color: rgba(255,100,100,.5);
+}
+
+.answer.b {
+    --accent-color: rgba(150,255,150,.5);
+}
+
+.answer.d {
+    --accent-color: rgba(150,150,255,.5);
+}
+
+.answer.a > div {
+    border-radius: 50%;
+}
+
+.answer.b > div {
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    transform: scale(0.9);
+}
+
+.answer.c > div {
+    transform: scale(0.9);
+}
+
+.answer.d > div {
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
