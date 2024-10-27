@@ -13,6 +13,7 @@
         "sourceType": "module",
         "project": ["./client/tsconfig.json", "./server/tsconfig.json", "./shared/tsconfig.json"]
     },
+    "ignorePatterns": "*.js",
     "rules": {
         "no-unused-vars": "off",
         "import/no-cycle": "off",
@@ -25,8 +26,9 @@
         "no-restricted-syntax": "off",
         "no-useless-return": "off",
         "no-await-in-loop": "off",
-        "import/extensions": ["error", { "js": "always" }],
         "no-else-return": "off",
-        "no-continue": "off"
+        "no-continue": "off",
+        "consistent-return": "off",
+        "import/extensions": ["error", { "js": "always" }]
     }
 }

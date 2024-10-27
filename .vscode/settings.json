@@ -2,5 +2,6 @@
     "editor.codeActionsOnSave": {
         "source.fixAll": "explicit"
     },
-    "files.eol": "\n"
+    "files.eol": "\n",
+    "editor.tabSize": 2
 }

@@ -1,11 +1,11 @@
 {
-    "compilerOptions": {
-      "target": "es2020",
-      "module": "nodenext",
-      "moduleResolution": "nodenext",
-      "lib": ["ES6", "DOM"],
-      "types": ["node"],
-      "strict": true,
-      "rootDirs": ["./", "../shared"]
-    }
+  "compilerOptions": {
+    "target": "es2020",
+    "module": "ES6",
+    "lib": ["ES6", "DOM"],
+    "types": ["node"],
+    "strict": true,
+    "rootDirs": ["./", "../shared"],
+    "skipLibCheck": true
   }
+}

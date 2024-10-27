@@ -2,11 +2,18 @@
  * Static helper methods to manipulate the DOM
  */
 export default class Dom {
+  static async insertEl(el: HTMLElement, parent: HTMLElement): Promise<void> {
+    parent.appendChild(el);
+    return new Promise((r) => {
+      requestAnimationFrame(() => setTimeout(r));
+    });
+  }
+
   /**
    * Construct a button DOM object
    */
   static button(
-    text: string,
+    child: string | HTMLElement,
     callback?: (ev: MouseEvent) => void,
     className?: string,
   ): HTMLButtonElement {
@@ -14,7 +21,11 @@ export default class Dom {
     if (callback !== undefined) {
       d.onclick = callback;
     }
-    d.textContent = text;
+    if (typeof child === "string") {
+      d.textContent = child;
+    } else if (child !== undefined) {
+      d.appendChild(child);
+    }
     if (className !== undefined) {
       d.className = className;
     }
@@ -43,6 +54,24 @@ export default class Dom {
       p.className = className;
     }
     return p;
+  }
+
+  /**
+   * Construct an HTML div element
+   */
+  static div(child?: string | HTMLElement, className?: string): HTMLElement {
+    const sec = document.createElement("div");
+
+    if (typeof child === "string") {
+      sec.appendChild(Dom.span(child));
+    } else if (child !== undefined) {
+      sec.appendChild(child);
+    }
+    if (className !== undefined) {
+      sec.className = className;
+    }
+
+    return sec;
   }
 
   /**
