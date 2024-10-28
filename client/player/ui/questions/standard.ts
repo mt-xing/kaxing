@@ -53,6 +53,7 @@ export default class StandardQuestion {
     }
 
     this.#wrap = Dom.outerwrap();
+    this.#wrap.classList.add("answerouterwrap");
     this.#answerWraps.forEach((x) => this.#wrap.appendChild(x));
 
     Dom.insertEl(this.#wrap, parent).then(() => {

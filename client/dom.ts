@@ -19,7 +19,7 @@ export default class Dom {
       setTimeout(() => {
         wrap.parentElement?.removeChild(wrap);
         r();
-      }, 500);
+      }, 750);
     });
   }
 
