@@ -41,12 +41,9 @@ export default class Join {
     });
   }
 
-  remove() {
-    this.#wrap.classList.add("out");
-    setTimeout(() => {
-      this.#wrap.parentElement?.removeChild(this.#wrap);
-      // eslint-disable-next-line no-new
-      new StandardQuestion(document.body);
-    }, 500);
+  async remove() {
+    await Dom.deleteOuterwrap(this.#wrap);
+    // eslint-disable-next-line no-new
+    new StandardQuestion(document.body);
   }
 }

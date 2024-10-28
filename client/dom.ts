@@ -13,6 +13,16 @@ export default class Dom {
     return this.div(child, "outerwrap");
   }
 
+  static async deleteOuterwrap(wrap: HTMLElement): Promise<void> {
+    return new Promise((r) => {
+      wrap.classList.add("out");
+      setTimeout(() => {
+        wrap.parentElement?.removeChild(wrap);
+        r();
+      }, 500);
+    });
+  }
+
   /**
    * Construct a button DOM object
    */

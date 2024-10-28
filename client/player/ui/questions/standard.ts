@@ -44,7 +44,7 @@ export default class StandardQuestion {
         w.appendChild(
           Dom.button(
             Dom.div(getButtonText(i, j)),
-            undefined,
+            () => Dom.deleteOuterwrap(this.#wrap),
             `card answer ${getButtonType(i, j)}`,
           ),
         );
