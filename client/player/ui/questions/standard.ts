@@ -1,6 +1,8 @@
 import Dom from "../../../dom.js";
 
 export default class StandardQuestion {
+  #wrap: HTMLElement;
+
   #answerWraps: HTMLElement[];
 
   constructor(parent: HTMLElement) {
@@ -50,16 +52,17 @@ export default class StandardQuestion {
       this.#answerWraps.push(w);
     }
 
-    this.#answerWraps.forEach((x) =>
-      Dom.insertEl(x, parent).then(() => {
-        (
-          Array.from(document.getElementsByClassName("answer")) as HTMLElement[]
-        ).forEach((a, i) => {
-          a.setAttribute("style", `--delay-time: ${(i * 75) / 1000}s`);
-          // eslint-disable-next-line no-param-reassign
-          a.style.transform = "scaleY(1)";
-        });
-      }),
-    );
+    this.#wrap = Dom.outerwrap();
+    this.#answerWraps.forEach((x) => this.#wrap.appendChild(x));
+
+    Dom.insertEl(this.#wrap, parent).then(() => {
+      (
+        Array.from(document.getElementsByClassName("answer")) as HTMLElement[]
+      ).forEach((a, i) => {
+        a.setAttribute("style", `--delay-time: ${(i * 75) / 1000}s`);
+        // eslint-disable-next-line no-param-reassign
+        a.style.transform = "scaleY(1)";
+      });
+    });
   }
 }

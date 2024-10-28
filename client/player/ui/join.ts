@@ -9,10 +9,10 @@ export default class Join {
   #nameEl: HTMLInputElement;
 
   constructor(parent: HTMLElement) {
-    this.#wrap = Dom.div(Dom.h1("KaXing"), "card center");
-    this.#wrap.appendChild(Dom.p("We have Kahoot at home."));
+    const wrap = Dom.div(Dom.h1("KaXing"), "card center");
+    wrap.appendChild(Dom.p("We have Kahoot at home."));
     const form = document.createElement("form");
-    this.#wrap.appendChild(form);
+    wrap.appendChild(form);
 
     this.#codeEl = Dom.input("text", "Game Code");
     this.#codeEl.maxLength = 5;
@@ -29,16 +29,24 @@ export default class Join {
         "Here We Go",
         (e) => {
           e.preventDefault();
-          this.#wrap.parentElement?.removeChild(this.#wrap);
-          // eslint-disable-next-line no-new
-          new StandardQuestion(document.body);
+          this.remove();
         },
         "bigbtn",
       ),
     );
 
+    this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {
-      this.#wrap.style.transform = "translateY(0)";
+      wrap.style.transform = "translateY(0)";
     });
+  }
+
+  remove() {
+    this.#wrap.classList.add("out");
+    setTimeout(() => {
+      this.#wrap.parentElement?.removeChild(this.#wrap);
+      // eslint-disable-next-line no-new
+      new StandardQuestion(document.body);
+    }, 500);
   }
 }

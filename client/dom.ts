@@ -9,6 +9,10 @@ export default class Dom {
     });
   }
 
+  static outerwrap(child?: HTMLElement): HTMLElement {
+    return this.div(child, "outerwrap");
+  }
+
   /**
    * Construct a button DOM object
    */
