@@ -93,3 +93,23 @@ input[type="text"] {
 .answer.d > div {
     clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
 }
+
+.questionRes {
+    transform: translateY(100vh);
+    text-align: center;
+    transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+}
+
+.questionRes h2, .questionRes p {
+    text-align: center;
+}
+
+.questionRes h2 {
+    font-size: min(15vw, 15vh);
+    margin: 0;
+}
+
+.questionRes p {
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
