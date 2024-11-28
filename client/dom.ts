@@ -171,4 +171,16 @@ export default class Dom {
     }
     return p;
   }
+
+  /**
+   * Construct an code DOM object
+   */
+  static code(text: string, className?: string): HTMLElement {
+    const p = document.createElement("code");
+    p.textContent = text;
+    if (className !== undefined) {
+      p.className = className;
+    }
+    return p;
+  }
 }

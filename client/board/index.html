@@ -7,21 +7,8 @@
         <script src="qrcode.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="board.css" />
-        <script>
-            window.onload = () => {
-                new QRCode(document.getElementById("qrcode"), "https://mxi.ng/kx?id=aaaaa");
-                document.getElementsByClassName("center")[0].style.transform = 'translateY(0)';
-            }
-        </script>
+        <script type="module" src="board.js"></script>
     </head>
     <body>
-        <div class="card instructions">
-            <h2>Scan to Join</h2>
-            <div id="qrcode"></div>
-            <p>or visit</p>
-            <p><code>mxi.ng/kx</code></p>
-            <p>and enter the game code</p>
-            <p><code>aaaaa</code></p>
-        </div>
     </body>
 </html>

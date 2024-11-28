@@ -29,6 +29,8 @@
         "no-else-return": "off",
         "no-continue": "off",
         "consistent-return": "off",
-        "import/extensions": ["error", { "js": "always" }]
+        "import/extensions": ["error", { "js": "always" }],
+        "no-console": "off",
+        "no-new": "off"
     }
 }

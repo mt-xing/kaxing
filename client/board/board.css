@@ -1,4 +1,81 @@
 #qrcode {
     border: 10px white solid;
     box-shadow: 0 0 20px 0 rgba(255,255,255,1);
+    width: 12vw;
+    height: 12vw;
+    margin: 0 auto;
+}
+
+#qrcode img {
+    width: 100%;
+}
+
+.instructions {
+    padding: 7vh 5vw;
+    width: 25vw;
+    box-sizing: border-box;
+    text-align: center;
+    font-size: 1.4em;
+}
+
+.instructions .code {
+    font-size: 1.5em;
+    margin: 0;
+    border: 5px rgba(255,255,255,0.2) solid;
+    padding: 0.2em 0;
+}
+
+.instructions h2 {
+    margin-top: 0;
+}
+
+.nameWrap {
+    margin-left: 5vw;
+    width: 60vw;
+    text-align: center;
+}
+
+.nameWrap h1 {
+    margin: 0;
+    font-size: 7.5vw;
+    font-weight: 900;
+}
+
+.nameWrap ul {
+    list-style: none;
+    padding: 0;
+    max-height: calc(100vh - 20vw);
+    overflow-y: auto;
+}
+
+.nameWrap li {
+    padding: 0.5em 1em;
+    background: rgba(0,0,0,0.5);
+    display: inline-block;
+    font-size: 1vw;
+    max-width: 25vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    border: 5px rgba(255,255,255,0.2) solid;
+    margin: 5px;
+
+    
+}
+
+.home {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    transform: translateY(100vh);
+
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+.home.out {
+    transform: scale(0);
+    pointer-events: none;
+    transition: transform 0.5s cubic-bezier(0.200, 0.000, 0.735, -0.470);
 }

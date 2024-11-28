@@ -43,7 +43,6 @@ export default class Join {
 
   async remove() {
     await Dom.deleteOuterwrap(this.#wrap);
-    // eslint-disable-next-line no-new
     new StandardQuestion(document.body);
   }
 }
