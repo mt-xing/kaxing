@@ -255,7 +255,7 @@
     backdrop-filter: invert(100%);
     transform-origin: left center;
     transform: scaleX(var(--correct-percent));
-    transition: transform 2s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+    transition: transform 2s cubic-bezier(0.230, 1.000, 0.320, 1.000);
 }
 
 .answer::after {
@@ -276,4 +276,64 @@
 
 .answer.correct {
     box-shadow: 0 0 1vw 1vw rgb(0, 255, 128);
+}
+
+.leaderboard {
+    text-align: center;
+    transform: translateY(100vh);
+    transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+}
+
+.leaderboard h2 {
+    font-size: 2vw;
+}
+
+.leaderboard ol {
+    list-style: none;
+    padding: 0;
+}
+
+.leaderboard li {
+    --delay-time: 0s;
+
+    padding: 2em 3em calc(2em + 2px) 3em;
+    font-size: 1vw;
+    
+    --accent-color: rgba(0,150,255,.5);
+
+    background: rgba(0,0,0,0.5);
+    box-shadow: 2px 2px 10px #000;
+    border: none;
+    border-top: 2px var(--accent-color) solid;
+    backdrop-filter: blur(10px);
+
+    transform: translateY(100vh);
+    transition: transform calc(0.5s + var(--delay-time) / 3) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
+
+    display: flex;
+    flex-direction: row;
+}
+
+.leaderboard li > span:first-child {
+    flex-grow: 1;
+    max-width: 40vw;
+    min-width: 20vw;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    text-align: left;
+    margin-right: 1vw;
+}
+
+.leaderboard li span.up {
+    color: rgb(0, 255, 128);
+}
+
+.leaderboard li span.down {
+    color: rgb(255, 0, 128);
+}
+
+.leaderboard li > span:last-child {
+    flex-shrink: 0;
+    text-align: right;
 }

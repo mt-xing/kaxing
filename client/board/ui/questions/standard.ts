@@ -111,9 +111,7 @@ export default class StandardQuestionBoard {
   showAnswers() {
     this.#wrap.classList.add("smooth");
     this.#wrap.style.transform = "translateY(0)";
-    (
-      Array.from(document.getElementsByClassName("answer")) as HTMLElement[]
-    ).forEach((a, i) => {
+    this.#answers.forEach((a, i) => {
       a.setAttribute("style", `--delay-time: ${(i * 125) / 1000}s`);
       // eslint-disable-next-line no-param-reassign
       a.style.transform = "translateY(0)";
