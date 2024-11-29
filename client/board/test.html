@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>KaXing</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <script src="qrcode.min.js"></script>
+        <link rel="stylesheet" type="text/css" href="/uni.css" />
+        <link rel="stylesheet" type="text/css" href="board.css" />
+        <script>
+            window.onload = () => {
+                document.getElementsByClassName("questionWrap")[0].classList.add('smooth');
+                document.getElementsByClassName("questionWrap")[0].style.transform = "translateY(0)";
+                Array.from(document.getElementsByClassName("answer")).forEach((x, i) => {
+                    x.setAttribute('style', '--delay-time: ' + 0 + 's');
+                    x.style.transform = "translateY(0)";
+                });
+
+                document.getElementsByClassName("countdown")[0].style.opacity = 1;
+                document.getElementsByClassName("submissions")[0].style.opacity = 1;
+                document.getElementsByClassName("timeLeft")[0].setAttribute('style', '--time: 20s');
+                document.getElementsByClassName("timeLeft")[0].style.transform = "scaleY(1)";
+                document.getElementsByClassName("numSubmissions")[0].style.transform = "scaleY(0.1)";
+            }
+            // window.onload = () => {
+            //     document.getElementsByClassName("questionWrap")[0].style.transform = "translateY(20vh)";
+            //     window.setTimeout(() => {
+            //         document.getElementsByClassName("questionWrap")[0].classList.add('smooth');
+            //         document.getElementsByClassName("questionWrap")[0].style.transform = "translateY(0)";
+            //         Array.from(document.getElementsByClassName("answer")).forEach((x, i) => {
+            //             x.setAttribute('style', '--delay-time: ' + (i * 125 / 1000) + 's');
+            //             x.style.transform = "translateY(0)";
+            //         });
+
+            //         document.getElementsByClassName("countdown")[0].style.opacity = 1;
+            //         document.getElementsByClassName("submissions")[0].style.opacity = 1;
+            //         document.getElementsByClassName("timeLeft")[0].setAttribute('style', '--time: 20s');
+            //         document.getElementsByClassName("timeLeft")[0].style.transform = "scaleY(1)";
+            //         window.setTimeout(() => {
+            //             document.getElementsByClassName("numSubmissions")[0].style.transform = "scaleY(0.1)";
+            //         }, 2000);
+            //     }, 1000);
+            // }
+        </script>
+    </head>
+    <body>
+        <div class="questionWrap">
+            <div class="countdown">
+                <div class="timeLeft"></div>
+                <p>150</p>
+            </div>
+            <div class="questionContent">
+                <p>Which of the following members of course staff did not lead at least one lab or discussion this semester?</p>
+            </div>
+            <div class="answerwrap">
+                <div class="card answer a">
+                    <div>Circle Answer</div>
+                    <span>James Zhang</span>
+                </div>
+                <div class="card answer b">
+                    <div>Triangle Answer</div>
+                    <span>Sean Zhang</span>
+                </div>
+            </div>
+            <div class="answerwrap">
+                <div class="card answer c">
+                    <div>Square Answer</div>
+                    <span>Jonathan Gabor</span>
+                </div>
+                <div class="card answer d">
+                    <div>Star Answer</div>
+                    <span>Jonah Huang</span>
+                </div>
+            </div>
+            <div class="submissions">
+                <div class="numSubmissions"></div>
+                <p>5 <span class="sep">of</span> 120</p>
+            </div>
+        </div>
+    </body>
+</html>

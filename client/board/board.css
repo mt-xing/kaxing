@@ -79,3 +79,201 @@
     pointer-events: none;
     transition: transform 0.5s cubic-bezier(0.200, 0.000, 0.735, -0.470);
 }
+
+.answerouterwrap {
+    transition: transform 0.5s cubic-bezier(0.550, 0.055, 0.675, 0.190) 0.25s;
+}
+
+.answerwrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.answer {
+    --delay-time: 0;
+    --correct-percent: 0;
+    --answer-text: "";
+    width: 44vw;
+    height: 20vh;
+    margin: min(2vw, 2vh);
+    padding: min(10vw, 10vh) min(5vw, 5vh);
+    box-sizing: border-box;
+    position: relative;
+
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    flex-direction: row;
+
+    border-top: 1vh var(--accent-color) solid;
+
+    color: white;
+
+    transform: translateY(100vh);
+    transition: box-shadow 0.25s ease-out, transform calc(0.5s + var(--delay-time) / 3) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
+}
+
+.answer > div {
+    width: min(10vw, 10vh);
+    height: min(10vw, 10vh);
+    background: rgba(255, 255, 255, 0.75);
+    font-size: 0;
+    flex-shrink: 0;
+}
+
+.answer > span {
+    flex-grow: 1;
+    text-align: center;
+    display: block;
+    font-size: 1.5vw;
+    font-family: 'Montserrat', sans-serif;
+}
+
+.answer.a {
+    --accent-color: rgba(255,100,100,.5);
+}
+
+.answer.b {
+    --accent-color: rgba(150,255,150,.5);
+}
+
+.answer.d {
+    --accent-color: rgba(150,150,255,.5);
+}
+
+.answer.a > div {
+    border-radius: 50%;
+}
+
+.answer.b > div {
+    clip-path: polygon(50% 0, 0 100%, 100% 100%);
+    transform: scale(0.9);
+}
+
+.answer.c > div {
+    transform: scale(0.9);
+}
+
+.answer.d > div {
+    clip-path: polygon(50% 0%, 61% 35%, 98% 35%, 68% 57%, 79% 91%, 50% 70%, 21% 91%, 32% 57%, 2% 35%, 39% 35%);
+}
+
+.questionContent {
+    font-size: 2vw;
+    text-align: center;
+    margin: 0 10vw;
+    height: 40vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+
+.questionWrap {
+    transform: translateY(100vh);
+    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.questionWrap.smooth {
+    transition: transform 0.5s ease-in-out;
+}
+
+.questionWrap.out {
+    transform: translateY(0)scale(0) !important;
+    transition: transform 0.5s ease-in;
+}
+
+.countdown, .submissions {
+    height: 90vh;
+    width: 2vw;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px 0 black;
+    position: absolute;
+    top: 0;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+}
+
+.countdown {
+    left: 1.5vw;
+    --time: 0s;
+}
+
+.countdown p, .submissions p {
+    z-index: 5;
+    position: relative;
+    text-shadow: 0 0 5px black;
+    font-size: 1.25vw;
+    text-align: center;
+    opacity: 0.6;
+}
+
+.timeLeft {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transform: scaleY(0);
+    transform-origin: top center;
+    background: linear-gradient(rgb(0, 0, 128), rgb(128, 0, 0));
+    box-shadow: 0 0 1vw black inset;
+
+    transition: transform var(--time) linear;
+}
+
+.submissions {
+    right: 1.5vw;
+}
+
+.submissions span.sep {
+    display: block;
+    font-size: 0.7em;
+}
+
+.numSubmissions {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transform: scaleY(0);
+    transform-origin: bottom center;
+    background: linear-gradient(rgb(0, 128, 0), rgb(0, 0, 128));
+    box-shadow: 0 0 1vw black inset;
+
+    transition: transform 0.2s ease-in-out;
+}
+
+.answer::before {
+    content: '';
+    top: 0; left: 0; bottom: 0; right: 0;
+    display: block;
+    position: absolute;
+    z-index: 3;
+    backdrop-filter: invert(100%);
+    transform-origin: left center;
+    transform: scaleX(var(--correct-percent));
+    transition: transform 2s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+}
+
+.answer::after {
+    content: var(--answer-text);
+    bottom: 1em; right: 1em;
+    display: block;
+    position: absolute;
+    z-index: 2;
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    transition-delay: 1s;
+    font-size: 1vw;
+}
+
+.answer.done::after {
+    opacity: 1;
+}
+
+.answer.correct {
+    box-shadow: 0 0 1vw 1vw rgb(0, 255, 128);
+}
