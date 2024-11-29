@@ -31,6 +31,15 @@
         "consistent-return": "off",
         "import/extensions": ["error", { "js": "always" }],
         "no-console": "off",
-        "no-new": "off"
+        "no-new": "off",
+        "import/no-extraneous-dependencies": [
+            1,
+            {
+                "devDependencies": false,
+                "includeInternal": false,
+                "includeTypes": false,
+                "packageDir": ["."]
+            }
+        ]
     }
 }

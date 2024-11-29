@@ -1,4 +1,4 @@
-import { Answer } from "./question";
+import { Answer } from "./question.js";
 
 export type Player = {
   name: string;

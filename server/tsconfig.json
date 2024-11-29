@@ -6,6 +6,10 @@
       "lib": ["ES6"],
       "types": ["node"],
       "strict": true,
-      "rootDirs": ["./", "../shared"]
+      "rootDirs": ["./", "../shared"],
+      "baseUrl": "./",
+      "paths": {
+        "*": ["../"]
+      }
     }
   }

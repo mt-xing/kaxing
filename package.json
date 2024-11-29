@@ -4,17 +4,22 @@
   "description": "",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "server-build": "tsc --project ./server",
+    "server-start": "node server/index.js",
     "client-watch": "tsc --project ./client/tsconfig.json --watch",
     "client-silent": "http-server ./client -s -p 3000",
-    "start": "npm-run-all --parallel client-watch client-silent"
+    "start": "npm-run-all --parallel client-watch client-silent server-start"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@types/node": "^22.7.6",
+    "express": "^4.21.1",
+    "socket.io": "^4.8.1",
     "typescript": "^5.6.3"
   },
   "devDependencies": {
+    "@types/express": "^5.0.0",
     "eslint": "^8.2.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-config-airbnb-typescript": "^18.0.0",
