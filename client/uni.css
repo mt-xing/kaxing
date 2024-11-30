@@ -133,3 +133,9 @@ body {
 .bigbtn:disabled::before {
     opacity: 0.3;
 }
+
+input[type="text"] {
+    margin-bottom: 10px;
+    padding: 1em 1.5em;
+    text-align: center;
+}

@@ -22,12 +22,6 @@ form {
     color: rgb(255, 128, 128);
 }
 
-input[type="text"] {
-    margin-bottom: 10px;
-    padding: 1em 1.5em;
-    text-align: center;
-}
-
 .answerouterwrap {
     transition: transform 0.5s cubic-bezier(0.550, 0.055, 0.675, 0.190) 0.25s;
 }

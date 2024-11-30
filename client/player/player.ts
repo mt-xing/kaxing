@@ -12,10 +12,12 @@ function joinGame(): Promise<void> {
         socket.on("joinYes", () => {
           r(true);
           socket.off("joinYes");
+          socket.off("joinNo");
           resolve();
         });
         socket.on("joinNo", () => {
           r(false);
+          socket.off("joinYes");
           socket.off("joinNo");
         });
         socket.emit("join", JSON.stringify(payload));

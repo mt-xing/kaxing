@@ -3,7 +3,8 @@ import Home from "./ui/home.js";
 // import Leaderboard from "./ui/leaderboard.js";
 
 import Socket from "../player/socket.js";
-import { JoinRoomPayload } from "../payloads.js";
+import { ControllerJoinResponse, JoinRoomPayload } from "../payloads.js";
+import ControllerJoin from "./ui/controllerJoin.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -13,7 +14,34 @@ function getGameCode(): Promise<string> {
     socket.on("createYes", (x) => {
       const { id } = JSON.parse(x) as { id: string };
       socket.off("createYes");
+      socket.off("createNo");
       r(id);
+    });
+    socket.on("createNo", () => {
+      // eslint-disable-next-line no-alert
+      alert("Error when creating room");
+    });
+  });
+}
+
+function pairController(): Promise<void> {
+  return new Promise((resolve) => {
+    new ControllerJoin(document.body, (password) => {
+      return new Promise((r) => {
+        const payload: ControllerJoinResponse = { password };
+        socket.on("controllerClaimYes", () => {
+          r(true);
+          socket.off("controllerClaimYes");
+          socket.off("controllerClaimNo");
+          resolve();
+        });
+        socket.on("controllerClaimNo", () => {
+          r(false);
+          socket.off("controllerClaimYes");
+          socket.off("controllerClaimNo");
+        });
+        socket.emit("controllerClaim", JSON.stringify(payload));
+      });
     });
   });
 }
@@ -30,6 +58,7 @@ function homeScreen(code: string): Promise<void> {
 
 async function gameLoop() {
   const code = await getGameCode();
+  await pairController();
   await homeScreen(code);
 }
 
