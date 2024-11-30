@@ -3,11 +3,14 @@ import { Answer, Question, wasAnswerCorrect } from "../shared/question.js";
 import { awardPoints, Player } from "../shared/player.js";
 import { QuestionState } from "../shared/state.js";
 import Communicator from "./comms.js";
+import { GameStatePayload } from "./payloads.js";
 
 export default class KaXingGame {
   #questions: Question[];
 
-  #players: Map<string, Player>;
+  #controller: io.Socket;
+
+  #players: Map<string, { socket: io.Socket } & Player>;
 
   #comms: Communicator;
 
@@ -31,11 +34,57 @@ export default class KaXingGame {
     players: Map<string, { socket: io.Socket } & Player>,
   ) {
     this.#questions = questions;
+    this.#controller = controller;
     this.#players = players;
     this.#comms = new Communicator(board, controller, players);
     this.#questionState = "blank";
     this.#currentQuestion = 0;
     this.#numAnswers = 0;
+  }
+
+  isController(socket: io.Socket) {
+    return socket === this.#controller;
+  }
+
+  handleControllerRequest(socket: io.Socket, msg: string) {
+    if (!this.isController(socket)) {
+      return;
+    }
+    const payload = JSON.parse(msg) as GameStatePayload;
+    switch (payload.t) {
+      case "adjustScore": {
+        const p = this.#players.get(payload.player);
+        if (p) {
+          p.score = payload.score;
+        }
+        break;
+      }
+      case "setupQ":
+        this.setQuestion(payload.n);
+        break;
+      case "blank":
+        this.blank();
+        break;
+      case "showQuestion":
+        this.showQuestion();
+        break;
+      case "showAnswers":
+        this.showAnswers();
+        break;
+      case "countdown":
+        this.countdown();
+        break;
+      case "answers":
+        this.endCountdownShowResults();
+        break;
+      case "leaderboard":
+        this.showLeaderboard();
+        break;
+      default:
+        ((x: never) => {
+          throw new Error(x);
+        })(payload);
+    }
   }
 
   setQuestion(questionId: number) {
@@ -82,7 +131,7 @@ export default class KaXingGame {
     };
   }
 
-  getResponse(socket: io.Socket, response: Answer) {
+  receiveResponse(socket: io.Socket, response: Answer) {
     if (!this.#currentCountdown) {
       return;
     }

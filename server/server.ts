@@ -7,6 +7,7 @@ import {
   ErrorResponse,
   JoinRoomPayload,
 } from "../shared/payloads.js";
+import { Answer } from "../shared/question.js";
 
 export default class KaXingServer {
   #namespace: io.Namespace;
@@ -41,6 +42,9 @@ export default class KaXingServer {
       socket.on("join", this.#joinRoom.bind(this, socket));
 
       socket.on("start", this.#startGame.bind(this, socket));
+
+      socket.on("gameState", this.#handleControllerCmd.bind(this, socket));
+      socket.on("response", this.#handleResponse.bind(this, socket));
 
       // socket.on("disconnect", this.#endGame.bind(this, socket));
     });
@@ -179,11 +183,6 @@ export default class KaXingServer {
       return;
     }
 
-    // const nameSpace = this.#namespace.to(room);
-    // const communicator = new Communicator(
-    //   game.playerToSocket,
-    //   nameSpace.emit.bind(nameSpace),
-    // );
     const newGame = new KaXingGame(
       game.questions,
       game.board,
@@ -195,5 +194,25 @@ export default class KaXingServer {
     this.#setups.delete(room);
 
     this.#namespace.to(room).emit("start");
+  }
+
+  #handleControllerCmd(socket: io.Socket, value: string, callback: () => void) {
+    callback();
+    const room = this.#socketRoom.get(socket.id);
+    const game = this.#games.get(room ?? "");
+    if (!room || !game) {
+      return;
+    }
+    game.handleControllerRequest(socket, value);
+  }
+
+  #handleResponse(socket: io.Socket, value: string, callback: () => void) {
+    callback();
+    const room = this.#socketRoom.get(socket.id);
+    const game = this.#games.get(room ?? "");
+    if (!room || !game) {
+      return;
+    }
+    game.receiveResponse(socket, JSON.parse(value) as Answer);
   }
 }
