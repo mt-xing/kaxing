@@ -1,5 +1,9 @@
 import Socket from "../player/socket.js";
-import { ControllerJoinResponse } from "../../shared/payloads.js";
+import {
+  ControllerJoinResponse,
+  JoinRoomPayload,
+  KickPlayerPayload,
+} from "../../shared/payloads.js";
 import Dom from "../dom.js";
 
 const socket = new Socket("http://localhost:8080/");
@@ -20,7 +24,9 @@ async function getCode(): Promise<string> {
   });
 }
 
-async function waitToJoin(code: string): Promise<void> {
+async function waitToJoin(
+  code: string,
+): Promise<{ players: JoinRoomPayload[] }> {
   return new Promise((r) => {
     const wrap = Dom.div();
     wrap.appendChild(Dom.h2("Waiting"));
@@ -31,17 +37,51 @@ async function waitToJoin(code: string): Promise<void> {
     );
     wrap.appendChild(Dom.div(Dom.code(code)));
     document.body.appendChild(wrap);
-    socket.on("controllerClaimYes", () => {
+    socket.on("controllerClaimYes", (msg) => {
+      const payload = JSON.parse(msg) as { players: JoinRoomPayload[] };
       socket.off("controllerClaimYes");
       wrap.parentElement?.removeChild(wrap);
-      r();
+      r(payload);
+    });
+  });
+}
+
+async function negotiateGameStart(players: { id: string; name: string }[]) {
+  return new Promise((r) => {
+    const wrap = Dom.div(Dom.h2("Game Setup"));
+    const ul = document.createElement("UL");
+    const addPlayer = (val: { id: string; name: string }) => {
+      const li = document.createElement("LI");
+      li.textContent = val.name;
+      const btn = Dom.button("Kick", () => {
+        // eslint-disable-next-line no-restricted-globals, no-alert
+        if (confirm(`Do you really want to kick ${val.name}?`)) {
+          ul.removeChild(li);
+          const payload: KickPlayerPayload = { id: val.id };
+          socket.send("kick", payload);
+        }
+      });
+      li.appendChild(btn);
+      ul.appendChild(li);
+    };
+    players.forEach(addPlayer);
+    wrap.appendChild(ul);
+
+    const goBtn = Dom.button("Begin Game", r, "bigbtn");
+    wrap.appendChild(goBtn);
+    document.body.appendChild(wrap);
+
+    socket.on("join", (msg) => {
+      const payload = JSON.parse(msg) as JoinRoomPayload;
+      addPlayer(payload);
     });
   });
 }
 
 async function gameLoop() {
   const code = await getCode();
-  await waitToJoin(code);
+  const players = await waitToJoin(code);
+  await negotiateGameStart(players.players);
 }
 
 window.addEventListener("load", () => {

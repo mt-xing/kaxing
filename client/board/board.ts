@@ -53,6 +53,12 @@ function homeScreen(code: string): Promise<void> {
       const payload = JSON.parse(msg) as JoinRoomPayload;
       h.addPlayer(payload.id, payload.name);
     });
+    socket.on("start", () => {
+      socket.off("join"); // TODO: Join mid-game
+      socket.off("start");
+      h.remove();
+      r();
+    });
   });
 }
 
