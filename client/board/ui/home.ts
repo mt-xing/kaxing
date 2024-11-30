@@ -39,7 +39,10 @@ export default class Home {
 
     Dom.insertEl(this.#wrap, parent).then(() => {
       this.#wrap.style.transform = "translateY(0)";
-      new QRCode(qrCode, `https://mxi.ng/kx?id=${gameCode}`);
+      new QRCode(
+        qrCode,
+        `https://michaelxing.com/games/kaxing/player?id=${gameCode}`,
+      );
     });
   }
 

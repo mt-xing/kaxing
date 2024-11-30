@@ -18,6 +18,10 @@ form {
     margin: 0 auto;
 }
 
+.center .error {
+    color: rgb(255, 128, 128);
+}
+
 input[type="text"] {
     margin-bottom: 10px;
     padding: 1em 1.5em;

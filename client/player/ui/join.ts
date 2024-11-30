@@ -23,7 +23,13 @@ export default class Join {
     this.#codeEl = Dom.input("text", "Game Code");
     this.#codeEl.maxLength = 5;
     this.#codeEl.required = true;
+    this.#codeEl.style.fontFamily = "'Consolas', monospace";
     form.appendChild(this.#codeEl);
+
+    if (window.location.search.length === 6) {
+      this.#codeEl.value = window.location.search.substring(1);
+      this.#codeEl.style.display = "none";
+    }
 
     this.#nameEl = Dom.input("text", "Name");
     this.#nameEl.maxLength = 50;
@@ -43,7 +49,10 @@ export default class Join {
           this.remove();
         } else {
           this.#message.textContent = "That didn't work. Try again?";
+          this.#message.classList.add("error");
+          this.#codeEl.style.display = "";
           goBtn.disabled = false;
+          this.#codeEl.focus();
         }
       },
       "bigbtn",

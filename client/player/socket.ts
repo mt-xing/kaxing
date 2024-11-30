@@ -19,7 +19,7 @@ export default class Socket {
    */
   constructor(url: string) {
     this.#socket = io(url, {
-      ackTimeout: 2000,
+      ackTimeout: 10000,
       retries: 3,
       closeOnBeforeunload: false,
     });

@@ -1,4 +1,5 @@
 import * as io from "socket.io";
+import crypto from "crypto";
 import KaXingGame from "./game.js";
 import Broker from "./broker.js";
 import {
@@ -33,7 +34,7 @@ export default class KaXingServer {
     this.#setups = new Map();
 
     namespace.on("connection", (socket) => {
-      socket.on("create", this.#createRoom.bind(this, socket));
+      socket.on("createRoom", this.#createRoom.bind(this, socket));
       socket.on("controller", this.#controllerJoin.bind(this, socket));
       socket.on("controllerClaim", this.#controllerClaim.bind(this, socket));
       socket.on("join", this.#joinRoom.bind(this, socket));
@@ -47,7 +48,8 @@ export default class KaXingServer {
   /**
    * Attempt to create a new room
    */
-  #createRoom(socket: io.Socket, gameInfo: string) {
+  #createRoom(socket: io.Socket, gameInfo: string, callback: () => void) {
+    callback();
     const getID = () => Math.random().toString(36).substring(2, 7);
     let remainingTries = 50;
     while (remainingTries > 0) {
@@ -72,7 +74,8 @@ export default class KaXingServer {
     );
   }
 
-  #controllerJoin(socket: io.Socket) {
+  #controllerJoin(socket: io.Socket, _value: string, callback: () => void) {
+    callback();
     const getPwd = () => Math.random().toString().substring(3, 9);
     let remainingTries = 50;
     while (remainingTries > 0) {
@@ -94,7 +97,8 @@ export default class KaXingServer {
     socket.emit("controllerNo", JSON.stringify(errorPayload));
   }
 
-  #controllerClaim(socket: io.Socket, payload: string) {
+  #controllerClaim(socket: io.Socket, payload: string, callback: () => void) {
+    callback();
     const { password } = JSON.parse(payload) as ControllerJoinResponse;
     const controller = this.#pendingControllers.get(password);
     const room = this.#socketRoom.get(socket.id);
@@ -117,7 +121,8 @@ export default class KaXingServer {
    * @param {io.Socket} socket
    * @param {string} roomInfo
    */
-  #joinRoom(socket: io.Socket, roomInfo: string) {
+  #joinRoom(socket: io.Socket, roomInfo: string, callback: () => void) {
+    callback();
     const { id, name } = JSON.parse(roomInfo) as JoinRoomPayload;
     const game = this.#setups.get(id);
     if (game === undefined) {
@@ -146,7 +151,8 @@ export default class KaXingServer {
   /**
    * @param {io.Socket} socket
    */
-  #startGame(socket: io.Socket) {
+  #startGame(socket: io.Socket, _value: string, callback: () => void) {
+    callback();
     const room = this.#socketRoom.get(socket.id);
     const game = this.#setups.get(room ?? "");
     if (
