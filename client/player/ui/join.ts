@@ -4,13 +4,19 @@ import StandardQuestion from "./questions/standard.js";
 export default class Join {
   #wrap: HTMLElement;
 
+  #message: HTMLElement;
+
   #codeEl: HTMLInputElement;
 
   #nameEl: HTMLInputElement;
 
-  constructor(parent: HTMLElement) {
+  constructor(
+    parent: HTMLElement,
+    connect: (id: string, name: string) => Promise<boolean>,
+  ) {
     const wrap = Dom.div(Dom.h1("KaXing"), "card center");
-    wrap.appendChild(Dom.p("We have Kahoot at home."));
+    this.#message = Dom.p("We have Kahoot at home.");
+    wrap.appendChild(this.#message);
     const form = document.createElement("form");
     wrap.appendChild(form);
 
@@ -24,16 +30,26 @@ export default class Join {
     this.#nameEl.required = true;
     form.appendChild(this.#nameEl);
 
-    form.appendChild(
-      Dom.button(
-        "Here We Go",
-        (e) => {
-          e.preventDefault();
+    const goBtn = Dom.button(
+      "Here We Go",
+      async (e) => {
+        e.preventDefault();
+        if (!this.#nameEl.value || this.#codeEl.value.length < 5) {
+          return;
+        }
+        goBtn.disabled = true;
+        const result = await connect(this.#codeEl.value, this.#nameEl.value);
+        if (result) {
           this.remove();
-        },
-        "bigbtn",
-      ),
+        } else {
+          this.#message.textContent = "That didn't work. Try again?";
+          goBtn.disabled = false;
+        }
+      },
+      "bigbtn",
     );
+
+    form.appendChild(goBtn);
 
     this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {
