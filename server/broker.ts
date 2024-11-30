@@ -54,7 +54,7 @@ export default class Broker {
       return false;
     }
 
-    this.#players.set(id, { socket, name, score: 0, answers: [] });
+    this.#players.set(id, { socket, name, score: 0, answers: [], record: [] });
     this.#boardSocket.emit("join", JSON.stringify({ id, name }));
     this.#controlSocket?.emit("join", JSON.stringify({ id, name }));
     return true;

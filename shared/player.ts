@@ -5,6 +5,8 @@ export type Player = {
   score: number;
   answers: (Answer | null)[];
   record: boolean[];
+  /** Previous rank number (NOT zero-indexed) */
+  previousRank?: number;
 };
 
 export function awardPoints(

@@ -67,7 +67,10 @@ export default class Communicator {
   }
 
   sendShowQuestion(q: number) {
-    this.sendToBoard({ t: "showQuestion" });
+    this.sendToBoard({
+      t: "showQuestionBoard",
+      numPlayers: this.#players.size,
+    });
     this.sendToAllPlayers({ t: "blank" });
     this.sendQuestionStateToController(q, "question");
   }
@@ -118,20 +121,39 @@ export default class Communicator {
       };
       p.socket.emit("gameState", JSON.stringify(msg));
     });
+    this.sendToBoard({
+      t: "displayAnswerResultsBoard",
+      answers: Array.from(this.#players)
+        .map((x) => x[1].answers[q])
+        .filter((x) => x !== undefined && x !== null),
+      numPlayers: this.#players.size,
+    });
     this.sendQuestionStateToController(q, "results");
   }
 
   sendLeaderboard(q: number) {
     const ranks = computeRanks(this.#players);
+    const currentPlayerRank: Player[] = [];
 
     this.#players.forEach((p) => {
+      const rank = ranks.get(p) ?? Infinity;
       const msg: GameStateClientResponse = {
         t: "text",
-        text: `${ranks.get(p)}th place with ${p.score} point${p.score === 1 ? "" : "s"}`,
+        text: `${rank}th place with ${p.score} point${p.score === 1 ? "" : "s"}`,
       };
       p.socket.emit("gameState", JSON.stringify(msg));
+      if (rank < 6) {
+        currentPlayerRank[rank - 1] = p;
+      }
     });
-    this.sendToBoard({ t: "leaderboard" });
+    this.sendToBoard({
+      t: "leaderboardBoard",
+      leaderboard: currentPlayerRank.map((x, i) => ({
+        name: x.name,
+        points: x.score,
+        diff: x.previousRank === undefined ? 0 : i + 1 - x.previousRank,
+      })),
+    });
     this.sendQuestionStateToController(q, "leaderboard");
   }
 

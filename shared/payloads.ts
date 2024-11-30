@@ -33,7 +33,7 @@ export type GameStatePayload =
         | "showQuestion"
         | "showAnswers"
         | "countdown"
-        | "answers"
+        | "displayAnswerResults"
         | "leaderboard";
     }
   | {
@@ -50,8 +50,21 @@ export type GameStateBoardResponse =
       d: number;
     }
   | {
-      t: "displayAnswerResults";
+      t: "displayAnswerResultsBoard";
       answers: Answer[];
+      numPlayers: number;
+    }
+  | {
+      t: "showQuestionBoard";
+      numPlayers: number;
+    }
+  | {
+      t: "leaderboardBoard";
+      leaderboard: {
+        name: string;
+        points: number;
+        diff: number;
+      }[];
     };
 
 export type GameStateControllerResponse =

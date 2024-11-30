@@ -1,6 +1,6 @@
 import * as io from "socket.io";
 import { Answer, Question, wasAnswerCorrect } from "../shared/question.js";
-import { awardPoints, Player } from "../shared/player.js";
+import { awardPoints, computeRanks, Player } from "../shared/player.js";
 import { QuestionState } from "../shared/state.js";
 import Communicator from "./comms.js";
 import { GameStatePayload } from "./payloads.js";
@@ -74,7 +74,7 @@ export default class KaXingGame {
       case "countdown":
         this.countdown();
         break;
-      case "answers":
+      case "displayAnswerResults":
         this.endCountdownShowResults();
         break;
       case "leaderboard":
@@ -92,6 +92,13 @@ export default class KaXingGame {
     this.#questionState = "blank";
     this.#numAnswers = 0;
     this.#comms.sendQuestionReset(questionId);
+    if (questionId !== 0) {
+      const ranks = computeRanks(this.#players);
+      this.#players.forEach((x) => {
+        // eslint-disable-next-line no-param-reassign
+        x.previousRank = ranks.get(x);
+      });
+    }
   }
 
   showQuestion() {

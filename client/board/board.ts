@@ -3,10 +3,33 @@ import Home from "./ui/home.js";
 // import Leaderboard from "./ui/leaderboard.js";
 
 import Socket from "../player/socket.js";
-import { ControllerJoinResponse, JoinRoomPayload } from "../payloads.js";
+import {
+  ControllerJoinResponse,
+  GameStateBoardResponse,
+  JoinRoomPayload,
+} from "../payloads.js";
 import ControllerJoin from "./ui/controllerJoin.js";
+import { Question } from "../question.js";
+import UploadQuestions from "./ui/uploadQuestions.js";
+import StandardQuestionBoard from "./ui/questions/standard.js";
+import Leaderboard from "./ui/leaderboard.js";
 
 const socket = new Socket("http://localhost:8080/");
+
+function uploadQuestions(): Promise<Question[]> {
+  return new Promise((resolve) => {
+    new UploadQuestions(document.body, (text) => {
+      return new Promise((r) => {
+        const questions: Question[] = JSON.parse(text);
+        if (!Array.isArray(questions)) {
+          r(false);
+        }
+        r(true);
+        resolve(questions);
+      });
+    });
+  });
+}
 
 function getGameCode(): Promise<string> {
   return new Promise((r) => {
@@ -71,38 +94,92 @@ function homeScreen(code: string): Promise<void> {
   });
 }
 
+async function gameScreen(questions: Question[]): Promise<void> {
+  let ui: { remove: () => Promise<void> } | undefined;
+  let questionUi: StandardQuestionBoard | undefined;
+  let question: Question = questions[0];
+
+  socket.on("gameState", (msg) => {
+    const payload = JSON.parse(msg) as GameStateBoardResponse;
+    switch (payload.t) {
+      case "adjustScore":
+      case "displayAnswerResults":
+      case "showQuestion":
+      case "leaderboard":
+        break;
+      case "setupQ":
+        question = questions[payload.n];
+      // eslint-disable-next-line no-fallthrough
+      case "blank": {
+        if (ui) {
+          ui.remove();
+        }
+        ui = undefined;
+        break;
+      }
+      case "showQuestionBoard": {
+        switch (question.t) {
+          case "standard": {
+            if (ui) {
+              ui.remove();
+            }
+            questionUi = new StandardQuestionBoard(
+              document.body,
+              question,
+              payload.numPlayers,
+            );
+            ui = questionUi;
+            break;
+          }
+          default:
+            break;
+        }
+        break;
+      }
+      case "showAnswers":
+        questionUi?.showAnswers();
+        break;
+      case "countdown":
+        questionUi?.startCountdown();
+        break;
+      case "answerReceived":
+        questionUi?.setNumAnswers(payload.n, payload.d);
+        break;
+      case "displayAnswerResultsBoard": {
+        const answerCounts = [0, 0, 0, 0];
+        payload.answers.forEach((x) => {
+          if (x.t !== "standard") {
+            return;
+          }
+          answerCounts[x.a]++;
+        });
+        questionUi?.showResults(answerCounts, payload.numPlayers);
+        break;
+      }
+      case "leaderboardBoard":
+        if (ui) {
+          ui.remove();
+        }
+        questionUi = undefined;
+        ui = new Leaderboard(document.body, payload.leaderboard);
+        break;
+      default:
+        ((x: never) => {
+          throw new Error(x);
+        })(payload);
+    }
+  });
+}
+
 async function gameLoop() {
+  const questions = await uploadQuestions();
   const code = await getGameCode();
   await pairController();
   await waitForGameToOpen();
   await homeScreen(code);
+  await gameScreen(questions);
 }
 
 window.onload = () => {
   gameLoop();
-  // new Home(document.body, "fjiw8");
-  // @ts-ignore
-  // window.testBoard = new StandardQuestionBoard(
-  //   document.body,
-  //   {
-  //     t: "standard",
-  //     points: 100,
-  //     time: 20,
-  //     text: "Which of the following members of course staff did not lead at least one lab or discussion this semester?",
-  //     correct: 3,
-  //     answers: ["James Zhang", "Sean Zhang", "Jonathan Gabor", "Jonah Huang"],
-  //   },
-  //   50,
-  // );
-  // new Leaderboard(document.body, [
-  //   { name: "Michael Xing", points: 4958, diff: 1 },
-  //   { name: "Sean Zhang (cheating)", points: 4008, diff: 1 },
-  //   { name: "David Lin (super cheating)", points: 3958, diff: 0 },
-  //   { name: "Someone Else", points: 3558, diff: -2 },
-  //   {
-  //     name: "Etc. really long name test eowjfoiwjf4e3890i3  938t 983 9ghr3owiefjwl 2wfewhfkwe w foi ewjiosdfsf fejwoifjwoifjeoiwejfoiw",
-  //     points: 2000,
-  //     diff: 2,
-  //   },
-  // ]);
 };
