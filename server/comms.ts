@@ -22,4 +22,8 @@ export default class Communicator {
       this.#socketToPlayer.set(socket.id, id),
     );
   }
+
+  getPlayerId(socket: io.Socket): string | undefined {
+    return this.#socketToPlayer.get(socket.id);
+  }
 }

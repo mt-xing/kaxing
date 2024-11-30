@@ -34,3 +34,39 @@ export type Answer =
       t: "type";
       a: string;
     };
+
+export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
+  if (a === null || a === undefined) {
+    return false;
+  }
+  switch (q.t) {
+    case "standard": {
+      if (a.t !== "standard") {
+        return false;
+      }
+      if (typeof q.correct === "number") {
+        return q.correct === a.a;
+      }
+      return q.correct.indexOf(a.a) > -1;
+    }
+    case "multi": {
+      if (a.t !== "multi") {
+        return false;
+      }
+      if (a.a.length !== q.correct.length) {
+        return false;
+      }
+      const aSet = new Set(a.a);
+      return q.correct.every((x) => aSet.has(x));
+    }
+    case "type":
+      if (a.t !== "type") {
+        return false;
+      }
+      return q.correct.test(a.a);
+    default:
+      ((x: never) => {
+        throw new Error(x);
+      })(q);
+  }
+}

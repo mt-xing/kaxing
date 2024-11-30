@@ -1,3 +1,6 @@
+import { Answer, Question } from "./question.js";
+import { QuestionState } from "./state.js";
+
 export type ControllerJoinResponse = {
   password: string;
 };
@@ -18,3 +21,66 @@ export type JoinRoomPayload = {
 export type KickPlayerPayload = {
   id: string;
 };
+
+export type GameStatePayload =
+  | {
+      t: "setupQ";
+      n: number;
+    }
+  | {
+      t:
+        | "blank"
+        | "showQuestion"
+        | "showAnswers"
+        | "countdown"
+        | "answers"
+        | "leaderboard";
+    }
+  | {
+      t: "adjustScore";
+      player: string;
+      score: number;
+    };
+
+export type GameStateBoardResponse =
+  | GameStatePayload
+  | {
+      t: "answerReceived";
+      n: number;
+      d: number;
+    }
+  | {
+      t: "displayAnswerResults";
+      answers: Answer[];
+    };
+
+export type GameStateControllerResponse =
+  | {
+      t: "scores";
+      players: Record<string, number>;
+    }
+  | {
+      t: "state";
+      question: number;
+      state: QuestionState;
+    };
+
+export type GameStateClientResponse =
+  | {
+      t: "blank";
+    }
+  | {
+      t: "acceptResponse";
+      q: Question;
+    }
+  | {
+      t: "result";
+      correct: boolean | null;
+      history: (boolean | null | undefined)[];
+      points: number;
+      rank: number;
+    }
+  | {
+      t: "text";
+      text: string;
+    };

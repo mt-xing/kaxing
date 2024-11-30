@@ -29,7 +29,7 @@ async function waitToJoin(
 ): Promise<{ players: JoinRoomPayload[] }> {
   return new Promise((r) => {
     const wrap = Dom.div();
-    wrap.appendChild(Dom.h2("Waiting"));
+    wrap.appendChild(Dom.h2("Welcome"));
     wrap.appendChild(
       Dom.p(
         "Enter the following password for this controller on your game board:",
