@@ -1,22 +1,13 @@
 import * as io from "socket.io";
 import { Answer, Question, wasAnswerCorrect } from "../shared/question.js";
-import { awardPoints, computeRanks, Player } from "../shared/player.js";
+import { awardPoints, Player } from "../shared/player.js";
 import { QuestionState } from "../shared/state.js";
 import Communicator from "./comms.js";
-import {
-  GameStateBoardResponse,
-  GameStateClientResponse,
-  GameStateControllerResponse,
-} from "./payloads.js";
 
 export default class KaXingGame {
   #questions: Question[];
 
-  #board: io.Socket;
-
-  #controller: io.Socket;
-
-  #players: Map<string, { socket: io.Socket } & Player>;
+  #players: Map<string, Player>;
 
   #comms: Communicator;
 
@@ -40,8 +31,6 @@ export default class KaXingGame {
     players: Map<string, { socket: io.Socket } & Player>,
   ) {
     this.#questions = questions;
-    this.#board = board;
-    this.#controller = controller;
     this.#players = players;
     this.#comms = new Communicator(board, controller, players);
     this.#questionState = "blank";
@@ -49,35 +38,11 @@ export default class KaXingGame {
     this.#numAnswers = 0;
   }
 
-  private sendToAllPlayers(msg: GameStateClientResponse) {
-    this.#players.forEach((p) =>
-      p.socket.emit("gameState", JSON.stringify(msg)),
-    );
-  }
-
-  private sendToController(msg: GameStateControllerResponse) {
-    this.#controller.emit("gameState", JSON.stringify(msg));
-  }
-
-  private sendToBoard(msg: GameStateBoardResponse) {
-    this.#board.emit("gameState", JSON.stringify(msg));
-  }
-
-  private sendQuestionStateToController() {
-    this.sendToController({
-      t: "state",
-      question: this.#currentQuestion,
-      state: this.#questionState,
-    });
-  }
-
   setQuestion(questionId: number) {
     this.#currentQuestion = questionId;
     this.#questionState = "blank";
     this.#numAnswers = 0;
-    this.sendToAllPlayers({ t: "blank" });
-    this.sendToBoard({ t: "setupQ", n: questionId });
-    this.sendQuestionStateToController();
+    this.#comms.sendQuestionReset(questionId);
   }
 
   showQuestion() {
@@ -85,8 +50,7 @@ export default class KaXingGame {
       return;
     }
     this.#questionState = "question";
-    this.sendToBoard({ t: "showQuestion" });
-    this.sendQuestionStateToController();
+    this.#comms.sendShowQuestion(this.#currentQuestion);
   }
 
   showAnswers() {
@@ -94,8 +58,7 @@ export default class KaXingGame {
       return;
     }
     this.#questionState = "answers";
-    this.sendToBoard({ t: "showAnswers" });
-    this.sendQuestionStateToController();
+    this.#comms.sendShowAnswers(this.#currentQuestion);
   }
 
   countdown() {
@@ -103,12 +66,10 @@ export default class KaXingGame {
       return;
     }
     this.#questionState = "countdown";
-    this.sendToBoard({ t: "countdown" });
-    this.sendToAllPlayers({
-      t: "acceptResponse",
-      q: this.#questions[this.#currentQuestion],
-    });
-    this.sendQuestionStateToController();
+    this.#comms.sendCountdown(
+      this.#currentQuestion,
+      this.#questions[this.#currentQuestion],
+    );
 
     this.#currentCountdown = {
       startTime: new Date().getTime(),
@@ -147,23 +108,7 @@ export default class KaXingGame {
     }
 
     this.#numAnswers++;
-    this.sendToBoard({
-      t: "answerReceived",
-      n: this.#numAnswers,
-      d: this.#players.size,
-    });
-
-    this.sendToController({
-      t: "scores",
-      players: Array.from(this.#players).reduce(
-        (a, x) => ({
-          ...a,
-          [x[0]]: x[1].score,
-        }),
-        {},
-      ),
-    });
-    this.sendQuestionStateToController();
+    this.#comms.sendResponseReceived(this.#numAnswers);
   }
 
   endCountdownShowResults() {
@@ -176,18 +121,7 @@ export default class KaXingGame {
     }
     this.#questionState = "results";
 
-    const ranks = computeRanks(this.#players);
-
-    this.#players.forEach((p) => {
-      const msg: GameStateClientResponse = {
-        t: "result",
-        correct: p.record[this.#currentQuestion] ?? null,
-        points: p.score,
-        history: p.record,
-        rank: ranks.get(p) ?? -1,
-      };
-      p.socket.emit("gameState", JSON.stringify(msg));
-    });
+    this.#comms.sendCountdownEnd(this.#currentQuestion);
   }
 
   showLeaderboard() {
@@ -195,23 +129,11 @@ export default class KaXingGame {
       return;
     }
     this.#questionState = "leaderboard";
-    const ranks = computeRanks(this.#players);
-
-    this.#players.forEach((p) => {
-      const msg: GameStateClientResponse = {
-        t: "text",
-        text: `${ranks.get(p)}th place with ${p.score} point${p.score === 1 ? "" : "s"}`,
-      };
-      p.socket.emit("gameState", JSON.stringify(msg));
-    });
-    this.sendToBoard({ t: "leaderboard" });
-    this.sendQuestionStateToController();
+    this.#comms.sendLeaderboard(this.#currentQuestion);
   }
 
   blank() {
     this.#questionState = "blank";
-    this.sendToBoard({ t: "blank" });
-    this.sendToAllPlayers({ t: "blank" });
-    this.sendQuestionStateToController();
+    this.#comms.sendBlank(this.#currentQuestion);
   }
 }
