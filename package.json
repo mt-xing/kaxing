@@ -8,7 +8,7 @@
     "server-start": "node server/index.js",
     "client-watch": "tsc --project ./client/tsconfig.json --watch",
     "client-silent": "http-server ./client -s -p 3000",
-    "start": "npm-run-all --parallel client-watch client-silent server-start"
+    "start": "npm run server-build && npm-run-all --parallel client-watch client-silent server-start"
   },
   "author": "",
   "license": "ISC",

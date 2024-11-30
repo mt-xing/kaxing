@@ -46,6 +46,15 @@ function pairController(): Promise<void> {
   });
 }
 
+function waitForGameToOpen(): Promise<void> {
+  return new Promise((resolve) => {
+    socket.on("openGame", () => {
+      socket.off("openGame");
+      resolve();
+    });
+  });
+}
+
 function homeScreen(code: string): Promise<void> {
   return new Promise((r) => {
     const h = new Home(document.body, code);
@@ -65,6 +74,7 @@ function homeScreen(code: string): Promise<void> {
 async function gameLoop() {
   const code = await getGameCode();
   await pairController();
+  await waitForGameToOpen();
   await homeScreen(code);
 }
 

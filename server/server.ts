@@ -37,6 +37,7 @@ export default class KaXingServer {
       socket.on("createRoom", this.#createRoom.bind(this, socket));
       socket.on("controller", this.#controllerJoin.bind(this, socket));
       socket.on("controllerClaim", this.#controllerClaim.bind(this, socket));
+      socket.on("openGame", this.#openGame.bind(this, socket));
       socket.on("join", this.#joinRoom.bind(this, socket));
 
       socket.on("start", this.#startGame.bind(this, socket));
@@ -108,6 +109,7 @@ export default class KaXingServer {
       broker.addController(controller);
       this.#pendingControllers.delete(password);
       socket.emit("controllerClaimYes");
+      this.#socketRoom.set(controller.id, room);
     } else {
       const errorPayload: ErrorResponse = {
         reason: "Invalid password",
@@ -117,9 +119,23 @@ export default class KaXingServer {
   }
 
   /**
+   * Allow players to begin joining a game
+   */
+  #openGame(socket: io.Socket) {
+    const room = this.#socketRoom.get(socket.id);
+    const game = this.#setups.get(room ?? "");
+    if (
+      game === undefined ||
+      room === undefined ||
+      socket !== game.controller
+    ) {
+      return;
+    }
+    game.board.emit("openGame");
+  }
+
+  /**
    * Join an existing room being setup
-   * @param {io.Socket} socket
-   * @param {string} roomInfo
    */
   #joinRoom(socket: io.Socket, roomInfo: string, callback: () => void) {
     callback();

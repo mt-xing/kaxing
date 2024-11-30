@@ -46,6 +46,21 @@ async function waitToJoin(
   });
 }
 
+async function openGame(): Promise<void> {
+  return new Promise((r) => {
+    const goBtn = Dom.button(
+      "Start",
+      () => {
+        socket.emit("openGame", "");
+        document.body.removeChild(goBtn);
+        r();
+      },
+      "bigbtn",
+    );
+    document.body.appendChild(goBtn);
+  });
+}
+
 async function negotiateGameStart(players: { id: string; name: string }[]) {
   return new Promise((r) => {
     const wrap = Dom.div(Dom.h2("Game Setup"));
@@ -81,6 +96,7 @@ async function negotiateGameStart(players: { id: string; name: string }[]) {
 async function gameLoop() {
   const code = await getCode();
   const players = await waitToJoin(code);
+  await openGame();
   await negotiateGameStart(players.players);
 }
 
