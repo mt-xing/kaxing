@@ -104,5 +104,6 @@ async function gameLoop() {
 }
 
 window.onload = () => {
+  window.onbeforeunload = () => "Are you sure you want to leave the game?";
   gameLoop();
 };
