@@ -1,5 +1,6 @@
 import Dom from "../../../dom.js";
 import { Question } from "../../../../shared/question.js";
+import { playQuestion, stopAudio } from "../../audio.js";
 
 export default class StandardQuestionBoard {
   #wrap: HTMLElement;
@@ -119,6 +120,8 @@ export default class StandardQuestionBoard {
   }
 
   startCountdown() {
+    playQuestion(this.#question.time);
+
     this.#countdown.style.opacity = "1";
     this.#submissionWrap.style.opacity = "1";
     this.#countdownBar.style.transform = "scaleY(1)";
@@ -135,6 +138,7 @@ export default class StandardQuestionBoard {
   }
 
   endCountdown() {
+    stopAudio();
     if (this.#timeout) {
       clearTimeout(this.#timeout);
     }

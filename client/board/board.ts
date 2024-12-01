@@ -10,6 +10,7 @@ import { Question } from "../question.js";
 import UploadQuestions from "./ui/uploadQuestions.js";
 import StandardQuestionBoard from "./ui/questions/standard.js";
 import Leaderboard from "./ui/leaderboard.js";
+import { startupAudio } from "./audio.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -185,5 +186,6 @@ async function gameLoop() {
 
 window.onload = () => {
   window.onbeforeunload = () => "Are you sure you want to leave the game?";
+  startupAudio();
   gameLoop();
 };

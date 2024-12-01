@@ -1,4 +1,5 @@
 import Dom from "../../dom.js";
+import { playTheme, stopAudio } from "../audio.js";
 
 declare const QRCode: any;
 
@@ -37,6 +38,8 @@ export default class Home {
     names.appendChild(this.#numPlayers);
     this.#wrap.appendChild(names);
 
+    playTheme();
+
     Dom.insertEl(this.#wrap, parent).then(() => {
       this.#wrap.style.transform = "scale(1)translateY(0)";
       new QRCode(
@@ -60,6 +63,7 @@ export default class Home {
   }
 
   async remove() {
+    stopAudio();
     await Dom.deleteOuterwrap(this.#wrap);
   }
 }

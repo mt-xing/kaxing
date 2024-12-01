@@ -349,3 +349,11 @@
     flex-shrink: 0;
     text-align: right;
 }
+
+audio {
+    position: absolute;
+    pointer-events: none;
+    opacity: 0;
+    bottom: 100vh;
+    right: 100vw;
+}
