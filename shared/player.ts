@@ -15,7 +15,7 @@ export function awardPoints(
   startTime: number,
   question: Question,
 ) {
-  const timeLeft = answerTime - startTime;
+  const timeLeft = startTime + question.time * 1000 - answerTime;
   const percentTimeLeft = Math.min(
     1,
     Math.max(0, timeLeft / (question.time * 1000)),

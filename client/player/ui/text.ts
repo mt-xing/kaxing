@@ -9,7 +9,9 @@ export default class TextUi {
 
     this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {
-      wrap.style.transform = "translateY(0)";
+      window.setTimeout(() => {
+        wrap.style.transform = "translateY(0)";
+      }, 500);
     });
   }
 

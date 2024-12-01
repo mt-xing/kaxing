@@ -20,10 +20,12 @@ export default class Leaderboard {
         const s3 = Dom.span(x.diff > 0 ? "▲" : "▼", x.diff > 0 ? "up" : "down");
         s2.appendChild(s3);
         s2.appendChild(
-          document.createTextNode(`${Math.abs(x.diff)} - ${x.points}`),
+          document.createTextNode(
+            `${Math.abs(x.diff)}: ${Math.round(x.points)}`,
+          ),
         );
       } else {
-        s2.appendChild(document.createTextNode(`${x.points}`));
+        s2.appendChild(document.createTextNode(`${Math.round(x.points)}`));
       }
       li.appendChild(s2);
       ol.appendChild(li);

@@ -155,7 +155,7 @@ export default class Communicator {
       leaderboard: currentPlayerRank.map((x, i) => ({
         name: x.name,
         points: x.score,
-        diff: x.previousRank === undefined ? 0 : i + 1 - x.previousRank,
+        diff: x.previousRank === undefined ? 0 : x.previousRank - (i + 1),
       })),
     });
     this.sendQuestionStateToController(q, "leaderboard");

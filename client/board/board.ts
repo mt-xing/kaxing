@@ -40,7 +40,7 @@ function getGameCode(questions: Question[]): Promise<string> {
       socket.off("createNo");
       setTimeout(() => {
         r(id);
-      }, 1000);
+      }, 500);
     });
     socket.on("createNo", () => {
       // eslint-disable-next-line no-alert
@@ -164,7 +164,9 @@ function gameScreen(questions: Question[]): Promise<void> {
             ui.remove();
           }
           questionUi = undefined;
-          ui = new Leaderboard(document.body, payload.leaderboard);
+          setTimeout(() => {
+            ui = new Leaderboard(document.body, payload.leaderboard);
+          }, 1000);
           break;
         default:
           ((x: never) => {

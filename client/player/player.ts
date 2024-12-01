@@ -34,9 +34,10 @@ function joinGame(): Promise<void> {
   });
 }
 
-function gameScreen(): Promise<void> {
+async function gameScreen(): Promise<void> {
   return new Promise(() => {
     let ui: { remove: () => Promise<void> } | undefined;
+    ui = new TextUi(document.body, "You're in!");
     socket.on("gameState", (msg) => {
       const payload = JSON.parse(msg) as GameStateClientResponse;
       switch (payload.t) {

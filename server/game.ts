@@ -22,6 +22,8 @@ export default class KaXingGame {
   /** Number of answers received for current question */
   #numAnswers: number;
 
+  #firstQuestion: boolean;
+
   #currentCountdown?: {
     startTime: number;
     timeout: ReturnType<typeof setTimeout>;
@@ -40,6 +42,7 @@ export default class KaXingGame {
     this.#questionState = "blank";
     this.#currentQuestion = 0;
     this.#numAnswers = 0;
+    this.#firstQuestion = true;
   }
 
   isController(socket: io.Socket) {
@@ -92,12 +95,14 @@ export default class KaXingGame {
     this.#questionState = "blank";
     this.#numAnswers = 0;
     this.#comms.sendQuestionReset(questionId);
-    if (questionId !== 0) {
+    if (!this.#firstQuestion) {
       const ranks = computeRanks(this.#players);
       this.#players.forEach((x) => {
         // eslint-disable-next-line no-param-reassign
         x.previousRank = ranks.get(x);
       });
+    } else {
+      this.#firstQuestion = false;
     }
   }
 
