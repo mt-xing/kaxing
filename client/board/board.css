@@ -183,6 +183,7 @@
 }
 
 .questionWrap {
+    width: 100%;
     transform: translateY(100vh);
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
 }

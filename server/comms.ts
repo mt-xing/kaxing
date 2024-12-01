@@ -143,7 +143,7 @@ export default class Communicator {
       const rank = ranks.get(p) ?? Infinity;
       const msg: GameStateClientResponse = {
         t: "text",
-        text: `${rank}th place with ${p.score} point${p.score === 1 ? "" : "s"}`,
+        text: `Rank ${rank} with ${Math.round(p.score)} points`,
       };
       p.socket.emit("gameState", JSON.stringify(msg));
       if (rank < 6) {

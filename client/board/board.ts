@@ -31,14 +31,16 @@ function uploadQuestions(): Promise<Question[]> {
   });
 }
 
-function getGameCode(): Promise<string> {
+function getGameCode(questions: Question[]): Promise<string> {
   return new Promise((r) => {
-    socket.emit("createRoom", JSON.stringify([]));
+    socket.emit("createRoom", JSON.stringify(questions));
     socket.on("createYes", (x) => {
       const { id } = JSON.parse(x) as { id: string };
       socket.off("createYes");
       socket.off("createNo");
-      r(id);
+      setTimeout(() => {
+        r(id);
+      }, 1000);
     });
     socket.on("createNo", () => {
       // eslint-disable-next-line no-alert
@@ -175,7 +177,7 @@ function gameScreen(questions: Question[]): Promise<void> {
 
 async function gameLoop() {
   const questions = await uploadQuestions();
-  const code = await getGameCode();
+  const code = await getGameCode(questions);
   await pairController();
   await waitForGameToOpen();
   await homeScreen(code);
