@@ -64,3 +64,13 @@ export function getWrongString() {
 export function getEmptyString() {
   return NONE[Math.floor(Math.random() * NONE.length)];
 }
+
+export function getTaunt(correct: boolean | null) {
+  if (correct === null) {
+    return getEmptyString();
+  } else if (correct) {
+    return getCorrectString();
+  } else {
+    return getWrongString();
+  }
+}

@@ -94,80 +94,82 @@ function homeScreen(code: string): Promise<void> {
   });
 }
 
-async function gameScreen(questions: Question[]): Promise<void> {
-  let ui: { remove: () => Promise<void> } | undefined;
-  let questionUi: StandardQuestionBoard | undefined;
-  let question: Question = questions[0];
+function gameScreen(questions: Question[]): Promise<void> {
+  return new Promise(() => {
+    let ui: { remove: () => Promise<void> } | undefined;
+    let questionUi: StandardQuestionBoard | undefined;
+    let question: Question = questions[0];
 
-  socket.on("gameState", (msg) => {
-    const payload = JSON.parse(msg) as GameStateBoardResponse;
-    switch (payload.t) {
-      case "adjustScore":
-      case "displayAnswerResults":
-      case "showQuestion":
-      case "leaderboard":
-        break;
-      case "setupQ":
-        question = questions[payload.n];
-      // eslint-disable-next-line no-fallthrough
-      case "blank": {
-        if (ui) {
-          ui.remove();
+    socket.on("gameState", (msg) => {
+      const payload = JSON.parse(msg) as GameStateBoardResponse;
+      switch (payload.t) {
+        case "adjustScore":
+        case "displayAnswerResults":
+        case "showQuestion":
+        case "leaderboard":
+          break;
+        case "setupQ":
+          question = questions[payload.n];
+        // eslint-disable-next-line no-fallthrough
+        case "blank": {
+          if (ui) {
+            ui.remove();
+          }
+          ui = undefined;
+          break;
         }
-        ui = undefined;
-        break;
-      }
-      case "showQuestionBoard": {
-        switch (question.t) {
-          case "standard": {
-            if (ui) {
-              ui.remove();
+        case "showQuestionBoard": {
+          switch (question.t) {
+            case "standard": {
+              if (ui) {
+                ui.remove();
+              }
+              questionUi = new StandardQuestionBoard(
+                document.body,
+                question,
+                payload.numPlayers,
+              );
+              ui = questionUi;
+              break;
             }
-            questionUi = new StandardQuestionBoard(
-              document.body,
-              question,
-              payload.numPlayers,
-            );
-            ui = questionUi;
-            break;
+            default:
+              break;
           }
-          default:
-            break;
+          break;
         }
-        break;
-      }
-      case "showAnswers":
-        questionUi?.showAnswers();
-        break;
-      case "countdown":
-        questionUi?.startCountdown();
-        break;
-      case "answerReceived":
-        questionUi?.setNumAnswers(payload.n, payload.d);
-        break;
-      case "displayAnswerResultsBoard": {
-        const answerCounts = [0, 0, 0, 0];
-        payload.answers.forEach((x) => {
-          if (x.t !== "standard") {
-            return;
+        case "showAnswers":
+          questionUi?.showAnswers();
+          break;
+        case "countdown":
+          questionUi?.startCountdown();
+          break;
+        case "answerReceived":
+          questionUi?.setNumAnswers(payload.n, payload.d);
+          break;
+        case "displayAnswerResultsBoard": {
+          const answerCounts = [0, 0, 0, 0];
+          payload.answers.forEach((x) => {
+            if (x.t !== "standard") {
+              return;
+            }
+            answerCounts[x.a]++;
+          });
+          questionUi?.showResults(answerCounts, payload.numPlayers);
+          break;
+        }
+        case "leaderboardBoard":
+          if (ui) {
+            ui.remove();
           }
-          answerCounts[x.a]++;
-        });
-        questionUi?.showResults(answerCounts, payload.numPlayers);
-        break;
+          questionUi = undefined;
+          ui = new Leaderboard(document.body, payload.leaderboard);
+          break;
+        default:
+          ((x: never) => {
+            throw new Error(x);
+          })(payload);
       }
-      case "leaderboardBoard":
-        if (ui) {
-          ui.remove();
-        }
-        questionUi = undefined;
-        ui = new Leaderboard(document.body, payload.leaderboard);
-        break;
-      default:
-        ((x: never) => {
-          throw new Error(x);
-        })(payload);
-    }
+    });
   });
 }
 

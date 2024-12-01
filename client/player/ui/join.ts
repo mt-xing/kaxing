@@ -1,5 +1,4 @@
 import Dom from "../../dom.js";
-import StandardQuestion from "./questions/standard.js";
 
 export default class Join {
   #wrap: HTMLElement;
@@ -68,6 +67,5 @@ export default class Join {
 
   async remove() {
     await Dom.deleteOuterwrap(this.#wrap);
-    new StandardQuestion(document.body);
   }
 }

@@ -84,7 +84,7 @@ export type GameStateClientResponse =
     }
   | {
       t: "acceptResponse";
-      q: Question;
+      q: Omit<Question, "correct">;
     }
   | {
       t: "result";

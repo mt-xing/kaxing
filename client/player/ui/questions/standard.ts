@@ -1,13 +1,11 @@
 import Dom from "../../../dom.js";
-import { getCorrectString, getWrongString } from "../../utils/taunts.js";
-import QuestionResponse from "../qRes.js";
 
 export default class StandardQuestion {
   #wrap: HTMLElement;
 
   #answerWraps: HTMLElement[];
 
-  constructor(parent: HTMLElement) {
+  constructor(parent: HTMLElement, callback: (answerIndex: number) => void) {
     this.#answerWraps = [];
 
     const getButtonType = (i: number, j: number) => {
@@ -47,16 +45,7 @@ export default class StandardQuestion {
           Dom.button(
             Dom.div(getButtonText(i, j)),
             () => {
-              Dom.deleteOuterwrap(this.#wrap);
-              setTimeout(() => {
-                const correct = Math.random() < 0.5;
-                // eslint-disable-next-line no-new
-                new QuestionResponse(
-                  parent,
-                  correct,
-                  correct ? getCorrectString() : getWrongString(),
-                );
-              }, 1000);
+              callback(i * 2 + j);
             },
             `card answer ${getButtonType(i, j)}`,
           ),
@@ -78,5 +67,9 @@ export default class StandardQuestion {
         a.style.transform = "scaleY(1)";
       });
     });
+  }
+
+  async remove() {
+    return Dom.deleteOuterwrap(this.#wrap);
   }
 }

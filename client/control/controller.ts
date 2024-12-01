@@ -1,6 +1,7 @@
 import Socket from "../player/socket.js";
 import {
   ControllerJoinResponse,
+  GameStateControllerResponse,
   JoinRoomPayload,
   KickPlayerPayload,
 } from "../../shared/payloads.js";
@@ -93,11 +94,29 @@ async function negotiateGameStart(players: { id: string; name: string }[]) {
   });
 }
 
+function mainGame(): Promise<void> {
+  return new Promise(() => {
+    socket.on("gameState", (msg) => {
+      const payload = JSON.parse(msg) as GameStateControllerResponse;
+      switch (payload.t) {
+        case "scores":
+        case "state":
+          break;
+        default:
+          ((x: never) => {
+            throw new Error(x);
+          })(payload);
+      }
+    });
+  });
+}
+
 async function gameLoop() {
   const code = await getCode();
   const players = await waitToJoin(code);
   await openGame();
   await negotiateGameStart(players.players);
+  await mainGame();
 }
 
 window.addEventListener("load", () => {

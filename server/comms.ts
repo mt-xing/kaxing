@@ -82,10 +82,14 @@ export default class Communicator {
   }
 
   sendCountdown(qNum: number, q: Question) {
+    const playerQ: Omit<Question, "correct"> & { correct?: unknown } = {
+      ...q,
+    };
+    delete playerQ.correct;
     this.sendToBoard({ t: "countdown" });
     this.sendToAllPlayers({
       t: "acceptResponse",
-      q,
+      q: playerQ,
     });
     this.sendQuestionStateToController(qNum, "countdown");
   }

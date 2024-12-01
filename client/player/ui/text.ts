@@ -1,6 +1,6 @@
 import Dom from "../../dom.js";
 
-export default class Text {
+export default class TextUi {
   #wrap: HTMLElement;
 
   constructor(parent: HTMLElement, text: string) {
