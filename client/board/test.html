@@ -7,19 +7,13 @@
         <script src="qrcode.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="board.css" />
-        <script>
+        <script type="module">
+            import Home from "./ui/home.js";
+            window.addEventListener('load', () => {
+                new Home(document.body, "aaaaa");
+            })
         </script>
     </head>
     <body>
-        <div class="leaderboard">
-            <h2>Leaderboard</h2>
-            <ol>
-                <li><span>Michael Xing</span><span><span class="up">▲</span>1 - 1520</span></li>
-                <li><span>Sean Zhang (cheating)</span><span>(<span class="down">▼</span>1) 1520</span></li>
-                <li><span>David Lin (super cheating)</span><span>(<span class="down">▼</span>1) 1520</span></li>
-                <li><span>Someone Else</span><span>(<span class="up">▲</span>1) 1520</span></li>
-                <li><span>Etc. really long name test eowjfoiwjf4e3890i3  938t 983 9ghr3owiefjwl 2wfewhfkwe w foi ewjiosdfsf fejwoifjwoifjeoiwejfoiw</span><span>(<span class="down">▼</span>1) 1520</span></li>
-            </ol>
-        </div>
     </body>
 </html>

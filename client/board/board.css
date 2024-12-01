@@ -86,7 +86,7 @@
 }
 
 .home.out {
-    transform: scale(0);
+    transform: scale(0)translateY(0) !important;
     pointer-events: none;
     transition: transform 0.5s cubic-bezier(0.200, 0.000, 0.735, -0.470);
 }
@@ -123,7 +123,7 @@
     color: white;
 
     transform: translateY(100vh);
-    transition: box-shadow 0.25s ease-out, transform calc(0.5s + var(--delay-time) / 3) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
+    transition: box-shadow 0.5s ease-out 0.5s, transform calc(0.5s + var(--delay-time) / 3) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
 }
 
 .answer > div {

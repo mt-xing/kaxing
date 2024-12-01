@@ -1,7 +1,4 @@
 import Home from "./ui/home.js";
-// import StandardQuestionBoard from "./ui/questions/standard.js";
-// import Leaderboard from "./ui/leaderboard.js";
-
 import Socket from "../player/socket.js";
 import {
   ControllerJoinResponse,
@@ -87,9 +84,9 @@ function homeScreen(code: string): Promise<void> {
       const payload = JSON.parse(msg) as JoinRoomPayload;
       h.addPlayer(payload.id, payload.name);
     });
-    socket.on("start", () => {
+    socket.on("startGame", () => {
       socket.off("join"); // TODO: Join mid-game
-      socket.off("start");
+      socket.off("startGame");
       h.remove();
       r();
     });
@@ -166,7 +163,7 @@ function gameScreen(questions: Question[]): Promise<void> {
           questionUi = undefined;
           setTimeout(() => {
             ui = new Leaderboard(document.body, payload.leaderboard);
-          }, 1000);
+          }, 500);
           break;
         default:
           ((x: never) => {

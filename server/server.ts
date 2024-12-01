@@ -41,7 +41,7 @@ export default class KaXingServer {
       socket.on("openGame", this.#openGame.bind(this, socket));
       socket.on("join", this.#joinRoom.bind(this, socket));
 
-      socket.on("start", this.#startGame.bind(this, socket));
+      socket.on("startGame", this.#startGame.bind(this, socket));
 
       socket.on("gameState", this.#handleControllerCmd.bind(this, socket));
       socket.on("response", this.#handleResponse.bind(this, socket));
@@ -193,7 +193,7 @@ export default class KaXingServer {
     this.#games.set(room, newGame);
     this.#setups.delete(room);
 
-    this.#namespace.to(room).emit("start");
+    this.#namespace.to(room).emit("startGame");
   }
 
   #handleControllerCmd(socket: io.Socket, value: string, callback: () => void) {

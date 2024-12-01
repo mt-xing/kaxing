@@ -126,6 +126,9 @@ export default class KaXingGame {
     if (this.#questionState === "countdown") {
       return;
     }
+    if (this.#questionState === "question") {
+      this.#comms.sendShowAnswers(this.#currentQuestion);
+    }
     this.#questionState = "countdown";
     this.#comms.sendCountdown(
       this.#currentQuestion,

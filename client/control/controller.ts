@@ -89,9 +89,9 @@ async function negotiateGameStart(
     const goBtn = Dom.button(
       "Begin Game",
       () => {
-        r();
-        socket.emit("start", "");
+        socket.emit("startGame", "");
         document.body.removeChild(wrap);
+        r();
       },
       "bigbtn",
     );
@@ -106,6 +106,9 @@ async function negotiateGameStart(
 }
 
 async function mainGame(numQuestions: number): Promise<void> {
+  await new Promise((r) => {
+    setTimeout(r, 1000);
+  });
   return new Promise(() => {
     let qID = 0;
 
@@ -223,7 +226,7 @@ async function mainGame(numQuestions: number): Promise<void> {
               blankBtn.disabled = false;
               showQBtn.disabled = true;
               showABtn.disabled = false;
-              countdownBtn.disabled = true;
+              countdownBtn.disabled = false;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
               break;
