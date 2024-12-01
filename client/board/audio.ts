@@ -7,6 +7,8 @@ let audioState:
       currentlyPlaying?: HTMLAudioElement;
     } = false;
 
+const lastPlayedSongForTime = new Map<number, number>();
+
 function spawnAudioElement(src: string) {
   const el = document.createElement("AUDIO") as HTMLAudioElement;
   el.src = src;
@@ -78,8 +80,13 @@ export function playQuestion(time: number) {
     stopAudio();
     if (time in audioState.questions) {
       const choices = audioState.questions[time];
-      const choice = choices[Math.floor(Math.random() * choices.length)];
+      let num = Math.floor(Math.random() * choices.length);
+      while (choices.length > 1 && num === lastPlayedSongForTime.get(time)) {
+        num = Math.floor(Math.random() * choices.length);
+      }
+      const choice = choices[num];
       playSong(choice);
+      lastPlayedSongForTime.set(time, num);
     }
   }
 }
