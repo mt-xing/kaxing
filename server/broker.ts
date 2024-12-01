@@ -36,6 +36,7 @@ export default class Broker {
         name: x[1].name,
         id: x[0],
       })),
+      numQuestions: this.#questions.length,
     };
     socket.emit("controllerClaimYes", JSON.stringify(payload));
     socket.on("kick", (msg: string) => {

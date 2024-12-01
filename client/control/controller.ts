@@ -1,6 +1,7 @@
 import Socket from "../player/socket.js";
 import {
   ControllerJoinResponse,
+  ControllerSuccessResponse,
   GameStateControllerResponse,
   GameStatePayload,
   JoinRoomPayload,
@@ -26,9 +27,7 @@ async function getCode(): Promise<string> {
   });
 }
 
-async function waitToJoin(
-  code: string,
-): Promise<{ players: JoinRoomPayload[] }> {
+async function waitToJoin(code: string): Promise<ControllerSuccessResponse> {
   return new Promise((r) => {
     const wrap = Dom.div();
     wrap.appendChild(Dom.h2("Welcome"));
@@ -40,7 +39,7 @@ async function waitToJoin(
     wrap.appendChild(Dom.div(Dom.code(code)));
     document.body.appendChild(wrap);
     socket.on("controllerClaimYes", (msg) => {
-      const payload = JSON.parse(msg) as { players: JoinRoomPayload[] };
+      const payload = JSON.parse(msg) as ControllerSuccessResponse;
       socket.off("controllerClaimYes");
       wrap.parentElement?.removeChild(wrap);
       r(payload);
@@ -285,10 +284,10 @@ async function mainGame(numQuestions: number): Promise<void> {
 
 async function gameLoop() {
   const code = await getCode();
-  const players = await waitToJoin(code);
+  const gameData = await waitToJoin(code);
   await openGame();
-  await negotiateGameStart(players.players);
-  await mainGame(2); // TODO get number of questions
+  await negotiateGameStart(gameData.players);
+  await mainGame(gameData.numQuestions);
 }
 
 window.addEventListener("load", () => {
