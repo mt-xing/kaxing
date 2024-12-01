@@ -20,7 +20,8 @@ export function awardPoints(
     1,
     Math.max(0, timeLeft / (question.time * 1000)),
   );
-  const points = 500 + percentTimeLeft * 500;
+  const halfPoints = question.points / 2;
+  const points = halfPoints + percentTimeLeft * halfPoints;
   // eslint-disable-next-line no-param-reassign
   player.score += points;
 }
