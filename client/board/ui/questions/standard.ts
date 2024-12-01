@@ -35,7 +35,7 @@ export default class StandardQuestionBoard {
     this.#wrap = Dom.div(undefined, "questionWrap");
 
     this.#countdownBar = Dom.div(undefined, "timeLeft");
-    this.#countdownBar.setAttribute("style", `--time: ${question.time}s`);
+    this.#countdownBar.setAttribute("style", `--time: ${question.time + 1}s`);
     this.#countdown = Dom.div(this.#countdownBar, "countdown");
     this.#countdownTime = Dom.p(`${question.time}`);
     this.#countdown.appendChild(this.#countdownTime);

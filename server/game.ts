@@ -141,7 +141,7 @@ export default class KaXingGame {
         () => {
           this.endCountdownShowResults();
         },
-        1000 * (this.#questions[this.#currentQuestion].time + 1),
+        1000 * (this.#questions[this.#currentQuestion].time + 2),
       ),
     };
   }
