@@ -134,7 +134,7 @@ export default class StandardQuestionBoard {
         this.#timeout = setTimeout(adjustTime, 1000);
       }
     };
-    this.#timeout = setTimeout(adjustTime, 1000);
+    this.#timeout = setTimeout(adjustTime, 1500);
   }
 
   endCountdown() {
