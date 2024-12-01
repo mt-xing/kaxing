@@ -41,7 +41,7 @@ export default class Home {
       this.#wrap.style.transform = "scale(1)translateY(0)";
       new QRCode(
         qrCode,
-        `https://michaelxing.com/games/kaxing/player?id=${gameCode}`,
+        `https://michaelxing.com/games/kaxing/client/player?${gameCode}`,
       );
     });
   }

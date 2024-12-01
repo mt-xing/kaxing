@@ -130,3 +130,4 @@ dist
 .pnp.*
 
 *.js
+deploy.ps1

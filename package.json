@@ -6,6 +6,7 @@
     "test": "echo \"Error: no test specified\" && exit 1",
     "server-build": "tsc --project ./server",
     "server-start": "node server/index.js",
+    "client-build": "tsc --project ./client/tsconfig.json",
     "client-watch": "tsc --project ./client/tsconfig.json --watch",
     "client-silent": "http-server ./client -s -p 3000",
     "start": "npm run server-build && npm-run-all --parallel client-watch client-silent server-start"
