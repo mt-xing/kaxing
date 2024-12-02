@@ -105,5 +105,10 @@ async function gameLoop() {
 
 window.onload = () => {
   window.onbeforeunload = () => "Are you sure you want to leave the game?";
+  try {
+    navigator.wakeLock.request("screen");
+  } catch (err) {
+    console.error(err);
+  }
   gameLoop();
 };
