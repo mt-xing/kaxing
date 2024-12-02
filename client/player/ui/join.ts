@@ -43,7 +43,10 @@ export default class Join {
           return;
         }
         goBtn.disabled = true;
-        const result = await connect(this.#codeEl.value, this.#nameEl.value);
+        const result = await connect(
+          this.#codeEl.value.toLowerCase(),
+          this.#nameEl.value,
+        );
         if (result) {
           this.remove();
         } else {
