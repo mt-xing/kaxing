@@ -1,5 +1,5 @@
 import Dom from "../../dom.js";
-import { playTheme, stopAudio } from "../audio.js";
+import { playEnd, playTheme, stopAudio } from "../audio.js";
 
 declare const QRCode: any;
 
@@ -64,6 +64,7 @@ export default class Home {
 
   async remove() {
     stopAudio();
+    playEnd();
     await Dom.deleteOuterwrap(this.#wrap);
   }
 }

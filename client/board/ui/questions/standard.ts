@@ -1,6 +1,6 @@
 import Dom from "../../../dom.js";
 import { Question } from "../../../../shared/question.js";
-import { playQuestion, stopAudio } from "../../audio.js";
+import { playEnd, playQuestion, stopAudio } from "../../audio.js";
 
 export default class StandardQuestionBoard {
   #wrap: HTMLElement;
@@ -155,6 +155,7 @@ export default class StandardQuestionBoard {
 
   showResults(responses: number[], numPlayers: number) {
     this.endCountdown();
+    playEnd();
     const checkIfCorrect = (i: number) => {
       const a = this.#question.correct;
       if (typeof a === "number") {
@@ -178,6 +179,7 @@ export default class StandardQuestionBoard {
 
   async remove() {
     await Dom.deleteOuterwrap(this.#wrap);
+    stopAudio();
 
     this.#countdown.style.opacity = "0";
     this.#submissionWrap.style.opacity = "0";
