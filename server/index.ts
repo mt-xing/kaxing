@@ -13,6 +13,9 @@ const io = new Server(http, {
     methods: ["GET", "POST"],
     credentials: true,
   },
+  connectionStateRecovery: {
+    maxDisconnectionDuration: 2 * 60 * 1000,
+  },
 });
 
 http.listen(port, () => {
