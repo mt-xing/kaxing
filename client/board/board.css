@@ -260,6 +260,10 @@
     transition: opacity 0.5s ease-in-out;
 }
 
+.tfWrap .countdown, .tfWrap .submissions {
+    bottom: 5vh;
+}
+
 .countdown {
     left: 1.5vw;
     --time: 0s;
@@ -272,6 +276,10 @@
     font-size: 1.25vw;
     text-align: center;
     opacity: 0.6;
+}
+
+.countdown p {
+    font-size: 2vw;
 }
 
 .timeLeft {

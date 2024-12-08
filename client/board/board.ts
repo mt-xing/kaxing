@@ -169,14 +169,33 @@ function gameScreen(
           questionUi?.setNumAnswers(payload.n, payload.d);
           break;
         case "displayAnswerResultsBoard": {
-          const answerCounts = [0, 0, 0, 0];
-          payload.answers.forEach((x) => {
-            if (x.t !== "standard") {
-              return;
+          switch (question.t) {
+            case "standard": {
+              const answerCounts = [0, 0, 0, 0];
+              payload.answers.forEach((x) => {
+                if (x.t !== "standard") {
+                  return;
+                }
+                answerCounts[x.a]++;
+              });
+              questionUi?.showResults(answerCounts, payload.numPlayers);
+              break;
             }
-            answerCounts[x.a]++;
-          });
-          questionUi?.showResults(answerCounts, payload.numPlayers);
+            case "tf": {
+              const answerCounts = [0, 0];
+              payload.answers.forEach((x) => {
+                if (x.t !== "tf") {
+                  return;
+                }
+                answerCounts[x.a ? 0 : 1]++;
+              });
+              questionUi?.showResults(answerCounts, payload.numPlayers);
+              break;
+            }
+            default:
+              break;
+          }
+
           break;
         }
         case "leaderboardBoard":
