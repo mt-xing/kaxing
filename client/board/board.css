@@ -95,6 +95,10 @@
     transition: transform 0.5s cubic-bezier(0.550, 0.055, 0.675, 0.190) 0.25s;
 }
 
+.tfWrap .answerwrap {
+    margin-top: 15vh;
+}
+
 .answerwrap {
     display: flex;
     flex-direction: row;
@@ -142,11 +146,11 @@
     font-family: 'Montserrat', sans-serif;
 }
 
-.answer.a {
+.answer.a, .answer.f {
     --accent-color: rgba(255,100,100,.5);
 }
 
-.answer.b {
+.answer.b, .answer.t {
     --accent-color: rgba(150,255,150,.5);
 }
 

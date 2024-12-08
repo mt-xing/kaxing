@@ -9,6 +9,7 @@ import StandardQuestion from "./ui/questions/standard.js";
 import { Answer } from "../../shared/question.js";
 import QuestionResponse from "./ui/qRes.js";
 import { getTaunt } from "./utils/taunts.js";
+import TFQuestion from "./ui/questions/tf.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -59,6 +60,18 @@ async function gameScreen(): Promise<void> {
               ui = new StandardQuestion(document.body, (i) => {
                 const a: Answer = {
                   t: "standard",
+                  a: i,
+                };
+                socket.send("response", a);
+                ui?.remove();
+              });
+              break;
+            }
+            case "tf": {
+              ui?.remove();
+              ui = new TFQuestion(document.body, (i) => {
+                const a: Answer = {
+                  t: "tf",
                   a: i,
                 };
                 socket.send("response", a);

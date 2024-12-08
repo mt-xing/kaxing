@@ -8,10 +8,10 @@
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="board.css" />
         <script type="module">
-            import StandardQuestionBoard from "./ui/questions/standard.js";
+            import TFQuestionBoard from "./ui/questions/tf.js";
             window.addEventListener('load', () => {
-              const b = new StandardQuestionBoard(document.body, {
-                "t": "standard",
+              const b = new TFQuestionBoard(document.body, {
+                "t": "tf",
                 "points": 1000,
                 "time": 90,
                 "text": "Running Dijkstra's from A, which node has its priority changed after already being in the frontier?",

@@ -12,6 +12,7 @@ import StandardQuestionBoard from "./ui/questions/standard.js";
 import Leaderboard from "./ui/leaderboard.js";
 import { playGG, startupAudio } from "./audio.js";
 import TextUi from "../player/ui/text.js";
+import TFQuestionBoard from "./ui/questions/tf.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -100,7 +101,15 @@ function gameScreen(
 ): Promise<{ name: string; points: number }[]> {
   return new Promise((r) => {
     let ui: { remove: () => Promise<void> } | undefined;
-    let questionUi: StandardQuestionBoard | undefined;
+    let questionUi:
+      | {
+          showAnswers: () => void;
+          remove: () => Promise<void>;
+          startCountdown: () => void;
+          setNumAnswers: (n: number, d: number) => void;
+          showResults: (answers: number[], numPlayers: number) => void;
+        }
+      | undefined;
     let question: Question = questions[0];
 
     socket.on("gameState", (msg) => {
@@ -128,6 +137,16 @@ function gameScreen(
                 ui.remove();
               }
               questionUi = new StandardQuestionBoard(
+                document.body,
+                question,
+                payload.numPlayers,
+              );
+              ui = questionUi;
+              break;
+            }
+            case "tf": {
+              ui?.remove();
+              questionUi = new TFQuestionBoard(
                 document.body,
                 question,
                 payload.numPlayers,

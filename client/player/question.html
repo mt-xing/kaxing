@@ -6,31 +6,14 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="player.css" />
-        <script>
+        <script type="module">
+            import TFQuestion from "./ui/questions/tf.js";
             window.onload = () => {
-                Array.from(document.getElementsByClassName("answer")).forEach((x, i) => {
-                    x.setAttribute('style', '--delay-time: ' + (i * 75 / 1000) + 's');
-                    x.style.transform = "scaleY(1)";
-                });
+                const x = new TFQuestion(document.body, () => {x.remove();});
             }
         </script>
     </head>
     <body>
-        <div class="answerwrap">
-            <button class="card answer a">
-                <div>Circle Answer</div>
-            </button>
-            <button class="card answer b">
-                <div>Triangle Answer</div>
-            </button>
-        </div>
-        <div class="answerwrap">
-            <button class="card answer c">
-                <div>Square Answer</div>
-            </button>
-            <button class="card answer d">
-                <div>Star Answer</div>
-            </button>
-        </div>
+        
     </body>
 </html>
