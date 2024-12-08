@@ -10,7 +10,8 @@ import { Question } from "../question.js";
 import UploadQuestions from "./ui/uploadQuestions.js";
 import StandardQuestionBoard from "./ui/questions/standard.js";
 import Leaderboard from "./ui/leaderboard.js";
-import { startupAudio } from "./audio.js";
+import { playGG, startupAudio } from "./audio.js";
+import TextUi from "../player/ui/text.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -94,8 +95,10 @@ function homeScreen(code: string): Promise<void> {
   });
 }
 
-function gameScreen(questions: Question[]): Promise<void> {
-  return new Promise(() => {
+function gameScreen(
+  questions: Question[],
+): Promise<{ name: string; points: number }[]> {
+  return new Promise((r) => {
     let ui: { remove: () => Promise<void> } | undefined;
     let questionUi: StandardQuestionBoard | undefined;
     let question: Question = questions[0];
@@ -166,6 +169,10 @@ function gameScreen(questions: Question[]): Promise<void> {
             ui = new Leaderboard(document.body, payload.leaderboard);
           }, 500);
           break;
+        case "gg":
+          ui?.remove();
+          r(payload.leaderboard);
+          break;
         default:
           ((x: never) => {
             throw new Error(x);
@@ -175,13 +182,60 @@ function gameScreen(questions: Question[]): Promise<void> {
   });
 }
 
+async function displayResults(leaderboard: { name: string; points: number }[]) {
+  if (leaderboard.length < 3) {
+    new Leaderboard(
+      document.body,
+      leaderboard.map((x) => ({ ...x, diff: 0 })),
+    );
+  } else {
+    playGG();
+
+    let ui: TextUi | undefined;
+    const showText = (text: string, start: number, end: number) => {
+      setTimeout(() => {
+        ui = new TextUi(document.body, text);
+      }, start);
+      setTimeout(() => {
+        ui?.remove();
+        ui = undefined;
+      }, end);
+    };
+
+    showText("Results", 0, 3500);
+    showText(
+      `3rd Place: ${leaderboard[2].name.substring(0, 25)} (${Math.round(leaderboard[2].points)})`,
+      4000,
+      7500,
+    );
+    showText(
+      `2nd Place: ${leaderboard[1].name.substring(0, 25)} (${Math.round(leaderboard[1].points)})`,
+      8000,
+      11500,
+    );
+    showText("Drumroll...", 12000, 13500);
+    showText(
+      `1st Place: ${leaderboard[0].name.substring(0, 25)} (${Math.round(leaderboard[0].points)})`,
+      14000,
+      15500,
+    );
+    setTimeout(() => {
+      new Leaderboard(
+        document.body,
+        leaderboard.map((x) => ({ ...x, diff: 0 })),
+      );
+    }, 16000);
+  }
+}
+
 async function gameLoop() {
   const questions = await uploadQuestions();
   const code = await getGameCode(questions);
   await pairController();
   await waitForGameToOpen();
   await homeScreen(code);
-  await gameScreen(questions);
+  const finalResults = await gameScreen(questions);
+  await displayResults(finalResults);
 }
 
 window.onload = () => {

@@ -66,6 +66,13 @@ export type GameStateBoardResponse =
         points: number;
         diff: number;
       }[];
+    }
+  | {
+      t: "gg";
+      leaderboard: {
+        name: string;
+        points: number;
+      }[];
     };
 
 export type GameStateControllerResponse =

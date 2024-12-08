@@ -357,3 +357,16 @@ audio {
     bottom: 100vh;
     right: 100vw;
 }
+
+.questionRes {
+    transform: translateY(100vh);
+    text-align: center;
+    transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+}
+
+.questionRes p {
+    font-size: 2vw;
+    text-align: center;
+    padding-left: 10vw;
+    padding-right: 10vw;
+}
