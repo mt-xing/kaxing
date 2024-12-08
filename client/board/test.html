@@ -8,9 +8,62 @@
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="board.css" />
         <script type="module">
-            import Home from "./ui/home.js";
+            import TextUi from "../player/ui/text.js";
+            import Leaderboard from "./ui/leaderboard.js";
             window.addEventListener('load', () => {
-                new Home(document.body, "aaaaa");
+                
+async function displayResults(leaderboard) {
+  if (leaderboard.length < 3) {
+    new Leaderboard(
+      document.body,
+      leaderboard.map((x) => ({ ...x, diff: 0 })),
+    );
+  } else {
+
+    let ui;
+    const showText = (text, start, end) => {
+      setTimeout(() => {
+        ui = new TextUi(document.body, text);
+      }, start);
+      setTimeout(() => {
+        ui?.remove();
+        ui = undefined;
+      }, end);
+    };
+
+    showText("Results", 0, 3500);
+    showText(
+      `3rd Place: ${leaderboard[2].name.substring(0, 25)} (${Math.round(leaderboard[2].points)})`,
+      4000,
+      7500,
+    );
+    showText(
+      `2nd Place: ${leaderboard[1].name.substring(0, 25)} (${Math.round(leaderboard[1].points)})`,
+      8000,
+      11500,
+    );
+    showText("Drumroll...", 12000, 13500);
+    showText(
+      `1st Place: ${leaderboard[0].name.substring(0, 25)} (${Math.round(leaderboard[0].points)})`,
+      14000,
+      15500,
+    );
+    setTimeout(() => {
+      new Leaderboard(
+        document.body,
+        leaderboard.map((x) => ({ ...x, diff: 0 })),
+      );
+    }, 16000);
+  }
+}
+
+displayResults([
+    {name: "first place", points: 5000},
+    {name: "second place", points: 4000},
+    {name: "third place", points: 3000},
+    {name: "fourth place", points: 2000},
+    {name: "fifth place", points: 1000}
+]);
             })
         </script>
     </head>
