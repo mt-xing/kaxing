@@ -188,6 +188,44 @@
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
 }
 
+.questionWrap.hasImg .questionContent {
+    width: 40vw;
+    transform: translate(20vw, -30vh);
+    transition: transform 0.5s ease-in-out;
+}
+
+.questionWrap.hasImg.showingAnswers .questionContent {
+    transform: translate(0, 0);
+}
+
+.questionWrap.hasImg .imgWrap {
+    width: 50vw;
+    height: 40vh;
+    position: absolute;
+    right: 0;
+    top: 0;
+    transform: translate(-25vw, 15vh);
+    transition: width 0.5s ease-in-out, transform 0.5s ease-in-out;
+}
+
+.questionWrap.hasImg img {
+    max-width: 100%;
+    max-height: 100%;
+    display: block;
+    margin: 0 auto;
+    transform: scale(1.5);
+    transition: transform 0.5s ease-in-out;
+}
+
+.questionWrap.hasImg.showingAnswers .imgWrap {
+    width: 50vw;
+    transform: translate(0, 0);
+}
+
+.questionWrap.hasImg.showingAnswers img {
+    transform: scale(1);
+}
+
 .questionWrap.smooth {
     transition: transform 0.5s ease-in-out;
 }

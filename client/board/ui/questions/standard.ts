@@ -43,6 +43,14 @@ export default class StandardQuestionBoard {
 
     this.#wrap.appendChild(Dom.div(Dom.p(question.text), "questionContent"));
 
+    if (question.img !== undefined) {
+      const img = document.createElement("IMG") as HTMLImageElement;
+      img.src = question.img;
+      img.alt = "";
+      this.#wrap.appendChild(Dom.div(img, "imgWrap"));
+      this.#wrap.classList.add("hasImg");
+    }
+
     const answerWraps = [];
     this.#answers = [];
 
@@ -111,6 +119,7 @@ export default class StandardQuestionBoard {
 
   showAnswers() {
     this.#wrap.classList.add("smooth");
+    this.#wrap.classList.add("showingAnswers");
     this.#wrap.style.transform = "translateY(0)";
     this.#answers.forEach((a, i) => {
       a.setAttribute("style", `--delay-time: ${(i * 125) / 1000}s`);
