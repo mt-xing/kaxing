@@ -13,6 +13,7 @@ import Leaderboard from "./ui/leaderboard.js";
 import { playGG, startupAudio } from "./audio.js";
 import TextUi from "../player/ui/text.js";
 import TFQuestionBoard from "./ui/questions/tf.js";
+import TextQuestionBoard from "./ui/questions/text.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -151,6 +152,12 @@ function gameScreen(
                 question,
                 payload.numPlayers,
               );
+              ui = questionUi;
+              break;
+            }
+            case "text": {
+              ui?.remove();
+              questionUi = new TextQuestionBoard(document.body, question);
               ui = questionUi;
               break;
             }

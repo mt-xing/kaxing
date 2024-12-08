@@ -261,7 +261,7 @@
 }
 
 .tfWrap .countdown, .tfWrap .submissions {
-    transform: translateY(5vh);
+    transform: translateY(-5vh);
 }
 
 .countdown {

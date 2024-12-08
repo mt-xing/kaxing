@@ -6,9 +6,21 @@
   "answers": ["Cornell College", "Cornell University", "UC Berkeley", "University of Washington"],
   "correct": 1
 }, {
+  "t": "text",
+  "points": 0,
+  "time": -1,
+  "text": "This is text all in a box by itself. I will not be doing anything about it. I'll add a lot more text here to hopefully make the text spill onto the next line and more."
+}, {
+  "t": "text",
+  "points": 0,
+  "time": -1,
+  "text": "This is text all in a box by itself. I will not be doing anything about it. I'll add a lot more text here to hopefully make the text spill onto the next line and more.",
+  "img": "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png"
+}, {
   "t": "tf",
   "points": 1000,
   "time": 10,
   "text": "True or False? Ithaca is gorges. I'll add a lot more text here to hopefully make the text spill onto the next line and more.",
-  "correct": true
+  "correct": true,
+  "img": "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png"
 }]

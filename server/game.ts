@@ -91,6 +91,7 @@ export default class KaXingGame {
   }
 
   setQuestion(questionId: number) {
+    this.#clearCountdown();
     this.#currentQuestion = questionId;
     this.#questionState = "blank";
     this.#numAnswers = 0;
@@ -107,6 +108,7 @@ export default class KaXingGame {
   }
 
   showQuestion() {
+    this.#clearCountdown();
     if (this.#questionState === "question") {
       return;
     }
@@ -115,6 +117,7 @@ export default class KaXingGame {
   }
 
   showAnswers() {
+    this.#clearCountdown();
     if (this.#questionState === "answers") {
       return;
     }
@@ -123,7 +126,11 @@ export default class KaXingGame {
   }
 
   countdown() {
+    this.#clearCountdown();
     if (this.#questionState === "countdown") {
+      return;
+    }
+    if (this.#questions[this.#currentQuestion].t === "text") {
       return;
     }
     if (this.#questionState === "question") {
@@ -175,12 +182,19 @@ export default class KaXingGame {
     this.#comms.sendResponseReceived(this.#numAnswers);
   }
 
-  endCountdownShowResults() {
+  #clearCountdown() {
     if (this.#currentCountdown) {
       clearTimeout(this.#currentCountdown.timeout);
       this.#currentCountdown = undefined;
     }
+  }
+
+  endCountdownShowResults() {
+    this.#clearCountdown();
     if (this.#questionState === "results") {
+      return;
+    }
+    if (this.#questions[this.#currentQuestion].t === "text") {
       return;
     }
     this.#questionState = "results";
@@ -189,6 +203,7 @@ export default class KaXingGame {
   }
 
   showLeaderboard() {
+    this.#clearCountdown();
     if (this.#questionState === "leaderboard") {
       return;
     }
@@ -197,6 +212,7 @@ export default class KaXingGame {
   }
 
   blank() {
+    this.#clearCountdown();
     this.#questionState = "blank";
     this.#comms.sendBlank(this.#currentQuestion);
   }
