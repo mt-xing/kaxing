@@ -10,6 +10,10 @@ export type Question = {
       correct: number | number[];
     }
   | {
+      t: "tf";
+      correct: boolean;
+    }
+  | {
       t: "multi";
       answers: string[];
       correct: number[];
@@ -18,6 +22,9 @@ export type Question = {
       t: "type";
       maxChars: number;
       correct: RegExp;
+    }
+  | {
+      t: "text";
     }
 );
 
@@ -33,6 +40,10 @@ export type Answer =
   | {
       t: "type";
       a: string;
+    }
+  | {
+      t: "tf";
+      a: boolean;
     };
 
 export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
@@ -64,6 +75,13 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
         return false;
       }
       return q.correct.test(a.a);
+    case "tf":
+      if (a.t !== "tf") {
+        return false;
+      }
+      return a.a === q.correct;
+    case "text":
+      return true;
     default:
       ((x: never) => {
         throw new Error(x);

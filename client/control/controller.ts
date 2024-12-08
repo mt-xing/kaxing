@@ -68,6 +68,7 @@ async function negotiateGameStart(
   return new Promise((r) => {
     const wrap = Dom.div(Dom.h2("Game Setup"));
     const ul = document.createElement("UL");
+    ul.classList.add("playerListWrap");
     const addPlayer = (val: { id: string; name: string }) => {
       const li = document.createElement("LI");
       li.textContent = val.name;
