@@ -166,4 +166,20 @@ export default class Communicator {
     this.sendToAllPlayers({ t: "blank" });
     this.sendQuestionStateToController(q, "blank");
   }
+
+  sendGG() {
+    const currentPlayerRank: Player[] = [...this.#players]
+      .map((x) => x[1])
+      .sort((a, b) => b.score - a.score)
+      .slice(0, 5);
+
+    this.sendToAllPlayers({ t: "blank" });
+    this.sendToBoard({
+      t: "ggBoard",
+      leaderboard: currentPlayerRank.map((x) => ({
+        name: x.name,
+        points: x.score,
+      })),
+    });
+  }
 }

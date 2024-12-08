@@ -35,7 +35,8 @@ export type GameStatePayload =
         | "showAnswers"
         | "countdown"
         | "displayAnswerResults"
-        | "leaderboard";
+        | "leaderboard"
+        | "gg";
     }
   | {
       t: "adjustScore";
@@ -68,7 +69,7 @@ export type GameStateBoardResponse =
       }[];
     }
   | {
-      t: "gg";
+      t: "ggBoard";
       leaderboard: {
         name: string;
         points: number;

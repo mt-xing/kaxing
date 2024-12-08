@@ -145,6 +145,14 @@ async function mainGame(numQuestions: number): Promise<void> {
     });
     wrap.appendChild(prevQBtn);
     wrap.appendChild(nextQBtn);
+    const endGameBtn = Dom.button("END GAME (DANGER)", () => {
+      // eslint-disable-next-line no-restricted-globals, no-alert
+      if (!confirm("DO YOU REALLY WANT TO END THE GAME?")) {
+        return;
+      }
+      send({ t: "gg" });
+    });
+    wrap.appendChild(endGameBtn);
     wrap.appendChild(Dom.h2("Question Progression"));
 
     const blankBtn = Dom.button(

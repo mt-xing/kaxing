@@ -120,6 +120,7 @@ function gameScreen(
         case "displayAnswerResults":
         case "showQuestion":
         case "leaderboard":
+        case "gg":
           break;
         case "setupQ":
           question = questions[payload.n];
@@ -214,7 +215,7 @@ function gameScreen(
             ui = new Leaderboard(document.body, payload.leaderboard);
           }, 500);
           break;
-        case "gg":
+        case "ggBoard":
           ui?.remove();
           r(payload.leaderboard);
           break;

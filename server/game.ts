@@ -83,6 +83,9 @@ export default class KaXingGame {
       case "leaderboard":
         this.showLeaderboard();
         break;
+      case "gg":
+        this.#comms.sendGG();
+        break;
       default:
         ((x: never) => {
           throw new Error(x);
