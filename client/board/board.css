@@ -188,6 +188,10 @@
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
 }
 
+.questionWrap.hasImg {
+    transform: translateY(120vh);
+}
+
 .questionWrap.hasImg .questionContent {
     width: 40vw;
     transform: translate(20vw, -30vh);
@@ -215,6 +219,7 @@
     margin: 0 auto;
     transform: scale(1.5);
     transition: transform 0.5s ease-in-out;
+    box-shadow: 5px 5px 10px 0 black;
 }
 
 .questionWrap.hasImg.showingAnswers .imgWrap {
