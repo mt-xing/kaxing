@@ -3,6 +3,7 @@ let audioState:
   | {
       theme: HTMLAudioElement;
       end: HTMLAudioElement;
+      gg: HTMLAudioElement;
       questions: Record<number, HTMLAudioElement[]>;
       currentlyPlaying?: HTMLAudioElement;
     } = false;
@@ -25,12 +26,14 @@ export async function startupAudio() {
       const contents = await data.json();
       const themeLocation = contents.theme as string;
       const endLocation = contents.end as string;
+      const ggLocation = contents.gg as string;
       const questionLocations = contents.q as Record<string, string[]>;
-      if (themeLocation && endLocation && questionLocations) {
+      if (themeLocation && endLocation && ggLocation && questionLocations) {
         console.log("Audio found");
         audioState = {
           theme: spawnAudioElement(themeLocation),
           end: spawnAudioElement(endLocation),
+          gg: spawnAudioElement(ggLocation),
           questions: Array.from(Object.keys(questionLocations)).reduce(
             (a, x) => ({
               ...a,
@@ -88,5 +91,11 @@ export function playQuestion(time: number) {
       playSong(choice);
       lastPlayedSongForTime.set(time, num);
     }
+  }
+}
+
+export function playGG() {
+  if (audioState) {
+    playSong(audioState.gg);
   }
 }
