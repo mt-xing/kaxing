@@ -181,5 +181,17 @@ export default class Communicator {
         points: x.score,
       })),
     });
+    setTimeout(() => {
+      const ranks = computeRanks(this.#players);
+
+      this.#players.forEach((p) => {
+        const rank = ranks.get(p) ?? Infinity;
+        const msg: GameStateClientResponse = {
+          t: "text",
+          text: `Rank ${rank} with ${Math.round(p.score)} points`,
+        };
+        p.socket.emit("gameState", JSON.stringify(msg));
+      });
+    }, 16000);
   }
 }
