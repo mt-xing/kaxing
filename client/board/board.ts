@@ -248,21 +248,21 @@ async function displayResults(leaderboard: { name: string; points: number }[]) {
       }, end);
     };
 
-    showText("Results", 0, 3500);
+    showText("Results", 0, 3000);
     showText(
       `3rd Place: ${leaderboard[2].name.substring(0, 25)} (${Math.round(leaderboard[2].points)})`,
-      4000,
-      7500,
+      3500,
+      7000,
     );
     showText(
       `2nd Place: ${leaderboard[1].name.substring(0, 25)} (${Math.round(leaderboard[1].points)})`,
-      8000,
-      11500,
+      7500,
+      11000,
     );
     showText("Drumroll...", 12000, 13500);
     showText(
       `1st Place: ${leaderboard[0].name.substring(0, 25)} (${Math.round(leaderboard[0].points)})`,
-      14000,
+      13500,
       15500,
     );
     setTimeout(() => {
