@@ -150,7 +150,10 @@ async function mainGame(numQuestions: number): Promise<void> {
       if (!confirm("DO YOU REALLY WANT TO END THE GAME?")) {
         return;
       }
-      send({ t: "gg" });
+      send({ t: "blank" });
+      setTimeout(() => {
+        send({ t: "gg" });
+      }, 1000);
     });
     wrap.appendChild(endGameBtn);
     wrap.appendChild(Dom.h2("Question Progression"));
