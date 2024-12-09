@@ -280,6 +280,7 @@
 
 .countdown p {
     font-size: 2vw;
+    opacity: 1;
 }
 
 .timeLeft {
