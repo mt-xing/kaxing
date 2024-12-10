@@ -42,10 +42,7 @@ export default class Home {
 
     Dom.insertEl(this.#wrap, parent).then(() => {
       this.#wrap.style.transform = "scale(1)translateY(0)";
-      new QRCode(
-        qrCode,
-        `https://michaelxing.com/games/kaxing/client/player?${gameCode}`,
-      );
+      new QRCode(qrCode, `https://mxi.ng/kx:${gameCode}`);
     });
   }
 

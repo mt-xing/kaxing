@@ -8,15 +8,18 @@
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="board.css" />
         <script type="module">
-            import TextQuestionBoard from "./ui/questions/text.js";
+            import StandardQuestionBoard from "./ui/questions/standard.js";
             window.addEventListener('load', () => {
-              const b = new TextQuestionBoard(document.body, {
-                "t": "text",
-                "points": -1,
-                "time": -1,
+              const b = new StandardQuestionBoard(document.body, {
+                "t": "tf",
+                "points": 1,
+                "time": 120,
+                "correct": 0,
+                "answers": ["a", "b", "c", "d"],
                 "text": "Running Dijkstra's from A, which node has its priority changed after already being in the frontier?",
-                "img": Math.random() > 0.5 ? "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png" : undefined,
-              });
+                "img": "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png",
+              },1);
+              setTimeout(() => {b.showAnswers();b.startCountdown();}, 5000);
             })
         </script>
     </head>
