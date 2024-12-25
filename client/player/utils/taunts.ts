@@ -70,7 +70,7 @@ export function getWrongString({
   if (rank / numPlayers > 0.5) {
     // Doing poorly
     return WRONG[Math.floor(Math.random() * WRONG.length)];
-  } else if (!isTop && rank / numPlayers > 0.1) {
+  } else if (!isTop && rank / numPlayers > 0.15) {
     // Doing mid
     const totalChoices = WRONG.length + WRONG_MEAN.length;
     const choice = Math.floor(Math.random() * totalChoices);
