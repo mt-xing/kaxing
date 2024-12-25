@@ -120,6 +120,7 @@ export default class Communicator {
         points: p.score,
         history: p.record,
         rank: ranks.get(p) ?? -1,
+        numPlayers: this.#players.size,
       });
     });
     this.sendToBoard({

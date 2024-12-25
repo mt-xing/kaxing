@@ -87,18 +87,11 @@ async function gameScreen(): Promise<void> {
           break;
         }
         case "result": {
-          /*
-            TODO Use data to generate better taunts
-            correct: boolean | null;
-            history: (boolean | null | undefined)[];
-            points: number;
-            rank: number;
-          */
           ui?.remove();
           ui = new QuestionResponse(
             document.body,
             payload.correct ?? false,
-            getTaunt(payload.correct),
+            getTaunt(payload),
           );
           break;
         }

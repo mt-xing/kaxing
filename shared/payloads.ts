@@ -101,6 +101,7 @@ export type GameStateClientResponse =
       history: (boolean | null | undefined)[];
       points: number;
       rank: number;
+      numPlayers: number;
     }
   | {
       t: "text";
