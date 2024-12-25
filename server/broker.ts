@@ -114,4 +114,28 @@ export default class Broker {
   get questions() {
     return this.#questions;
   }
+
+  get allDisconnected() {
+    const boardSocket = this.#namespace.sockets.get(this.#boardSocketId);
+    if (boardSocket?.connected) {
+      return false;
+    }
+
+    if (this.#controlSocketId) {
+      const controlSocket = this.#namespace.sockets.get(this.#controlSocketId);
+      if (controlSocket?.connected) {
+        return false;
+      }
+    }
+
+    for (const p of this.#players) {
+      const [pid] = p;
+      const pSocket = this.#namespace.sockets.get(pid);
+      if (pSocket?.connected) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

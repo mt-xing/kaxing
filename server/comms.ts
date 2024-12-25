@@ -192,4 +192,26 @@ export default class Communicator {
       this.#players.size < 3 ? 1000 : 16000,
     );
   }
+
+  get allDisconnected() {
+    const boardSocket = this.#namespace.sockets.get(this.#boardId);
+    if (boardSocket?.connected) {
+      return false;
+    }
+
+    const controlSocket = this.#namespace.sockets.get(this.#controllerId);
+    if (controlSocket?.connected) {
+      return false;
+    }
+
+    for (const p of this.#players) {
+      const [pid] = p;
+      const pSocket = this.#namespace.sockets.get(pid);
+      if (pSocket?.connected) {
+        return false;
+      }
+    }
+
+    return true;
+  }
 }

@@ -48,7 +48,7 @@ export default class KaXingServer {
       socket.on("gameState", this.#handleControllerCmd.bind(this, socket));
       socket.on("response", this.#handleResponse.bind(this, socket));
 
-      // socket.on("disconnect", this.#endGame.bind(this, socket));
+      socket.on("disconnect", this.#cleanupRoomIfNeeded.bind(this, socket));
     });
   }
 
@@ -227,5 +227,24 @@ export default class KaXingServer {
       return;
     }
     game.receiveResponse(socket, JSON.parse(value) as Answer);
+  }
+
+  #cleanupRoomIfNeeded(socket: io.Socket) {
+    const room = this.#socketRoom.get(socket.id);
+    if (!room) {
+      return;
+    }
+    const broker = this.#setups.get(room);
+    const game = this.#games.get(room);
+
+    if (broker?.allDisconnected) {
+      console.log(`Cleaning up setup room ${room}`);
+      this.#setups.delete(room);
+    }
+
+    if (game?.allDisconnected) {
+      console.log(`Cleaning up game ${room}`);
+      this.#games.delete(room);
+    }
   }
 }

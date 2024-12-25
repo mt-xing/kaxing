@@ -220,4 +220,8 @@ export default class KaXingGame {
     this.#questionState = "blank";
     this.#comms.sendBlank(this.#currentQuestion);
   }
+
+  get allDisconnected() {
+    return this.#comms.allDisconnected;
+  }
 }
