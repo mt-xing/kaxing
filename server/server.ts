@@ -26,7 +26,7 @@ export default class KaXingServer {
   #setups: Map<string, Broker>;
 
   /**
-   * Create a new server for onuw
+   * Create a new server for KaXing
    * @param {io.Namespace} namespace A socket.io namespace for the game to operate on
    */
   constructor(namespace: io.Namespace) {
@@ -196,9 +196,10 @@ export default class KaXingServer {
     }
 
     const newGame = new KaXingGame(
+      this.#namespace,
       game.questions,
-      boardSocket,
-      controllerSocket,
+      game.board,
+      game.controller,
       game.players,
     );
     controllerSocket.removeAllListeners("kick");

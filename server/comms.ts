@@ -9,44 +9,42 @@ import { Question } from "../shared/question.js";
 import { computeRanks, Player } from "../shared/player.js";
 
 export default class Communicator {
-  #board: io.Socket;
+  #namespace: io.Namespace;
 
-  #controller: io.Socket;
+  #boardId: string;
 
-  #players: Map<string, { socket: io.Socket } & Player>;
+  #controllerId: string;
 
-  #socketToPlayer: Map<string, string>;
+  #players: Map<string, Player>;
 
   constructor(
-    board: io.Socket,
-    controller: io.Socket,
-    players: Map<string, { socket: io.Socket } & Player>,
+    namespace: io.Namespace,
+    boardId: string,
+    controllerId: string,
+    players: Map<string, Player>,
   ) {
-    this.#board = board;
-    this.#controller = controller;
+    this.#namespace = namespace;
+    this.#boardId = boardId;
+    this.#controllerId = controllerId;
     this.#players = players;
-    this.#socketToPlayer = new Map();
-    players.forEach(({ socket }, id) =>
-      this.#socketToPlayer.set(socket.id, id),
-    );
   }
 
-  getPlayerId(socket: io.Socket): string | undefined {
-    return this.#socketToPlayer.get(socket.id);
+  private sendToPlayer(pid: string, msg: GameStateClientResponse) {
+    this.#namespace.to(pid).emit("gameState", JSON.stringify(msg));
   }
 
   private sendToAllPlayers(msg: GameStateClientResponse) {
-    this.#players.forEach((p) =>
-      p.socket.emit("gameState", JSON.stringify(msg)),
-    );
+    this.#players.forEach((_p, pid) => this.sendToPlayer(pid, msg));
   }
 
   private sendToController(msg: GameStateControllerResponse) {
-    this.#controller.emit("gameState", JSON.stringify(msg));
+    this.#namespace
+      .to(this.#controllerId)
+      .emit("gameState", JSON.stringify(msg));
   }
 
   private sendToBoard(msg: GameStateBoardResponse) {
-    this.#board.emit("gameState", JSON.stringify(msg));
+    this.#namespace.to(this.#boardId).emit("gameState", JSON.stringify(msg));
   }
 
   private sendQuestionStateToController(
@@ -115,15 +113,14 @@ export default class Communicator {
 
   sendCountdownEnd(q: number) {
     const ranks = computeRanks(this.#players);
-    this.#players.forEach((p) => {
-      const msg: GameStateClientResponse = {
+    this.#players.forEach((p, pid) => {
+      this.sendToPlayer(pid, {
         t: "result",
         correct: p.record[q] ?? null,
         points: p.score,
         history: p.record,
         rank: ranks.get(p) ?? -1,
-      };
-      p.socket.emit("gameState", JSON.stringify(msg));
+      });
     });
     this.sendToBoard({
       t: "displayAnswerResultsBoard",
@@ -139,13 +136,12 @@ export default class Communicator {
     const ranks = computeRanks(this.#players);
     const currentPlayerRank: Player[] = [];
 
-    this.#players.forEach((p) => {
+    this.#players.forEach((p, pid) => {
       const rank = ranks.get(p) ?? Infinity;
-      const msg: GameStateClientResponse = {
+      this.sendToPlayer(pid, {
         t: "text",
         text: `Rank ${rank} with ${Math.round(p.score)} points`,
-      };
-      p.socket.emit("gameState", JSON.stringify(msg));
+      });
       if (rank < 6) {
         currentPlayerRank[rank - 1] = p;
       }
@@ -185,13 +181,12 @@ export default class Communicator {
       () => {
         const ranks = computeRanks(this.#players);
 
-        this.#players.forEach((p) => {
+        this.#players.forEach((p, pid) => {
           const rank = ranks.get(p) ?? Infinity;
-          const msg: GameStateClientResponse = {
+          this.sendToPlayer(pid, {
             t: "text",
             text: `Rank ${rank} with ${Math.round(p.score)} points`,
-          };
-          p.socket.emit("gameState", JSON.stringify(msg));
+          });
         });
       },
       this.#players.size < 3 ? 1000 : 16000,

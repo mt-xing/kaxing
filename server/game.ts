@@ -8,9 +8,9 @@ import { GameStatePayload } from "./payloads.js";
 export default class KaXingGame {
   #questions: Question[];
 
-  #controller: io.Socket;
+  #controllerId: string;
 
-  #players: Map<string, { socket: io.Socket } & Player>;
+  #players: Map<string, Player>;
 
   #comms: Communicator;
 
@@ -30,27 +30,28 @@ export default class KaXingGame {
   };
 
   constructor(
+    namespace: io.Namespace,
     questions: Question[],
-    board: io.Socket,
-    controller: io.Socket,
-    players: Map<string, { socket: io.Socket } & Player>,
+    boardId: string,
+    controllerId: string,
+    players: Map<string, Player>,
   ) {
     this.#questions = questions;
-    this.#controller = controller;
+    this.#controllerId = controllerId;
     this.#players = players;
-    this.#comms = new Communicator(board, controller, players);
+    this.#comms = new Communicator(namespace, boardId, controllerId, players);
     this.#questionState = "blank";
     this.#currentQuestion = 0;
     this.#numAnswers = 0;
     this.#firstQuestion = true;
   }
 
-  isController(socket: io.Socket) {
-    return socket === this.#controller;
+  isController(socketId: string) {
+    return socketId === this.#controllerId;
   }
 
   handleControllerRequest(socket: io.Socket, msg: string) {
-    if (!this.isController(socket)) {
+    if (!this.isController(socket.id)) {
       return;
     }
     const payload = JSON.parse(msg) as GameStatePayload;
@@ -164,7 +165,7 @@ export default class KaXingGame {
     if (q.t !== response.t) {
       return;
     }
-    const pid = this.#comms.getPlayerId(socket);
+    const pid = socket.id;
     const player = this.#players.get(pid ?? "");
     if (pid === undefined || player === undefined) {
       return;
