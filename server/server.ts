@@ -1,5 +1,4 @@
 import * as io from "socket.io";
-import crypto from "crypto";
 import KaXingGame from "./game.js";
 import Broker from "./broker.js";
 import {
@@ -17,14 +16,17 @@ export default class KaXingServer {
    */
   #socketRoom: Map<string, string>;
 
-  #pendingControllers: Map<string, io.Socket>;
+  /**
+   * Password to controller
+   */
+  #pendingControllers: Map<string, string>;
 
   #games: Map<string, KaXingGame>;
 
   #setups: Map<string, Broker>;
 
   /**
-   * Create a new server for onuw
+   * Create a new server for KaXing
    * @param {io.Namespace} namespace A socket.io namespace for the game to operate on
    */
   constructor(namespace: io.Namespace) {
@@ -46,7 +48,7 @@ export default class KaXingServer {
       socket.on("gameState", this.#handleControllerCmd.bind(this, socket));
       socket.on("response", this.#handleResponse.bind(this, socket));
 
-      // socket.on("disconnect", this.#endGame.bind(this, socket));
+      socket.on("disconnect", this.#cleanupRoomIfNeeded.bind(this, socket));
     });
   }
 
@@ -61,7 +63,10 @@ export default class KaXingServer {
       const id = getID();
       if (!this.#games.has(id) && !this.#setups.has(id)) {
         socket.join(id);
-        this.#setups.set(id, new Broker(socket, JSON.parse(gameInfo)));
+        this.#setups.set(
+          id,
+          new Broker(this.#namespace, socket.id, JSON.parse(gameInfo)),
+        );
         this.#socketRoom.set(socket.id, id);
 
         socket.emit("createYes", JSON.stringify({ id }));
@@ -86,7 +91,7 @@ export default class KaXingServer {
     while (remainingTries > 0) {
       const password = getPwd();
       if (!this.#pendingControllers.has(password)) {
-        this.#pendingControllers.set(password, socket);
+        this.#pendingControllers.set(password, socket.id);
 
         const payload: ControllerJoinResponse = { password };
         socket.emit("controllerYes", JSON.stringify(payload));
@@ -105,15 +110,16 @@ export default class KaXingServer {
   #controllerClaim(socket: io.Socket, payload: string, callback: () => void) {
     callback();
     const { password } = JSON.parse(payload) as ControllerJoinResponse;
-    const controller = this.#pendingControllers.get(password);
+    const controllerId = this.#pendingControllers.get(password);
+    const controller = this.#namespace.sockets.get(controllerId ?? "ERROR");
     const room = this.#socketRoom.get(socket.id);
     const broker = this.#setups.get(room ?? "");
-    if (controller && broker && room) {
+    if (controllerId && controller && broker && room) {
       controller.join(room);
-      broker.addController(controller);
+      broker.addController(controllerId);
       this.#pendingControllers.delete(password);
       socket.emit("controllerClaimYes");
-      this.#socketRoom.set(controller.id, room);
+      this.#socketRoom.set(controllerId, room);
     } else {
       const errorPayload: ErrorResponse = {
         reason: "Invalid password",
@@ -131,11 +137,11 @@ export default class KaXingServer {
     if (
       game === undefined ||
       room === undefined ||
-      socket !== game.controller
+      socket.id !== game.controller
     ) {
       return;
     }
-    game.board.emit("openGame");
+    this.#namespace.to(game.board).emit("openGame");
   }
 
   /**
@@ -152,8 +158,7 @@ export default class KaXingServer {
       socket.emit("joinNo", JSON.stringify(errorPayload));
       return;
     }
-    const guid = crypto.randomUUID();
-    const addResult = game.addPlayer(socket, name, guid);
+    const addResult = game.addPlayer(socket.id, name);
     if (!addResult) {
       socket.emit(
         "joinNo",
@@ -178,18 +183,26 @@ export default class KaXingServer {
     if (
       game === undefined ||
       room === undefined ||
-      socket !== game.controller
+      socket.id !== game.controller
     ) {
       return;
     }
 
+    const boardSocket = this.#namespace.sockets.get(game.board);
+    const controllerSocket = this.#namespace.sockets.get(game.controller);
+
+    if (!boardSocket || !controllerSocket) {
+      return;
+    }
+
     const newGame = new KaXingGame(
+      this.#namespace,
       game.questions,
       game.board,
       game.controller,
       game.players,
     );
-    game.controller.removeAllListeners("kick");
+    controllerSocket.removeAllListeners("kick");
     this.#games.set(room, newGame);
     this.#setups.delete(room);
 
@@ -214,5 +227,24 @@ export default class KaXingServer {
       return;
     }
     game.receiveResponse(socket, JSON.parse(value) as Answer);
+  }
+
+  #cleanupRoomIfNeeded(socket: io.Socket) {
+    const room = this.#socketRoom.get(socket.id);
+    if (!room) {
+      return;
+    }
+    const broker = this.#setups.get(room);
+    const game = this.#games.get(room);
+
+    if (broker?.allDisconnected) {
+      console.log(`Cleaning up setup room ${room}`);
+      this.#setups.delete(room);
+    }
+
+    if (game?.allDisconnected) {
+      console.log(`Cleaning up game ${room}`);
+      this.#games.delete(room);
+    }
   }
 }

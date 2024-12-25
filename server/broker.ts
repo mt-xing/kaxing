@@ -4,19 +4,26 @@ import { Question } from "./question.js";
 import { ControllerSuccessResponse, KickPlayerPayload } from "./payloads.js";
 
 export default class Broker {
-  #boardSocket: io.Socket;
+  #namespace: io.Namespace;
 
-  #controlSocket?: io.Socket;
+  #boardSocketId: string;
 
-  #players: Map<string, { socket: io.Socket } & Player>;
+  #controlSocketId?: string;
+
+  #players: Map<string, Player>;
 
   #questions: Question[];
 
   /**
    * Create a helper to setup a new game
    */
-  constructor(hostPlayerSocket: io.Socket, questions: Question[]) {
-    this.#boardSocket = hostPlayerSocket;
+  constructor(
+    namespace: io.Namespace,
+    hostPlayerSocketId: string,
+    questions: Question[],
+  ) {
+    this.#namespace = namespace;
+    this.#boardSocketId = hostPlayerSocketId;
     this.#players = new Map();
     this.#questions = questions;
   }
@@ -25,12 +32,12 @@ export default class Broker {
    * Designate a socket as the controller
    * @returns True iff successful
    */
-  addController(socket: io.Socket): boolean {
-    if (this.#controlSocket) {
+  addController(socketId: string): boolean {
+    if (this.#controlSocketId) {
       console.error("Controller already present!");
       return false;
     }
-    this.#controlSocket = socket;
+    this.#controlSocketId = socketId;
     const payload: ControllerSuccessResponse = {
       players: [...this.#players.entries()].map((x) => ({
         name: x[1].name,
@@ -38,8 +45,10 @@ export default class Broker {
       })),
       numQuestions: this.#questions.length,
     };
-    socket.emit("controllerClaimYes", JSON.stringify(payload));
-    socket.on("kick", (msg: string) => {
+    this.#namespace
+      .to(socketId)
+      .emit("controllerClaimYes", JSON.stringify(payload));
+    this.#namespace.sockets.get(socketId)?.on("kick", (msg: string) => {
       const { id } = JSON.parse(msg) as KickPlayerPayload;
       this.removePlayer(id);
     });
@@ -50,14 +59,20 @@ export default class Broker {
    * Add a player to the game
    * @returns Whether joining was successful or not
    */
-  addPlayer(socket: io.Socket, name: string, id: string): boolean {
+  addPlayer(id: string, name: string): boolean {
     if (this.#players.has(id)) {
       return false;
     }
 
-    this.#players.set(id, { socket, name, score: 0, answers: [], record: [] });
-    this.#boardSocket.emit("join", JSON.stringify({ id, name }));
-    this.#controlSocket?.emit("join", JSON.stringify({ id, name }));
+    this.#players.set(id, { name, score: 0, answers: [], record: [] });
+    this.#namespace
+      .to(this.#boardSocketId)
+      .emit("join", JSON.stringify({ id, name }));
+    if (this.#controlSocketId) {
+      this.#namespace
+        .to(this.#controlSocketId)
+        .emit("join", JSON.stringify({ id, name }));
+    }
     return true;
   }
 
@@ -69,21 +84,27 @@ export default class Broker {
     const player = this.#players.get(id);
     if (player) {
       this.#players.delete(id);
-      player.socket.emit(
-        "kick",
-        JSON.stringify({ reason: "You have been removed from the game" }),
-      );
-      player.socket.disconnect();
-      this.#controlSocket?.emit("kickYes", JSON.stringify({ id }));
+      this.#namespace
+        .to(id)
+        .emit(
+          "kick",
+          JSON.stringify({ reason: "You have been removed from the game" }),
+        );
+      this.#namespace.sockets.get(id)?.disconnect();
+      if (this.#controlSocketId) {
+        this.#namespace
+          .to(this.#controlSocketId)
+          .emit("kickYes", JSON.stringify({ id }));
+      }
     }
   }
 
   get board() {
-    return this.#boardSocket;
+    return this.#boardSocketId;
   }
 
   get controller() {
-    return this.#controlSocket;
+    return this.#controlSocketId;
   }
 
   get players() {
@@ -92,5 +113,29 @@ export default class Broker {
 
   get questions() {
     return this.#questions;
+  }
+
+  get allDisconnected() {
+    const boardSocket = this.#namespace.sockets.get(this.#boardSocketId);
+    if (boardSocket?.connected) {
+      return false;
+    }
+
+    if (this.#controlSocketId) {
+      const controlSocket = this.#namespace.sockets.get(this.#controlSocketId);
+      if (controlSocket?.connected) {
+        return false;
+      }
+    }
+
+    for (const p of this.#players) {
+      const [pid] = p;
+      const pSocket = this.#namespace.sockets.get(pid);
+      if (pSocket?.connected) {
+        return false;
+      }
+    }
+
+    return true;
   }
 }
