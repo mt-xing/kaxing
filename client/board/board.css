@@ -55,7 +55,7 @@
 .nameWrap ul {
     list-style: none;
     padding: 0;
-    max-height: calc(100vh - 20vw);
+    max-height: calc(100vh - 250px);
     overflow-y: auto;
 }
 

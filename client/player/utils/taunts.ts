@@ -4,7 +4,6 @@ const CORRECT = [
   "skibidi rizz, as I'm told the kids say these days",
   "Correct",
   "Yep",
-  "Doing Professor Myers proud",
   "Woot woot",
   ":)",
   "Noice",
@@ -38,12 +37,12 @@ const WRONG = [
   `"I attempted to set low expectations for you. But you have even managed to underachieve on those." - Justine`,
   `It be like that sometimes`,
   `Not very brat coded`,
-  `When I say failure you say yeah`,
+  `When I say failure, you say yeah!`,
   `"2 + 2 = 10... in base 4 I'M FINE" - GLaDOS`,
 ];
 const NONE = [
-  `Unlike the T/F, there's no guessing penalty in this game`,
-  `So, you see that timer on the board?`,
+  `There's no guessing penalty in this game`,
+  `So, like, you see that timer on the board?`,
   `No answer received`,
   `Too slow`,
   `You should try answering at some point`,
