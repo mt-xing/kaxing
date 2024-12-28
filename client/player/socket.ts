@@ -1,3 +1,5 @@
+import { showDisconnect, showReconnect } from "./ui/disconnect.js";
+
 declare const io: (
   url: string,
   options: Record<string, unknown>,
@@ -25,6 +27,15 @@ export default class Socket {
     });
     this.#socket.on("connect", () => {
       console.debug(`Socket connected; id: ${this.#socket.id}`);
+      showReconnect();
+    });
+    this.#socket.on("disconnect", (reason) => {
+      if (
+        reason !== "io server disconnect" &&
+        reason !== "io client disconnect"
+      ) {
+        showDisconnect();
+      }
     });
     this.#socket.io.engine.on("packet", (packet: unknown) => {
       if (
