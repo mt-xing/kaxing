@@ -11,8 +11,9 @@ export default class ControllerJoin {
         "Join as a controller on another device to use as a remote control",
       ),
     );
+    const form = document.createElement("FORM");
     const input = Dom.input("text", "Password");
-    wrap.appendChild(input);
+    form.appendChild(input);
     const btn = Dom.button(
       "Pair",
       async (e) => {
@@ -33,7 +34,8 @@ export default class ControllerJoin {
       },
       "bigbtn",
     );
-    wrap.appendChild(btn);
+    form.appendChild(btn);
+    wrap.appendChild(form);
 
     this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {
