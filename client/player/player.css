@@ -212,3 +212,32 @@ form {
 .disconnectMsg.done {
     --accent-color: rgba(150,255,150,.5);
 }
+
+.textanswerwrap {
+    text-align: center;
+    width: 100%;
+    max-width: 600px;
+    padding: 0 25px;
+    box-sizing: border-box;
+}
+
+.textanswerwrap input {
+    width: 100%;
+    box-sizing: border-box;
+    font-family: 'Consolas', monospace;
+    color: white;
+    border-bottom: 2px var(--accent-color) solid;
+    border-top: none;
+    padding: 1em;
+
+    transform: scaleX(0);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+.textanswerwrap button {
+    display: block;
+    margin: 0.5em auto;
+
+    opacity: 0;
+    transition: opacity 1s ease-in-out 0.35s;
+}

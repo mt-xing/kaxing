@@ -7,21 +7,34 @@
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="player.css" />
         <script type="module">
-            import TFQuestion from "./ui/questions/tf.js";
+            import TextQuestion from "./ui/questions/text.js";
             window.onload = () => {
-                const x = new TFQuestion(document.body, () => {x.remove();});
+                const x = new TextQuestion(document.body, () => {x.remove();});
             }
         </script>
     </head>
     <body>
-        <div class="disconnectMsg">
+        <!-- <div class="disconnectMsg show">
             <h1>⚠️ Reconnecting</h1>
             <p>This device seems to have been disconnected :(</p>
             <p>Hang on while we try to get you back into the game...</p>
         </div>
-        <div class="disconnectMsg done show">
+        <div class="disconnectMsg done">
             <h1>✅ We Are So Back</h1>
             <p>You'll rejoin the game with the next question.</p>
-        </div>
+        </div> -->
+        <!-- <div class="outerwrap answerouterwrap">
+            <div class="textanswerwrap">
+                <input
+                    class="card"
+                    type="text"
+                    placeholder="<Insert Stunning Insight Here>"
+                    autocomplete="off"
+                    autocapitalize="off"
+                    spellcheck="false"
+                    autocorrect="off" />
+                <button class="bigbtn">Confirm</button>
+            </div>
+        </div> -->
     </body>
 </html>
