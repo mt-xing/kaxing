@@ -9,7 +9,7 @@
         <script type="module">
             import TextQuestion from "./ui/questions/text.js";
             window.onload = () => {
-                const x = new TextQuestion(document.body, () => {x.remove();});
+                const x = new TextQuestion(document.body, console.log.bind(console));
             }
         </script>
     </head>

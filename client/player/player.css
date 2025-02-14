@@ -229,9 +229,15 @@ form {
     border-bottom: 2px var(--accent-color) solid;
     border-top: none;
     padding: 1em;
+    position: relative;
 
     transform: scaleX(0);
-    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275), background 0.2s ease-in-out, border 0.2s ease-in-out;
+}
+
+.textanswerwrap input:disabled {
+    background: rgba(255, 255, 255, 0.2);
+    --accent-color: rgba(150,255,150,.5);
 }
 
 .textanswerwrap button {

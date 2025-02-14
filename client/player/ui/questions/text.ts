@@ -7,7 +7,16 @@ export default class TextQuestion {
 
   #button: HTMLButtonElement;
 
+  #send: () => void;
+
+  #cooldown?: ReturnType<typeof setTimeout>;
+
+  #locked: boolean;
+
   constructor(parent: HTMLElement, callback: (value: string) => void) {
+    this.#send = () => callback(this.#input.value);
+    this.#locked = false;
+
     const w = Dom.div(undefined, "textanswerwrap");
 
     this.#input = Dom.input(
@@ -20,15 +29,19 @@ export default class TextQuestion {
     this.#input.setAttribute("autocapitalize", "off");
     this.#input.setAttribute("spellcheck", "false");
     this.#input.setAttribute("autocorrect", "off");
+    this.#input.addEventListener("input", () => {
+      if (this.#cooldown !== undefined) {
+        return;
+      } else {
+        this.#cooldown = setTimeout(() => {
+          this.#send();
+          this.#cooldown = undefined;
+        }, 250);
+      }
+    });
     w.appendChild(this.#input);
 
-    this.#button = Dom.button(
-      "Confirm",
-      () => {
-        callback(this.#input.value);
-      },
-      "bigbtn",
-    );
+    this.#button = Dom.button("Confirm", this.#toggleLock.bind(this), "bigbtn");
     w.appendChild(this.#button);
 
     this.#wrap = Dom.outerwrap();
@@ -41,7 +54,27 @@ export default class TextQuestion {
     });
   }
 
+  #toggleLock() {
+    if (this.#locked) {
+      this.#input.disabled = false;
+      this.#button.textContent = "Confirm";
+      this.#locked = false;
+      this.#input.focus();
+    } else {
+      this.#input.disabled = true;
+      this.#button.textContent = "Edit Answer";
+      this.#locked = true;
+      this.#button.blur();
+      this.#send();
+      if (this.#cooldown !== undefined) {
+        clearTimeout(this.#cooldown);
+        this.#cooldown = undefined;
+      }
+    }
+  }
+
   async remove() {
+    this.#send();
     return Dom.deleteOuterwrap(this.#wrap);
   }
 }
