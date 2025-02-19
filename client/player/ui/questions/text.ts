@@ -7,15 +7,15 @@ export default class TextQuestion {
 
   #button: HTMLButtonElement;
 
-  #send: () => void;
+  #send: (isFinal: boolean) => void;
 
   #cooldown?: ReturnType<typeof setTimeout>;
 
-  #locked: boolean;
-
-  constructor(parent: HTMLElement, callback: (value: string) => void) {
-    this.#send = () => callback(this.#input.value);
-    this.#locked = false;
+  constructor(
+    parent: HTMLElement,
+    callback: (value: string, isFinal: boolean) => void,
+  ) {
+    this.#send = (isFinal) => callback(this.#input.value, isFinal);
 
     const w = Dom.div(undefined, "textanswerwrap");
 
@@ -34,14 +34,18 @@ export default class TextQuestion {
         return;
       } else {
         this.#cooldown = setTimeout(() => {
-          this.#send();
+          this.#send(false);
           this.#cooldown = undefined;
-        }, 250);
+        }, 500);
       }
     });
     w.appendChild(this.#input);
 
-    this.#button = Dom.button("Confirm", this.#toggleLock.bind(this), "bigbtn");
+    this.#button = Dom.button(
+      "Submit",
+      this.#sendFinalAnswer.bind(this),
+      "bigbtn",
+    );
     w.appendChild(this.#button);
 
     this.#wrap = Dom.outerwrap();
@@ -54,27 +58,20 @@ export default class TextQuestion {
     });
   }
 
-  #toggleLock() {
-    if (this.#locked) {
-      this.#input.disabled = false;
-      this.#button.textContent = "Confirm";
-      this.#locked = false;
-      this.#input.focus();
-    } else {
-      this.#input.disabled = true;
-      this.#button.textContent = "Edit Answer";
-      this.#locked = true;
-      this.#button.blur();
-      this.#send();
-      if (this.#cooldown !== undefined) {
-        clearTimeout(this.#cooldown);
-        this.#cooldown = undefined;
-      }
+  #sendFinalAnswer() {
+    this.#input.disabled = true;
+    this.#button.disabled = true;
+    this.#button.blur();
+    this.#send(true);
+    if (this.#cooldown !== undefined) {
+      clearTimeout(this.#cooldown);
+      this.#cooldown = undefined;
     }
+
+    setTimeout(this.remove.bind(this), 250);
   }
 
   async remove() {
-    this.#send();
     return Dom.deleteOuterwrap(this.#wrap);
   }
 }
