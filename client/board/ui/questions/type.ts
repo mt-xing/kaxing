@@ -2,7 +2,7 @@ import Dom from "../../../dom.js";
 import { Question } from "../../../../shared/question.js";
 import { playEnd, playQuestion, stopAudio } from "../../audio.js";
 
-export default class TFQuestionBoard {
+export default class TypeQuestionBoard {
   #wrap: HTMLElement;
 
   #instrWrap: HTMLElement;
