@@ -110,11 +110,7 @@ function gameScreen(
           startCountdown: () => void;
           setNumAnswers: (n: number, d: number) => void;
           showResults?: (answers: number[], numPlayers: number) => void;
-          showResultsType?: (
-            correctResponses: string[],
-            numCorrect: number,
-            numPlayers: number,
-          ) => void;
+          showResultsType?: (answers: string[], numPlayers: number) => void;
         }
       | undefined;
     let question: Question = questions[0];
@@ -214,6 +210,13 @@ function gameScreen(
                 answerCounts[x.a ? 0 : 1]++;
               });
               questionUi?.showResults?.(answerCounts, payload.numPlayers);
+              break;
+            }
+            case "type": {
+              questionUi?.showResultsType?.(
+                payload.answers.map((x) => `${x.a}`),
+                payload.numPlayers,
+              );
               break;
             }
             default:

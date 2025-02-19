@@ -133,11 +133,15 @@ export default class TypeQuestionBoard {
     this.#submissionBar.style.transform = `scaleY(${numAnswers / numPlayers})`;
   }
 
-  showResultsType(
-    correctResponses: string[],
-    numCorrect: number,
-    numPlayers: number,
-  ) {
+  showResultsType(answers: string[], numPlayers: number) {
+    const correctResponses = this.#question.correct.representativeAnswers;
+    const regex = new RegExp(this.#question.correct.regex);
+
+    const numCorrect = answers.reduce(
+      (a, x) => a + (regex.test(x.trim()) ? 1 : 0),
+      0,
+    );
+
     this.endCountdown();
     playEnd();
     this.#instrWrap.style.opacity = "0";

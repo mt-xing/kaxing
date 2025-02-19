@@ -90,7 +90,7 @@ async function gameScreen(): Promise<void> {
                     a: val,
                   };
                   socket.send("response", a);
-                  ui?.remove();
+                  ui = undefined;
                 },
                 q.maxChars,
               );

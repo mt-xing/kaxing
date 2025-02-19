@@ -1,5 +1,6 @@
 import * as io from "socket.io";
 import {
+  DistributiveOmit,
   GameStateBoardResponse,
   GameStateClientResponse,
   GameStateControllerResponse,
@@ -80,7 +81,9 @@ export default class Communicator {
   }
 
   sendCountdown(qNum: number, q: Question) {
-    const playerQ: Omit<Question, "correct"> & { correct?: unknown } = {
+    const playerQ: DistributiveOmit<Question, "correct"> & {
+      correct?: unknown;
+    } = {
       ...q,
     };
     delete playerQ.correct;
