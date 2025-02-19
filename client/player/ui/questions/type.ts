@@ -9,7 +9,11 @@ export default class TypeQuestion {
 
   #send: () => void;
 
-  constructor(parent: HTMLElement, callback: (value: string) => void) {
+  constructor(
+    parent: HTMLElement,
+    callback: (value: string) => void,
+    maxLength: number,
+  ) {
     this.#send = () => callback(this.#input.value);
 
     const w = Dom.div(undefined, "textanswerwrap");
@@ -33,6 +37,7 @@ export default class TypeQuestion {
     this.#input.setAttribute("autocapitalize", "off");
     this.#input.setAttribute("spellcheck", "false");
     this.#input.setAttribute("autocorrect", "off");
+    this.#input.maxLength = maxLength;
     form.appendChild(this.#input);
 
     this.#button = Dom.button("Submit", () => {}, "bigbtn");
