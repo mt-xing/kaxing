@@ -445,3 +445,67 @@ audio {
     padding-left: 10vw;
     padding-right: 10vw;
 }
+
+.typeResponseWrap {
+    position: absolute;
+    bottom: 0;
+    height: 25vh;
+    left: 0; right: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+
+    transform: translateY(100vh);
+    transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+}
+
+.typeResponseWrap.show {
+    transform: translateY(0);
+}
+
+.typeResponseWrap .responseBar {
+    height: 4vw;
+    width: 60vw;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: 0 0 10px 0 black;
+    margin-bottom: 1vw;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    position: relative;
+}
+
+.typeResponseWrap .responseText {
+    z-index: 5;
+    position: relative;
+    text-shadow: 0 0 5px black;
+    font-size: 2vw;
+    text-align: center;
+    opacity: 1;
+}
+
+.typeResponseWrap .responseBarInner {
+    position: absolute;
+    top: 0; left: 0; right: 0; bottom: 0;
+    transform: scaleX(0);
+    transform-origin: left center;
+    background: linear-gradient(to right, rgb(0, 64, 255), rgb(0, 128, 0));
+    box-shadow: 0 0 1vw black inset;
+
+    transition: transform 2s cubic-bezier(0.230, 1.000, 0.320, 1.000);
+}
+
+.typeResponseWrap .response, .typeResponseWrap .responseList {
+    font-size: 2vw;
+    font-family: "Consolas", monospace;
+}
+
+.typeResponseWrap .response, .typeResponseWrap li {
+    --delay-time: 0s;
+
+    transform: translateY(100vh);
+    transition: transform calc(0.7s + var(--delay-time) / 2) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
+}

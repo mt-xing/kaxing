@@ -7,6 +7,12 @@ export default class TFQuestionBoard {
 
   #instrWrap: HTMLElement;
 
+  #responseWrap: HTMLElement;
+
+  #responseBar: HTMLElement;
+
+  #responseText: HTMLElement;
+
   #countdown: HTMLElement;
 
   #countdownBar: HTMLElement;
@@ -72,6 +78,15 @@ export default class TFQuestionBoard {
     this.#submissionWrap.appendChild(subTimeWrap);
     this.#wrap.appendChild(this.#submissionWrap);
 
+    this.#responseWrap = Dom.div(undefined, "typeResponseWrap");
+    this.#wrap.appendChild(this.#responseWrap);
+    const responseBarOuter = Dom.div(undefined, "responseBar");
+    this.#responseBar = Dom.div(undefined, "responseBarInner");
+    this.#responseText = Dom.p("", "responseText");
+    responseBarOuter.appendChild(this.#responseBar);
+    responseBarOuter.appendChild(this.#responseText);
+    this.#responseWrap.appendChild(responseBarOuter);
+
     Dom.insertEl(this.#wrap, parent).then(() => {
       this.#wrap.style.transform = "translateY(20vh)scale(1)";
     });
@@ -126,6 +141,32 @@ export default class TFQuestionBoard {
     this.endCountdown();
     playEnd();
     this.#instrWrap.style.opacity = "0";
+
+    const responses = correctResponses.map((r) =>
+      correctResponses.length === 1 ? Dom.p(r, "response") : Dom.li(r),
+    );
+
+    if (correctResponses.length === 1) {
+      this.#responseWrap.appendChild(responses[0]);
+    } else {
+      const ul = document.createElement("UL");
+      ul.className = "responseList";
+      responses.forEach((x) => ul.appendChild(x));
+      this.#responseWrap.appendChild(ul);
+    }
+
+    this.#responseText.textContent = `${numCorrect} / ${numPlayers}`;
+
+    setTimeout(() => {
+      this.#responseBar.style.transform = `scaleX(${numCorrect / numPlayers})`;
+      this.#responseWrap.classList.add("show");
+
+      responses.forEach((x, i) => {
+        x.setAttribute("style", `--delay-time: ${i * 100}ms`);
+        // eslint-disable-next-line no-param-reassign
+        x.style.transform = "translateY(0)";
+      });
+    }, 500);
   }
 
   async remove() {

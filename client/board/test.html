@@ -13,13 +13,17 @@
               const b = new TypeQuestionBoard(document.body, {
                 "t": "type",
                 "points": 1000,
-                "time": 5,
+                "time": 2,
                 "text": "What year was KaXing created?",
                 "maxChars": 4,
                 "correctRegex": "(?:20|')?24",
                 "representativeAnswers": ["2024"]
               },1);
               setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
+              setTimeout(() => {
+                // b.showResults(["Hi", "Bye", "Lea"], 10, 20);
+                b.showResults(["This is the answer"], 10, 20);
+              }, 5000);
             })
         </script>
     </head>
