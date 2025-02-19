@@ -26,7 +26,8 @@ export default class KaXingGame {
 
   #currentCountdown?: {
     startTime: number;
-    timeout: ReturnType<typeof setTimeout>;
+    totalTimeout: ReturnType<typeof setTimeout>;
+    responseTimeout: ReturnType<typeof setTimeout> | null;
   };
 
   constructor(
@@ -148,7 +149,16 @@ export default class KaXingGame {
 
     this.#currentCountdown = {
       startTime: new Date().getTime(),
-      timeout: setTimeout(
+      responseTimeout: setTimeout(
+        () => {
+          this.#comms.sendBlankPlayer();
+          if (this.#currentCountdown) {
+            this.#currentCountdown.responseTimeout = null;
+          }
+        },
+        1000 * (this.#questions[this.#currentQuestion].time + 2) - 500,
+      ),
+      totalTimeout: setTimeout(
         () => {
           this.endCountdownShowResults();
         },
@@ -188,7 +198,10 @@ export default class KaXingGame {
 
   #clearCountdown() {
     if (this.#currentCountdown) {
-      clearTimeout(this.#currentCountdown.timeout);
+      clearTimeout(this.#currentCountdown.totalTimeout);
+      if (this.#currentCountdown.responseTimeout !== null) {
+        clearTimeout(this.#currentCountdown.responseTimeout);
+      }
       this.#currentCountdown = undefined;
     }
   }

@@ -36,7 +36,7 @@ export default class TextQuestion {
         this.#cooldown = setTimeout(() => {
           this.#send(false);
           this.#cooldown = undefined;
-        }, 500);
+        }, 400);
       }
     });
     w.appendChild(this.#input);

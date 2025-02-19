@@ -158,6 +158,10 @@ export default class Communicator {
     this.sendQuestionStateToController(q, "leaderboard");
   }
 
+  sendBlankPlayer() {
+    this.sendToAllPlayers({ t: "blank" });
+  }
+
   sendBlank(q: number) {
     this.sendToBoard({ t: "blank" });
     this.sendToAllPlayers({ t: "blank" });
