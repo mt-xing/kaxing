@@ -247,3 +247,9 @@ form {
     opacity: 0;
     transition: opacity 1s ease-in-out 0.35s;
 }
+
+.instr {
+    opacity: 0;
+    transition: opacity 0.5s ease-in-out;
+    margin-bottom: 1em;
+}

@@ -130,6 +130,21 @@
     transition: box-shadow 0.5s ease-out 0.5s, transform calc(0.5s + var(--delay-time) / 3) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
 }
 
+.answerwrap.instr {
+    transform: translateY(100vh);
+    transition: opacity 0.5s ease-in, transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000) 250ms;
+    flex-direction: column;
+    font-size: 2vw;
+
+    min-height: 25vh;
+    box-sizing: border-box;
+}
+
+.answerwrap .extrainstr {
+    font-size: 1vw;
+    margin: 0;
+}
+
 .answer > div {
     width: min(10vw, 10vh);
     height: min(10vw, 10vh);

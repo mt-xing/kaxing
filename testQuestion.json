@@ -1,4 +1,12 @@
 [{
+  "t": "type",
+  "points": 1000,
+  "time": 20,
+  "text": "What year was KaXing created?",
+  "maxChars": 4,
+  "correctRegex": "(?:20|')?24",
+  "representativeAnswers": ["2024"]
+},{
   "t": "standard",
   "points": 1000,
   "time": 20,
