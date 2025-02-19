@@ -495,7 +495,7 @@ audio {
     background: linear-gradient(to right, rgb(0, 64, 255), rgb(0, 128, 0));
     box-shadow: 0 0 1vw black inset;
 
-    transition: transform 2s cubic-bezier(0.230, 1.000, 0.320, 1.000);
+    transition: transform 2.5s cubic-bezier(0.230, 1.000, 0.320, 1.000);
 }
 
 .typeResponseWrap .response, .typeResponseWrap .responseList {

@@ -133,7 +133,7 @@ export default class TypeQuestionBoard {
     this.#submissionBar.style.transform = `scaleY(${numAnswers / numPlayers})`;
   }
 
-  showResults(
+  showResultsType(
     correctResponses: string[],
     numCorrect: number,
     numPlayers: number,

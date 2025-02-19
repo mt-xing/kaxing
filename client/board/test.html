@@ -16,13 +16,16 @@
                 "time": 2,
                 "text": "What year was KaXing created?",
                 "maxChars": 4,
-                "correctRegex": "(?:20|')?24",
-                "representativeAnswers": ["2024"]
+                "correct": {
+                  "regex": "(?:20|')?24",
+                  "representativeAnswers": ["2024"]
+                }
               },1);
               setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
               setTimeout(() => {
-                // b.showResults(["Hi", "Bye", "Lea"], 10, 20);
-                b.showResults(["This is the answer"], 10, 20);
+                // b.showResultsType(["Hi", "Bye", "Lea"], 12, 20);
+                // b.showResultsType(["This is the answer"], 10, 20);
+                b.showResultsType(["2024"], 18, 20);
               }, 5000);
             })
         </script>

@@ -10,6 +10,7 @@ import { Answer } from "../../shared/question.js";
 import QuestionResponse from "./ui/qRes.js";
 import { getTaunt } from "./utils/taunts.js";
 import TFQuestion from "./ui/questions/tf.js";
+import TypeQuestion from "./ui/questions/type.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -79,8 +80,23 @@ async function gameScreen(): Promise<void> {
               });
               break;
             }
+            case "type": {
+              ui?.remove();
+              ui = new TypeQuestion(
+                document.body,
+                (val) => {
+                  const a: Answer = {
+                    t: "type",
+                    a: val,
+                  };
+                  socket.send("response", a);
+                  ui?.remove();
+                },
+                q.maxChars,
+              );
+              break;
+            }
             case "multi":
-            case "type":
             default:
               break;
           }

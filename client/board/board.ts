@@ -14,6 +14,7 @@ import { playGG, startupAudio } from "./audio.js";
 import TextUi from "../player/ui/text.js";
 import TFQuestionBoard from "./ui/questions/tf.js";
 import TextQuestionBoard from "./ui/questions/text.js";
+import TypeQuestionBoard from "./ui/questions/type.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -108,7 +109,12 @@ function gameScreen(
           remove: () => Promise<void>;
           startCountdown: () => void;
           setNumAnswers: (n: number, d: number) => void;
-          showResults: (answers: number[], numPlayers: number) => void;
+          showResults?: (answers: number[], numPlayers: number) => void;
+          showResultsType?: (
+            correctResponses: string[],
+            numCorrect: number,
+            numPlayers: number,
+          ) => void;
         }
       | undefined;
     let question: Question = questions[0];
@@ -162,6 +168,16 @@ function gameScreen(
               ui = questionUi;
               break;
             }
+            case "type": {
+              ui?.remove();
+              questionUi = new TypeQuestionBoard(
+                document.body,
+                question,
+                payload.numPlayers,
+              );
+              ui = questionUi;
+              break;
+            }
             default:
               break;
           }
@@ -186,7 +202,7 @@ function gameScreen(
                 }
                 answerCounts[x.a]++;
               });
-              questionUi?.showResults(answerCounts, payload.numPlayers);
+              questionUi?.showResults?.(answerCounts, payload.numPlayers);
               break;
             }
             case "tf": {
@@ -197,7 +213,7 @@ function gameScreen(
                 }
                 answerCounts[x.a ? 0 : 1]++;
               });
-              questionUi?.showResults(answerCounts, payload.numPlayers);
+              questionUi?.showResults?.(answerCounts, payload.numPlayers);
               break;
             }
             default:

@@ -1,6 +1,10 @@
 import { Answer, Question } from "./question.js";
 import { QuestionState } from "./state.js";
 
+export type DistributiveOmit<T, K extends keyof any> = T extends any
+  ? Omit<T, K>
+  : never;
+
 export type ControllerJoinResponse = {
   password: string;
 };
@@ -93,7 +97,7 @@ export type GameStateClientResponse =
     }
   | {
       t: "acceptResponse";
-      q: Omit<Question, "correct">;
+      q: DistributiveOmit<Question, "correct">;
     }
   | {
       t: "result";

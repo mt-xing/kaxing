@@ -21,8 +21,10 @@ export type Question = {
   | {
       t: "type";
       maxChars: number;
-      correctRegex: string;
-      representativeAnswers: string[];
+      correct: {
+        regex: string;
+        representativeAnswers: string[];
+      };
     }
   | {
       t: "text";
@@ -75,7 +77,7 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
       if (a.t !== "type") {
         return false;
       }
-      return new RegExp(q.correctRegex).test(a.a.trim());
+      return new RegExp(q.correct.regex).test(a.a.trim());
     case "tf":
       if (a.t !== "tf") {
         return false;
