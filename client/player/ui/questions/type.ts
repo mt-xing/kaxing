@@ -24,7 +24,9 @@ export default class TypeQuestion {
     const form = document.createElement("FORM");
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      this.remove();
+      if (this.#input.value.length > 0) {
+        this.remove();
+      }
     });
 
     this.#input = Dom.input(
@@ -60,7 +62,9 @@ export default class TypeQuestion {
     this.#input.disabled = true;
     this.#button.disabled = true;
     this.#button.blur();
-    this.#send();
+    if (this.#input.value.length > 0) {
+      this.#send();
+    }
 
     setTimeout(this.#fullRemove.bind(this), 100);
   }
