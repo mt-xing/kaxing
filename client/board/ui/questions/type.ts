@@ -135,7 +135,7 @@ export default class TypeQuestionBoard {
 
   showResultsType(answers: string[], numPlayers: number) {
     const correctResponses = this.#question.correct.representativeAnswers;
-    const regex = new RegExp(this.#question.correct.regex);
+    const regex = new RegExp(this.#question.correct.regex, "i");
 
     const numCorrect = answers.reduce(
       (a, x) => a + (regex.test(x.trim()) ? 1 : 0),
