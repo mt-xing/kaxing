@@ -88,6 +88,7 @@ export type GameStateControllerResponse =
   | {
       t: "state";
       question: number;
+      questionString: string;
       state: QuestionState;
     };
 

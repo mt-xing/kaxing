@@ -40,7 +40,13 @@ export default class KaXingGame {
     this.#questions = questions;
     this.#controllerId = controllerId;
     this.#players = players;
-    this.#comms = new Communicator(namespace, boardId, controllerId, players);
+    this.#comms = new Communicator(
+      namespace,
+      boardId,
+      controllerId,
+      players,
+      questions,
+    );
     this.#questionState = "blank";
     this.#currentQuestion = 0;
     this.#numAnswers = 0;

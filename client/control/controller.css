@@ -6,3 +6,10 @@ code {
   max-height: 75vh;
   overflow-y: auto;
 }
+
+.questionPreview {
+  max-height: 200px;
+  overflow-y: auto;
+  border: 1px black solid;
+  max-width: 90%;
+}

@@ -156,6 +156,11 @@ async function mainGame(numQuestions: number): Promise<void> {
       }, 1000);
     });
     wrap.appendChild(endGameBtn);
+
+    const questionInfo = document.createElement("PRE");
+    questionInfo.classList.add("questionPreview");
+    wrap.appendChild(questionInfo);
+
     wrap.appendChild(Dom.h2("Question Progression"));
 
     const blankBtn = Dom.button(
@@ -223,6 +228,7 @@ async function mainGame(numQuestions: number): Promise<void> {
         case "state": {
           qID = payload.question;
           qIdUi.textContent = `Question ${qID}`;
+          questionInfo.textContent = payload.questionString;
           switch (payload.state) {
             case "blank": {
               blankBtn.disabled = true;

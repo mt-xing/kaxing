@@ -18,16 +18,20 @@ export default class Communicator {
 
   #players: Map<string, Player>;
 
+  #questions: Question[];
+
   constructor(
     namespace: io.Namespace,
     boardId: string,
     controllerId: string,
     players: Map<string, Player>,
+    questions: Question[],
   ) {
     this.#namespace = namespace;
     this.#boardId = boardId;
     this.#controllerId = controllerId;
     this.#players = players;
+    this.#questions = questions;
   }
 
   private sendToPlayer(pid: string, msg: GameStateClientResponse) {
@@ -52,9 +56,11 @@ export default class Communicator {
     currentQuestion: number,
     state: QuestionState,
   ) {
+    const q = this.#questions[currentQuestion];
     this.sendToController({
       t: "state",
       question: currentQuestion,
+      questionString: `Type: ${q.t}\nText: ${q.text}\nTime: ${q.time} sec`,
       state,
     });
   }
