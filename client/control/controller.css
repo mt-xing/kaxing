@@ -11,5 +11,8 @@ code {
   max-height: 200px;
   overflow-y: auto;
   border: 1px black solid;
-  max-width: 90%;
+  white-space: pre-wrap;
+  max-width: 90vw;
+  display: block;
+  margin: 0 auto;
 }
