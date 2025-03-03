@@ -1,12 +1,21 @@
 import * as io from "socket.io";
-import { Answer, Question, wasAnswerCorrect } from "../shared/question.js";
+import {
+  Answer,
+  initResult,
+  Question,
+  QuestionResults,
+  wasAnswerCorrect,
+} from "../shared/question.js";
 import { awardPoints, computeRanks, Player } from "../shared/player.js";
 import { QuestionState } from "../shared/state.js";
 import Communicator from "./comms.js";
 import { GameStatePayload } from "./payloads.js";
+import { assertUnreachable } from "../shared/util.js";
 
 export default class KaXingGame {
   #questions: Question[];
+
+  #questionResults: QuestionResults[];
 
   #controllerId: string;
 
@@ -38,6 +47,7 @@ export default class KaXingGame {
     players: Map<string, Player>,
   ) {
     this.#questions = questions;
+    this.#questionResults = questions.map(initResult);
     this.#controllerId = controllerId;
     this.#players = players;
     this.#comms = new Communicator(
@@ -106,6 +116,7 @@ export default class KaXingGame {
     this.#currentQuestion = questionId;
     this.#questionState = "blank";
     this.#numAnswers = 0;
+    this.#questionResults[questionId] = initResult(this.#questions[questionId]);
     this.#comms.sendQuestionReset(questionId);
     if (!this.#firstQuestion) {
       const ranks = computeRanks(this.#players);
@@ -198,6 +209,39 @@ export default class KaXingGame {
       );
     }
 
+    const result = this.#questionResults[this.#currentQuestion];
+    switch (q.t) {
+      case "standard": {
+        if (result.t === q.t && response.t === q.t) {
+          result.responses[response.a]++;
+        }
+        break;
+      }
+      case "tf": {
+        if (result.t === q.t && response.t === q.t) {
+          if (response.a) {
+            result.numTrue++;
+          } else {
+            result.numFalse++;
+          }
+        }
+        break;
+      }
+      case "type": {
+        if (result.t === q.t && response.t === q.t) {
+          if (player.record[this.#currentQuestion]) {
+            result.numCorrect++;
+          }
+        }
+        break;
+      }
+      case "multi": {
+        throw new Error("TODO: Unimplemented");
+      }
+      default:
+        assertUnreachable(q);
+    }
+
     this.#numAnswers++;
     this.#comms.sendResponseReceived(this.#numAnswers);
   }
@@ -222,7 +266,10 @@ export default class KaXingGame {
     }
     this.#questionState = "results";
 
-    this.#comms.sendCountdownEnd(this.#currentQuestion);
+    this.#comms.sendCountdownEnd(
+      this.#currentQuestion,
+      this.#questionResults[this.#currentQuestion],
+    );
   }
 
   showLeaderboard() {

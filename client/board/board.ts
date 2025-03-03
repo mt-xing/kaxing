@@ -110,7 +110,7 @@ function gameScreen(
           startCountdown: () => void;
           setNumAnswers: (n: number, d: number) => void;
           showResults?: (answers: number[], numPlayers: number) => void;
-          showResultsType?: (answers: string[], numPlayers: number) => void;
+          showResultsType?: (numCorrect: number, numPlayers: number) => void;
         }
       | undefined;
     let question: Question = questions[0];
@@ -191,32 +191,30 @@ function gameScreen(
         case "displayAnswerResultsBoard": {
           switch (question.t) {
             case "standard": {
-              const answerCounts = [0, 0, 0, 0];
-              payload.answers.forEach((x) => {
-                if (x.t !== "standard") {
-                  return;
-                }
-                answerCounts[x.a]++;
-              });
-              questionUi?.showResults?.(answerCounts, payload.numPlayers);
+              if (payload.results.t === "standard") {
+                questionUi?.showResults?.(
+                  payload.results.responses,
+                  payload.numPlayers,
+                );
+              }
               break;
             }
             case "tf": {
-              const answerCounts = [0, 0];
-              payload.answers.forEach((x) => {
-                if (x.t !== "tf") {
-                  return;
-                }
-                answerCounts[x.a ? 0 : 1]++;
-              });
-              questionUi?.showResults?.(answerCounts, payload.numPlayers);
+              if (payload.results.t === "tf") {
+                questionUi?.showResults?.(
+                  [payload.results.numTrue, payload.results.numFalse],
+                  payload.numPlayers,
+                );
+              }
               break;
             }
             case "type": {
-              questionUi?.showResultsType?.(
-                payload.answers.map((x) => `${x.a}`),
-                payload.numPlayers,
-              );
+              if (payload.results.t === "type") {
+                questionUi?.showResultsType?.(
+                  payload.results.numCorrect,
+                  payload.numPlayers,
+                );
+              }
               break;
             }
             default:
@@ -248,49 +246,42 @@ function gameScreen(
 }
 
 async function displayResults(leaderboard: { name: string; points: number }[]) {
-  if (leaderboard.length < 3) {
+  playGG();
+
+  let ui: TextUi | undefined;
+  const showText = (text: string, start: number, end: number) => {
+    setTimeout(() => {
+      ui = new TextUi(document.body, text);
+    }, start);
+    setTimeout(() => {
+      ui?.remove();
+      ui = undefined;
+    }, end);
+  };
+
+  showText("Results", 0, 3000);
+  showText(
+    `3rd Place: ${leaderboard[2].name.substring(0, 25)} (${Math.round(leaderboard[2].points)})`,
+    3500,
+    7000,
+  );
+  showText(
+    `2nd Place: ${leaderboard[1].name.substring(0, 25)} (${Math.round(leaderboard[1].points)})`,
+    7500,
+    11000,
+  );
+  showText("Drumroll...", 12000, 13500);
+  showText(
+    `1st Place: ${leaderboard[0].name.substring(0, 25)} (${Math.round(leaderboard[0].points)})`,
+    13500,
+    15500,
+  );
+  setTimeout(() => {
     new Leaderboard(
       document.body,
       leaderboard.map((x) => ({ ...x, diff: 0 })),
     );
-  } else {
-    playGG();
-
-    let ui: TextUi | undefined;
-    const showText = (text: string, start: number, end: number) => {
-      setTimeout(() => {
-        ui = new TextUi(document.body, text);
-      }, start);
-      setTimeout(() => {
-        ui?.remove();
-        ui = undefined;
-      }, end);
-    };
-
-    showText("Results", 0, 3000);
-    showText(
-      `3rd Place: ${leaderboard[2].name.substring(0, 25)} (${Math.round(leaderboard[2].points)})`,
-      3500,
-      7000,
-    );
-    showText(
-      `2nd Place: ${leaderboard[1].name.substring(0, 25)} (${Math.round(leaderboard[1].points)})`,
-      7500,
-      11000,
-    );
-    showText("Drumroll...", 12000, 13500);
-    showText(
-      `1st Place: ${leaderboard[0].name.substring(0, 25)} (${Math.round(leaderboard[0].points)})`,
-      13500,
-      15500,
-    );
-    setTimeout(() => {
-      new Leaderboard(
-        document.body,
-        leaderboard.map((x) => ({ ...x, diff: 0 })),
-      );
-    }, 16000);
-  }
+  }, 16000);
 }
 
 async function gameLoop() {

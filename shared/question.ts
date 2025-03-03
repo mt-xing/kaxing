@@ -91,3 +91,51 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
       })(q);
   }
 }
+
+export type QuestionResults =
+  | {
+      t: "standard";
+      responses: [number, number, number, number];
+    }
+  | {
+      t: "tf";
+      numTrue: number;
+      numFalse: number;
+    }
+  | {
+      t: "type";
+      numCorrect: number;
+    }
+  | {
+      t: "other";
+    };
+
+export function initResult(q: Question): QuestionResults {
+  switch (q.t) {
+    case "multi":
+    case "text":
+      return {
+        t: "other",
+      };
+    case "standard":
+      return {
+        t: "standard",
+        responses: [0, 0, 0, 0],
+      };
+    case "tf":
+      return {
+        t: "tf",
+        numTrue: 0,
+        numFalse: 0,
+      };
+    case "type":
+      return {
+        t: "type",
+        numCorrect: 0,
+      };
+    default:
+      return ((x: never) => {
+        throw new Error(x);
+      })(q);
+  }
+}

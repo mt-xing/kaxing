@@ -6,7 +6,7 @@ import {
   GameStateControllerResponse,
 } from "../shared/payloads.js";
 import { QuestionState } from "../shared/state.js";
-import { Question } from "../shared/question.js";
+import { Question, QuestionResults } from "../shared/question.js";
 import { computeRanks, Player } from "../shared/player.js";
 
 export default class Communicator {
@@ -120,7 +120,7 @@ export default class Communicator {
     });
   }
 
-  sendCountdownEnd(q: number) {
+  sendCountdownEnd(q: number, results: QuestionResults) {
     const ranks = computeRanks(this.#players);
     this.#players.forEach((p, pid) => {
       this.sendToPlayer(pid, {
@@ -134,9 +134,7 @@ export default class Communicator {
     });
     this.sendToBoard({
       t: "displayAnswerResultsBoard",
-      answers: Array.from(this.#players)
-        .map((x) => x[1].answers[q])
-        .filter((x) => x !== undefined && x !== null),
+      results,
       numPlayers: this.#players.size,
     });
     this.sendQuestionStateToController(q, "results");
@@ -191,20 +189,17 @@ export default class Communicator {
         points: x.score,
       })),
     });
-    setTimeout(
-      () => {
-        const ranks = computeRanks(this.#players);
+    setTimeout(() => {
+      const ranks = computeRanks(this.#players);
 
-        this.#players.forEach((p, pid) => {
-          const rank = ranks.get(p) ?? Infinity;
-          this.sendToPlayer(pid, {
-            t: "text",
-            text: `Rank ${rank} with ${Math.round(p.score)} points`,
-          });
+      this.#players.forEach((p, pid) => {
+        const rank = ranks.get(p) ?? Infinity;
+        this.sendToPlayer(pid, {
+          t: "text",
+          text: `Rank ${rank} with ${Math.round(p.score)} points`,
         });
-      },
-      this.#players.size < 3 ? 1000 : 16000,
-    );
+      });
+    }, 16000);
   }
 
   get allDisconnected() {

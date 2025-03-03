@@ -1,4 +1,4 @@
-import { Answer, Question } from "./question.js";
+import { Question, QuestionResults } from "./question.js";
 import { QuestionState } from "./state.js";
 
 export type DistributiveOmit<T, K extends keyof any> = T extends any
@@ -57,7 +57,7 @@ export type GameStateBoardResponse =
     }
   | {
       t: "displayAnswerResultsBoard";
-      answers: Answer[];
+      results: QuestionResults;
       numPlayers: number;
     }
   | {
