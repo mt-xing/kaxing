@@ -248,6 +248,10 @@ function gameScreen(
 async function displayResults(leaderboard: { name: string; points: number }[]) {
   playGG();
 
+  const fixedLeaderboard = [0, 1, 2].map((i) =>
+    leaderboard[i] === undefined ? { name: "N/A", points: 0 } : leaderboard[i],
+  );
+
   let ui: TextUi | undefined;
   const showText = (text: string, start: number, end: number) => {
     setTimeout(() => {
@@ -261,18 +265,18 @@ async function displayResults(leaderboard: { name: string; points: number }[]) {
 
   showText("Results", 0, 3000);
   showText(
-    `3rd Place: ${leaderboard[2].name.substring(0, 25)} (${Math.round(leaderboard[2].points)})`,
+    `3rd Place: ${fixedLeaderboard[2].name.substring(0, 25)} (${Math.round(fixedLeaderboard[2].points)})`,
     3500,
     7000,
   );
   showText(
-    `2nd Place: ${leaderboard[1].name.substring(0, 25)} (${Math.round(leaderboard[1].points)})`,
+    `2nd Place: ${fixedLeaderboard[1].name.substring(0, 25)} (${Math.round(fixedLeaderboard[1].points)})`,
     7500,
     11000,
   );
   showText("Drumroll...", 12000, 13500);
   showText(
-    `1st Place: ${leaderboard[0].name.substring(0, 25)} (${Math.round(leaderboard[0].points)})`,
+    `1st Place: ${fixedLeaderboard[0].name.substring(0, 25)} (${Math.round(fixedLeaderboard[0].points)})`,
     13500,
     15500,
   );
