@@ -213,3 +213,29 @@ form {
     transition: opacity 0.5s ease-in-out;
     margin-bottom: 1em;
 }
+
+.mapanswerwrap {
+    text-align: center;
+}
+
+.mapanswerwrap .map {
+    height: 60vh;
+    width: 95vw;
+    max-width: 1000px;
+    position: relative;
+}
+
+.mapanswerwrap .map::after {
+    content: "";
+    background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d1/Google_Maps_pin.svg');
+    background-size: contain;
+    background-position: bottom center;
+    background-repeat: no-repeat;
+    display: block;
+    position: absolute;
+    z-index: 1000;
+    top: 50%; left: 50%;
+    width: 5vh;
+    height: 10vh;
+    transform: translate(-50%, -100%);
+}

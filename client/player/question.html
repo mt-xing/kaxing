@@ -6,10 +6,23 @@
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="player.css" />
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
         <script type="module">
-            import TypeQuestion from "./ui/questions/type.js";
+            // import TypeQuestion from "./ui/questions/type.js";
             window.onload = () => {
-                const x = new TypeQuestion(document.body, console.log.bind(console), 4);
+                // const x = new TypeQuestion(document.body, console.log.bind(console), 4);
+                const map = L.map('map').setView([42.44597494631099, -76.47993615775893], 16);
+                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                    minZoom: 15,
+                    maxZoom: 19,
+                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
+                }).addTo(map);
+                console.log(map);
             }
         </script>
     </head>
@@ -23,18 +36,12 @@
             <h1>✅ We Are So Back</h1>
             <p>You'll rejoin the game with the next question.</p>
         </div> -->
-        <!-- <div class="outerwrap answerouterwrap">
-            <div class="textanswerwrap">
-                <input
-                    class="card"
-                    type="text"
-                    placeholder="<Insert Stunning Insight Here>"
-                    autocomplete="off"
-                    autocapitalize="off"
-                    spellcheck="false"
-                    autocorrect="off" />
-                <button class="bigbtn">Confirm</button>
+        <div class="outerwrap answerouterwrap">
+            <div class="mapanswerwrap">
+                <p>Move the map so that the pin is over your answer, then press Submit. <button class="bigbtn" style="font-size: 0.6em;">Reset Map</button></p>
+                <div id="map" class="map"></div>
+                <button class="bigbtn" style="width: 80%; margin-top: 10px;">Submit</button>
             </div>
-        </div> -->
+        </div>
     </body>
 </html>
