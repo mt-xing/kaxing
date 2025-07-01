@@ -223,6 +223,7 @@ form {
     width: 95vw;
     max-width: 1000px;
     position: relative;
+    margin: 0 auto;
 }
 
 .mapanswerwrap .map::after {
@@ -238,4 +239,5 @@ form {
     width: 5vh;
     height: 10vh;
     transform: translate(-50%, -100%);
+    pointer-events: none;
 }
