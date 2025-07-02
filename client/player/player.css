@@ -241,3 +241,20 @@ form {
     transform: translate(-50%, -100%);
     pointer-events: none;
 }
+
+.mapanswerwrap .submitbtn {
+    width: 100%;
+    display: block;
+    max-width: 95vw;
+    margin: 10px auto;
+}
+
+.mapanswerwrap .smallbtn {
+    font-size: 0.6em;
+    transform: translateY(-2px);
+}
+
+.mapanswerwrap .smallbtn::after {
+    display: none;
+    content: '';
+}
