@@ -244,14 +244,23 @@ form {
 
 .mapanswerwrap .submitbtn {
     width: 100%;
-    display: block;
     max-width: 95vw;
-    margin: 10px auto;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.mapanswerwrap .submitbtn button {
+    width: 100%;
+}
+
+.mapanswerwrap .toptext {
+    line-height: 2em;
 }
 
 .mapanswerwrap .smallbtn {
     font-size: 0.6em;
     transform: translateY(-2px);
+    margin-left: 1em;
 }
 
 .mapanswerwrap .smallbtn::after {
