@@ -245,8 +245,8 @@ form {
 .mapanswerwrap .submitbtn {
     width: 100%;
     max-width: 95vw;
-    margin-left: auto;
-    margin-right: auto;
+    margin: 16px auto;
+    display: block;
 }
 
 .mapanswerwrap .submitbtn button {
