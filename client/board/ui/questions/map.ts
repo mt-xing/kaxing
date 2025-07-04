@@ -200,12 +200,19 @@ export default class MapQuestionBoard {
     correctCoords.forEach((coord) => {
       L.marker(coord, { interactive: false }).addTo(map);
     });
-    wrongCoords.forEach((coord) => {
-      L.marker(coord, {
-        interactive: false,
-        opacity: 0.45,
-        icon: redIcon,
-      }).addTo(map);
+
+    const rampTime = wrongCoords.length <= 5 ? 2000 : 5000;
+    wrongCoords.forEach((coord, i) => {
+      setTimeout(
+        () => {
+          L.marker(coord, {
+            interactive: false,
+            opacity: 0.45,
+            icon: redIcon,
+          }).addTo(map);
+        },
+        3000 + (i * rampTime) / wrongCoords.length,
+      );
     });
 
     setTimeout(() => {
