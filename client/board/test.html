@@ -20,7 +20,7 @@
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
 
         <script type="module">
-            import TypeQuestionBoard from "./ui/questions/map.js";
+            import MapQuestionBoard from "./ui/questions/map.js";
             window.addEventListener('load', () => {
               const b = new MapQuestionBoard(document.body, {
                 "t": "map",
@@ -33,14 +33,14 @@
                 minZoom: 15,
                 maxZoom: 19,
                 correct: {
-                  matches: [{center: [42.44597494631099, -76.47993615775893], radius: 0.001}],
-                  representativeAnswers: [[42.44597494631099, -76.47993615775893]],
+                  matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
+                  representativeAnswers: [[42.44490022247275, -76.48084649037085]],
                 },
               }, 1);
-              setTimeout(() => {b.showAnswers();b.startCountdown();}, 5000);
+              setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
               setTimeout(() => {
-                b.showResultsMap(18, 20, [[42.44598, -76.47993615775893], [42.44597494631099, -76.47992]]);
-              }, 10000);
+                b.showResultsMap(18, 20, [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]]);
+              }, 4000);
             })
         </script>
     </head>

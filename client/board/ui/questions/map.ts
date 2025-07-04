@@ -12,6 +12,7 @@ declare const L: {
     };
   };
   latLng: (...args: unknown[]) => unknown;
+  Icon: new (...args: unknown[]) => unknown;
 };
 
 export default class MapQuestionBoard {
@@ -52,7 +53,7 @@ export default class MapQuestionBoard {
   ) {
     this.#question = question;
 
-    this.#wrap = Dom.div(undefined, "questionWrap mapWrap");
+    this.#wrap = Dom.div(undefined, "questionWrap tfWrap mapWrap");
 
     this.#countdownBar = Dom.div(undefined, "timeLeft");
     this.#countdownBar.setAttribute("style", `--time: ${question.time + 1}s`);
@@ -171,8 +172,8 @@ export default class MapQuestionBoard {
       q.startZoom,
     );
     L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
-      minZoom: q.minZoom,
-      maxZoom: q.maxZoom,
+      // minZoom: q.minZoom,
+      // maxZoom: q.maxZoom,
       attribution:
         '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
     }).addTo(map);
@@ -185,13 +186,25 @@ export default class MapQuestionBoard {
       })
       .addTo(map);
 
+    const redIcon = new L.Icon({
+      iconUrl:
+        "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+      shadowUrl:
+        "https://cdnjs.cloudflare.com/ajax/libs/leaflet/0.7.7/images/marker-shadow.png",
+      iconSize: [25, 41],
+      iconAnchor: [12, 41],
+      popupAnchor: [1, -34],
+      shadowSize: [41, 41],
+    });
+
     correctCoords.forEach((coord) => {
       L.marker(coord, { interactive: false }).addTo(map);
     });
     wrongCoords.forEach((coord) => {
       L.marker(coord, {
         interactive: false,
-        opacity: 0.5,
+        opacity: 0.45,
+        icon: redIcon,
       }).addTo(map);
     });
 

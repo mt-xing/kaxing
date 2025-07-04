@@ -238,6 +238,9 @@ export default class KaXingGame {
       case "multi": {
         throw new Error("TODO: Unimplemented");
       }
+      case "map": {
+        throw new Error("TODO: Unimplemented");
+      }
       default:
         assertUnreachable(q);
     }

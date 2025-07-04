@@ -514,5 +514,13 @@ audio {
     margin: 1em auto;
     width: 80%;
     display: block;
-    height: 30vh;
+    height: 43vh;
+}
+
+.mapWrap .typeResponseWrap {
+    height: 50vh;
+}
+
+.mapWrap .typeResponseWrap .responseBar {
+    height: 5vh;
 }
