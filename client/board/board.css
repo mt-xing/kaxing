@@ -509,3 +509,10 @@ audio {
     transform: translateY(100vh);
     transition: transform calc(0.7s + var(--delay-time) / 2) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
 }
+
+.mapWrap .map {
+    margin: 1em auto;
+    width: 80%;
+    display: block;
+    height: 30vh;
+}

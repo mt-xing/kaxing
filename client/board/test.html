@@ -7,26 +7,40 @@
         <script src="qrcode.min.js"></script>
         <link rel="stylesheet" type="text/css" href="/uni.css" />
         <link rel="stylesheet" type="text/css" href="board.css" />
+
+        <!-- Map Question Dependencies -->
+        <!-- Load a questionable amount of junk just for a single gag question type -->
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+            integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+            crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
+            integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
+            crossorigin=""></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
+
         <script type="module">
-            import TypeQuestionBoard from "./ui/questions/type.js";
+            import TypeQuestionBoard from "./ui/questions/map.js";
             window.addEventListener('load', () => {
-              const b = new TypeQuestionBoard(document.body, {
-                "t": "type",
+              const b = new MapQuestionBoard(document.body, {
+                "t": "map",
                 "points": 1000,
-                "time": 2,
-                "text": "What year was KaXing created?",
-                "maxChars": 4,
-                "correct": {
-                  "regex": "(?:20|')?24",
-                  "representativeAnswers": ["2024"]
-                }
-              },1);
-              setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
+                "time": 20,
+                "text": "Where is lecture?",
+                startLat: 42.44597494631099, 
+                startLon: -76.47993615775893,
+                startZoom: 15,
+                minZoom: 15,
+                maxZoom: 19,
+                correct: {
+                  matches: [{center: [42.44597494631099, -76.47993615775893], radius: 0.001}],
+                  representativeAnswers: [[42.44597494631099, -76.47993615775893]],
+                },
+              }, 1);
+              setTimeout(() => {b.showAnswers();b.startCountdown();}, 5000);
               setTimeout(() => {
-                // b.showResultsType(["Hi", "Bye", "Lea"], 12, 20);
-                // b.showResultsType(["This is the answer"], 10, 20);
-                b.showResultsType(["2024"], 18, 20);
-              }, 5000);
+                b.showResultsMap(18, 20, [[42.44598, -76.47993615775893], [42.44597494631099, -76.47992]]);
+              }, 10000);
             })
         </script>
     </head>

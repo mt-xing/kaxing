@@ -27,6 +27,21 @@ export type Question = {
       };
     }
   | {
+      t: "map";
+      startLat: number;
+      startLon: number;
+      startZoom: number;
+      minZoom: number;
+      maxZoom: number;
+      correct: {
+        matches: {
+          center: [number, number];
+          radius: number;
+        }[];
+        representativeAnswers: [number, number][];
+      };
+    }
+  | {
       t: "text";
     }
 );
@@ -47,6 +62,10 @@ export type Answer =
   | {
       t: "tf";
       a: boolean;
+    }
+  | {
+      t: "map";
+      a: [number, number];
     };
 
 export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
@@ -83,6 +102,17 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
         return false;
       }
       return a.a === q.correct;
+    case "map":
+      if (a.t !== "map") {
+        return false;
+      }
+      return q.correct.matches.some(
+        (candidate) =>
+          Math.sqrt(
+            (candidate.center[0] - a.a[0]) ** 2 +
+              (candidate.center[1] - a.a[1]) ** 2,
+          ) <= candidate.radius,
+      );
     case "text":
       return true;
     default:
@@ -105,6 +135,11 @@ export type QuestionResults =
   | {
       t: "type";
       numCorrect: number;
+    }
+  | {
+      t: "map";
+      numCorrect: number;
+      wrongCoords: [number, number][];
     }
   | {
       t: "other";
@@ -132,6 +167,12 @@ export function initResult(q: Question): QuestionResults {
       return {
         t: "type",
         numCorrect: 0,
+      };
+    case "map":
+      return {
+        t: "map",
+        numCorrect: 0,
+        wrongCoords: [],
       };
     default:
       return ((x: never) => {
