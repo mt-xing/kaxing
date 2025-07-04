@@ -15,6 +15,7 @@ import TextUi from "../player/ui/text.js";
 import TFQuestionBoard from "./ui/questions/tf.js";
 import TextQuestionBoard from "./ui/questions/text.js";
 import TypeQuestionBoard from "./ui/questions/type.js";
+import MapQuestionBoard from "./ui/questions/map.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -111,6 +112,11 @@ function gameScreen(
           setNumAnswers: (n: number, d: number) => void;
           showResults?: (answers: number[], numPlayers: number) => void;
           showResultsType?: (numCorrect: number, numPlayers: number) => void;
+          showResultsMap?: (
+            numCorrect: number,
+            numPlayers: number,
+            wrongCoords: [number, number][],
+          ) => void;
         }
       | undefined;
     let question: Question = questions[0];
@@ -174,6 +180,16 @@ function gameScreen(
               ui = questionUi;
               break;
             }
+            case "map": {
+              ui?.remove();
+              questionUi = new MapQuestionBoard(
+                document.body,
+                question,
+                payload.numPlayers,
+              );
+              ui = questionUi;
+              break;
+            }
             default:
               break;
           }
@@ -213,6 +229,16 @@ function gameScreen(
                 questionUi?.showResultsType?.(
                   payload.results.numCorrect,
                   payload.numPlayers,
+                );
+              }
+              break;
+            }
+            case "map": {
+              if (payload.results.t === "map") {
+                questionUi?.showResultsMap?.(
+                  payload.results.numCorrect,
+                  payload.numPlayers,
+                  payload.results.wrongCoords,
                 );
               }
               break;

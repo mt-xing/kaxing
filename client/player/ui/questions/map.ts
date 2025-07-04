@@ -31,9 +31,9 @@ export default class MapQuestion {
   ) {
     this.#send = () => {
       const pos = (
-        this.#map as { getCenter: () => { lat: number; lon: number } }
+        this.#map as { getCenter: () => { lat: number; lng: number } }
       ).getCenter();
-      callback(pos.lat, pos.lon);
+      callback(pos.lat, pos.lng);
     };
 
     const w = Dom.div(undefined, "mapanswerwrap");

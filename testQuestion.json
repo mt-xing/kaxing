@@ -1,4 +1,18 @@
 [{
+  "t": "map",
+  "points": 1000,
+  "time": 20,
+  "text": "Where is lecture?",
+  "startLat": 42.44597494631099, 
+  "startLon": -76.47993615775893,
+  "startZoom": 15,
+  "minZoom": 15,
+  "maxZoom": 19,
+  "correct": {
+    "matches": [{"center": [42.44490022247275, -76.48084649037085], "radius": 0.000594}],
+    "representativeAnswers": [[42.44490022247275, -76.48084649037085]]
+  }
+},{
   "t": "type",
   "points": 1000,
   "time": 20,

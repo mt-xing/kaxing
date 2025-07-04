@@ -11,6 +11,7 @@ import QuestionResponse from "./ui/qRes.js";
 import { getTaunt } from "./utils/taunts.js";
 import TFQuestion from "./ui/questions/tf.js";
 import TypeQuestion from "./ui/questions/type.js";
+import MapQuestion from "./ui/questions/map.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -93,6 +94,26 @@ async function gameScreen(): Promise<void> {
                   ui = undefined;
                 },
                 q.maxChars,
+              );
+              break;
+            }
+            case "map": {
+              ui?.remove();
+              ui = new MapQuestion(
+                document.body,
+                (lat, lon) => {
+                  const a: Answer = {
+                    t: "map",
+                    a: [lat, lon],
+                  };
+                  socket.send("response", a);
+                  ui = undefined;
+                },
+                q.startLat,
+                q.startLon,
+                q.startZoom,
+                q.minZoom,
+                q.maxZoom,
               );
               break;
             }

@@ -235,10 +235,17 @@ export default class KaXingGame {
         }
         break;
       }
-      case "multi": {
-        throw new Error("TODO: Unimplemented");
-      }
       case "map": {
+        if (result.t === q.t && response.t === q.t) {
+          if (player.record[this.#currentQuestion]) {
+            result.numCorrect++;
+          } else {
+            result.wrongCoords.push(response.a);
+          }
+        }
+        break;
+      }
+      case "multi": {
         throw new Error("TODO: Unimplemented");
       }
       default:
