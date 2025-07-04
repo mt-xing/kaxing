@@ -211,7 +211,7 @@ export default class MapQuestionBoard {
             icon: redIcon,
           }).addTo(map);
         },
-        3000 + (i * rampTime) / wrongCoords.length,
+        2000 + (i * rampTime) / wrongCoords.length,
       );
     });
 
