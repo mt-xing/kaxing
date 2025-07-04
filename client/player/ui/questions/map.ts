@@ -1,5 +1,16 @@
 import Dom from "../../../dom.js";
 
+declare const L: {
+  map: (...args: unknown[]) => { setView: (...args: unknown[]) => unknown };
+  tileLayer: (...args: unknown[]) => { addTo: (...args: unknown[]) => unknown };
+  control: {
+    resetView: (...args: unknown[]) => {
+      addTo: (...args: unknown[]) => unknown;
+    };
+  };
+  latLng: (...args: unknown[]) => unknown;
+};
+
 export default class MapQuestion {
   #wrap: HTMLElement;
 
@@ -18,28 +29,20 @@ export default class MapQuestion {
     minZoom: number,
     maxZoom: number,
   ) {
-    // this.#send = () => callback(this.#input.value);
+    this.#send = () => {
+      const pos = (
+        this.#map as { getCenter: () => { lat: number; lon: number } }
+      ).getCenter();
+      callback(pos.lat, pos.lon);
+    };
 
     const w = Dom.div(undefined, "mapanswerwrap");
 
-    /*
-    <div class="mapanswerwrap">
-                <p class="toptext">
-                    Move the map so the pin is on your answer, then press Submit.
-                    <button class="bigbtn smallbtn">Reset Map</button>
-                </p>
-                <div id="map" class="map"></div>
-                <p class="submitbtn"><button class="bigbtn">Submit</button></p>
-            </div>
-    */
-
-    const instr = Dom.p(
-      "Move the map so the pin is on your answer, then press Submit. ",
-      "toptext",
+    w.appendChild(
+      Dom.p(
+        "Move the map so the pin points to your answer, then press Submit.",
+      ),
     );
-    const resetBtn = Dom.button("Reset Map", () => {}, "bigbtn smallbtn");
-    instr.appendChild(resetBtn);
-    w.appendChild(instr);
 
     const mapWrap = Dom.div(undefined, "map");
     mapWrap.id = "map";
@@ -47,29 +50,13 @@ export default class MapQuestion {
 
     const form = document.createElement("FORM");
     form.classList.add("submitbtn");
-    // TODO below here
     form.addEventListener("submit", (e) => {
       e.preventDefault();
-      if (this.#input.value.length > 0) {
-        this.remove();
-      }
+      this.remove();
     });
 
-    this.#input = Dom.input(
-      "text",
-      "<Insert Stunning Insight Here>",
-      undefined,
-      "card",
-    );
-    this.#input.setAttribute("autocomplete", "off");
-    this.#input.setAttribute("autocapitalize", "off");
-    this.#input.setAttribute("spellcheck", "false");
-    this.#input.setAttribute("autocorrect", "off");
-    this.#input.maxLength = maxLength;
-    form.appendChild(this.#input);
-
-    this.#button = Dom.button("Submit", () => {}, "bigbtn");
-    form.appendChild(this.#button);
+    this.#submitBtn = Dom.button("Submit", () => {}, "bigbtn");
+    form.appendChild(this.#submitBtn);
 
     w.appendChild(form);
 
@@ -78,19 +65,31 @@ export default class MapQuestion {
     this.#wrap.appendChild(w);
 
     Dom.insertEl(this.#wrap, parent).then(() => {
-      this.#input.style.transform = "scaleX(1)";
-      this.#button.style.opacity = "1";
-      instr.style.opacity = "1";
+      this.#map = L.map("map").setView([startLat, startLon], startZoom);
+      L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+        minZoom,
+        maxZoom,
+        attribution:
+          '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+      }).addTo(this.#map);
+      L.control
+        .resetView({
+          position: "topleft",
+          title: "Reset Map",
+          latlng: L.latLng([startLat, startLon]),
+          zoom: startZoom,
+        })
+        .addTo(this.#map);
+
+      w.style.transform = "translateY(0)";
     });
   }
 
   async remove() {
-    this.#input.disabled = true;
-    this.#button.disabled = true;
-    this.#button.blur();
-    if (this.#input.value.length > 0) {
-      this.#send();
-    }
+    this.#submitBtn.disabled = true;
+    this.#submitBtn.blur();
+    this.#wrap.style.pointerEvents = "none";
+    this.#send();
 
     setTimeout(this.#fullRemove.bind(this), 100);
   }

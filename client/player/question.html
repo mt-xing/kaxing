@@ -12,38 +12,16 @@
         <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"
             integrity="sha256-20nQCchB9co0qIjJZRGuk2/Z9VM+kNiyxNV1lvTlZBo="
             crossorigin=""></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.css">
+        <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
         <script type="module">
-            // import TypeQuestion from "./ui/questions/type.js";
+            import MapQuestion from "./ui/questions/map.js";
             window.onload = () => {
-                // const x = new TypeQuestion(document.body, console.log.bind(console), 4);
-                const map = L.map('map').setView([42.44597494631099, -76.47993615775893], 16);
-                L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                    minZoom: 15,
-                    maxZoom: 19,
-                    attribution: '&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>'
-                }).addTo(map);
+                const x = new MapQuestion(document.body, console.log.bind(console), 42.44597494631099, -76.47993615775893, 15, 15, 19);
             }
         </script>
     </head>
     <body>
-        <!-- <div class="disconnectMsg show">
-            <h1>⚠️ Reconnecting</h1>
-            <p>This device seems to have been disconnected :(</p>
-            <p>Hang on while we try to get you back into the game...</p>
-        </div>
-        <div class="disconnectMsg done">
-            <h1>✅ We Are So Back</h1>
-            <p>You'll rejoin the game with the next question.</p>
-        </div> -->
-        <div class="outerwrap answerouterwrap">
-            <div class="mapanswerwrap">
-                <p class="toptext">
-                    Move the map so the pin is on your answer, then press Submit.
-                    <button class="bigbtn smallbtn">Reset Map</button>
-                </p>
-                <div id="map" class="map"></div>
-                <p class="submitbtn"><button class="bigbtn">Submit</button></p>
-            </div>
-        </div>
+        
     </body>
 </html>
