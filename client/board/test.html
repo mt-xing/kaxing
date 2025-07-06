@@ -31,6 +31,15 @@
               "correct": 1
             }, 10);
             setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
+            setTimeout(() => {
+              b.showResults({
+                t: "standard",
+                responses: [10, 50, 25, 15],
+              }, 100);
+            }, 5000);
+            setTimeout(() => {
+              b.remove();
+            }, 10000);
           });
 
             // import MapQuestionBoard from "./ui/questions/map.js";

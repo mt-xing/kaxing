@@ -73,7 +73,7 @@ export default class Dom {
   /**
    * Construct an HTML div element
    */
-  static div(child?: string | HTMLElement, className?: string): HTMLElement {
+  static div(child?: string | HTMLElement, className?: string): HTMLDivElement {
     const sec = document.createElement("div");
 
     if (typeof child === "string") {
