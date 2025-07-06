@@ -20,28 +20,41 @@
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
 
         <script type="module">
-            import MapQuestionBoard from "./ui/questions/map.js";
-            window.addEventListener('load', () => {
-              const b = new MapQuestionBoard(document.body, {
-                "t": "map",
-                "points": 1000,
-                "time": 20,
-                "text": "Where is lecture?",
-                startLat: 42.44597494631099, 
-                startLon: -76.47993615775893,
-                startZoom: 15,
-                minZoom: 15,
-                maxZoom: 19,
-                correct: {
-                  matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
-                  representativeAnswers: [[42.44490022247275, -76.48084649037085]],
-                },
-              }, 1);
-              setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
-              setTimeout(() => {
-                b.showResultsMap(18, 20, [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]]);
-              }, 4000);
-            })
+          import StandardQuestionBoard from "./ui/questions/standard.js";
+          window.addEventListener("load", () => {
+            const b = new StandardQuestionBoard(document.body, {
+              "t": "standard",
+              "points": 1000,
+              "time": 20,
+              "text": "Which university is in upstate New York?",
+              "answers": ["Cornell College", "Cornell University", "UC Berkeley", "University of Washington"],
+              "correct": 1
+            }, 10);
+            setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
+          });
+
+            // import MapQuestionBoard from "./ui/questions/map.js";
+            // window.addEventListener('load', () => {
+            //   const b = new MapQuestionBoard(document.body, {
+            //     "t": "map",
+            //     "points": 1000,
+            //     "time": 20,
+            //     "text": "Where is lecture?",
+            //     startLat: 42.44597494631099, 
+            //     startLon: -76.47993615775893,
+            //     startZoom: 15,
+            //     minZoom: 15,
+            //     maxZoom: 19,
+            //     correct: {
+            //       matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
+            //       representativeAnswers: [[42.44490022247275, -76.48084649037085]],
+            //     },
+            //   }, 1);
+            //   setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
+            //   setTimeout(() => {
+            //     b.showResultsMap(18, 20, [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]]);
+            //   }, 4000);
+            // })
         </script>
     </head>
     <body>

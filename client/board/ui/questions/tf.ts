@@ -51,10 +51,10 @@ export default class TFQuestionBoard {
       this.#wrap.classList.add("hasImg");
     }
 
-    const answerWraps = [];
+    const answerRows = [];
     this.#answers = [];
 
-    const w = Dom.div(undefined, "answerwrap");
+    const w = Dom.div(undefined, "answerRow");
     for (let j = 0; j < 2; j++) {
       const answer = Dom.div(
         Dom.span(j === 0 ? "True" : "False"),
@@ -63,9 +63,9 @@ export default class TFQuestionBoard {
       w.appendChild(answer);
       this.#answers.push(answer);
     }
-    answerWraps.push(w);
+    answerRows.push(w);
 
-    answerWraps.forEach((x) => this.#wrap.appendChild(x));
+    answerRows.forEach((x) => this.#wrap.appendChild(x));
 
     this.#submissionBar = Dom.div(undefined, "numSubmissions");
     this.#submissionWrap = Dom.div(this.#submissionBar, "submissions");

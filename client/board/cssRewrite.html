@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>KaXing</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="qrcode.min.js"></script>
+  <link rel="stylesheet" type="text/css" href="/uni.css" />
+  <link rel="stylesheet" type="text/css" href="board.css" />
+</head>
+
+<body>
+  <div class="questionOuter showAnswers" style="transform: translateY(0px);">
+    <div class="countdown" style="opacity: 1;">
+      <div class="timeLeft" style="--time: 21s; transform: scaleY(1); transition: none;"></div>
+      <p></p>
+    </div>
+    <div class="questionInner">
+      <div class="questionContent">
+        <p>Where is lecture?</p>
+      </div>
+      <div class="answerContent">
+        <div class="answerRow">
+          <div class="card answer a" style="--delay-time: 0s; transform: translateY(0px);">
+            <div><span>Circle Answer</span></div><span>Cornell College</span>
+          </div>
+          <div class="card answer b" style="--delay-time: 0.125s; transform: translateY(0px);">
+            <div><span>Triangle Answer</span></div><span>Cornell University</span>
+          </div>
+        </div>
+        <div class="answerRow">
+          <div class="card answer c" style="--delay-time: 0.25s; transform: translateY(0px);">
+            <div><span>Square Answer</span></div><span>UC Berkeley</span>
+          </div>
+          <div class="card answer d" style="--delay-time: 0.375s; transform: translateY(0px);">
+            <div><span>Star Answer</span></div><span>University of Washington</span>
+          </div>
+        </div>
+      </div>
+      <!-- <div class="answerRow instr" style="transform: translateY(0px); opacity: 1;">
+        <p>⬇️ Pin the location on your maps now ⬇️</p>
+        <p class="extrainstr">(Don't forget to click Submit)</p>
+      </div>
+      <div class="typeResponseWrap">
+        <div
+          class="map"
+          style="background:red;">
+        </div>
+        <div class="responseBar">
+          <div class="responseBarInner" style="transform: scaleX(0.9);"></div>
+          <p class="responseText">18 / 20</p>
+        </div>
+      </div> -->
+    </div>
+    <div class="submissions" style="opacity: 1;">
+      <div class="numSubmissions"></div>
+      <p><span>0</span><span class="sep">of</span><span>1</span></p>
+    </div>
+  </div>
+</body>
+
+</html>

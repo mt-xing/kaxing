@@ -26,7 +26,7 @@ form {
     transition: transform 0.5s cubic-bezier(0.550, 0.055, 0.675, 0.190) 0.1s;
 }
 
-.answerwrap {
+.answerRow {
     display: flex;
     flex-direction: row;
 }
@@ -173,7 +173,7 @@ form {
     100% { transform: rotate(360deg) }
 }
 
-.textanswerwrap {
+.textanswerRow {
     text-align: center;
     width: 100%;
     max-width: 600px;
@@ -181,7 +181,7 @@ form {
     box-sizing: border-box;
 }
 
-.textanswerwrap input {
+.textanswerRow input {
     width: 100%;
     box-sizing: border-box;
     font-family: 'Consolas', monospace;
@@ -195,12 +195,12 @@ form {
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275), background 0.2s ease-in-out, border 0.2s ease-in-out;
 }
 
-.textanswerwrap input:disabled {
+.textanswerRow input:disabled {
     background: rgba(255, 255, 255, 0.2);
     --accent-color: rgba(150,255,150,.5);
 }
 
-.textanswerwrap button {
+.textanswerRow button {
     display: block;
     margin: 0.5em auto;
 
@@ -214,13 +214,13 @@ form {
     margin-bottom: 1em;
 }
 
-.mapanswerwrap {
+.mapanswerRow {
     text-align: center;
     transform: translateY(100vh);
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
 }
 
-.mapanswerwrap .map {
+.mapanswerRow .map {
     height: 60vh;
     width: 95vw;
     max-width: 1000px;
@@ -228,7 +228,7 @@ form {
     margin: 0 auto;
 }
 
-.mapanswerwrap .map::after {
+.mapanswerRow .map::after {
     content: "";
     background-image: url('https://upload.wikimedia.org/wikipedia/commons/d/d1/Google_Maps_pin.svg');
     background-size: contain;
@@ -244,18 +244,18 @@ form {
     pointer-events: none;
 }
 
-.mapanswerwrap .submitbtn {
+.mapanswerRow .submitbtn {
     width: 100%;
     max-width: 95vw;
     margin: 16px auto;
     display: block;
 }
 
-.mapanswerwrap .submitbtn button {
+.mapanswerRow .submitbtn button {
     width: 100%;
 }
 
-.mapanswerwrap .smallbtn::after {
+.mapanswerRow .smallbtn::after {
     display: none;
     content: '';
 }

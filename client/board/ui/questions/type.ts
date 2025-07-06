@@ -59,7 +59,7 @@ export default class TypeQuestionBoard {
 
     this.#instrWrap = Dom.div(
       Dom.p("⬇️ Type your answer now ⬇️"),
-      "answerwrap instr",
+      "answerRow instr",
     );
     this.#instrWrap.appendChild(
       Dom.p("(Don't forget to click Submit)", "extrainstr"),

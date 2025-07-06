@@ -95,11 +95,7 @@
     transition: transform 0.5s cubic-bezier(0.550, 0.055, 0.675, 0.190) 0.25s;
 }
 
-.tfWrap .answerwrap {
-    margin-top: 15vh;
-}
-
-.answerwrap {
+.answerRow {
     display: flex;
     flex-direction: row;
     align-items: center;
@@ -128,21 +124,6 @@
 
     transform: translateY(100vh);
     transition: box-shadow 0.5s ease-out 0.5s, transform calc(0.5s + var(--delay-time) / 3) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
-}
-
-.answerwrap.instr {
-    transform: translateY(100vh);
-    transition: opacity 0.5s ease-in, transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000) 250ms;
-    flex-direction: column;
-    font-size: 2vw;
-
-    min-height: 25vh;
-    box-sizing: border-box;
-}
-
-.answerwrap .extrainstr {
-    font-size: 1vw;
-    margin: 0;
 }
 
 .answer > div {
@@ -194,21 +175,46 @@
     font-size: 2vw;
     text-align: center;
     margin: 0 10vw;
-    height: 40vh;
+    height: 45vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
+    
+    transform: translateY(22.5vh);
+    transition: transform 0.5s cubic-bezier(0.25, 0, 0.07, 1.000);
 }
 
-.questionWrap {
+.questionOuter {
     width: 100%;
+    height: 100vh;
     transform: translateY(100vh);
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 5vh 1.5vw;
+    box-sizing: border-box;
 }
 
-.questionWrap.hasImg {
-    transform: translateY(120vh);
+.questionInner {
+    width: 95%;
+    height: 100%;
+    margin: 0 0.5vw;
+}
+
+.questionOuter.showAnswers .questionContent {
+    transform: translateY(0);
+}
+
+.answerContent {
+    height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
 }
 
 .questionWrap.hasImg .questionContent {
@@ -264,12 +270,12 @@
 }
 
 .countdown, .submissions {
-    height: 90vh;
+    height: 100%;
     width: 2vw;
     background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 10px 0 black;
-    position: absolute;
-    top: 0;
+
+    position: relative;
 
     display: flex;
     align-items: center;
@@ -284,7 +290,6 @@
 }
 
 .countdown {
-    left: 1.5vw;
     --time: 0s;
 }
 
@@ -311,10 +316,6 @@
     box-shadow: 0 0 1vw black inset;
 
     transition: transform var(--time) linear;
-}
-
-.submissions {
-    right: 1.5vw;
 }
 
 .submissions span.sep {

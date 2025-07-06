@@ -51,7 +51,7 @@ export default class StandardQuestionBoard {
       this.#wrap.classList.add("hasImg");
     }
 
-    const answerWraps = [];
+    const answerRows = [];
     this.#answers = [];
 
     const getButtonType = (i: number, j: number) => {
@@ -85,7 +85,7 @@ export default class StandardQuestionBoard {
     };
 
     for (let i = 0; i < 2; i++) {
-      const w = Dom.div(undefined, "answerwrap");
+      const w = Dom.div(undefined, "answerRow");
       for (let j = 0; j < 2; j++) {
         const answer = Dom.div(
           Dom.div(getButtonText(i, j)),
@@ -95,10 +95,10 @@ export default class StandardQuestionBoard {
         w.appendChild(answer);
         this.#answers.push(answer);
       }
-      answerWraps.push(w);
+      answerRows.push(w);
     }
 
-    answerWraps.forEach((x) => this.#wrap.appendChild(x));
+    answerRows.forEach((x) => this.#wrap.appendChild(x));
 
     this.#submissionBar = Dom.div(undefined, "numSubmissions");
     this.#submissionWrap = Dom.div(this.#submissionBar, "submissions");

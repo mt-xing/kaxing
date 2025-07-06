@@ -16,7 +16,7 @@ export default class TypeQuestion {
   ) {
     this.#send = () => callback(this.#input.value);
 
-    const w = Dom.div(undefined, "textanswerwrap");
+    const w = Dom.div(undefined, "textanswerRow");
 
     const instr = Dom.p("Type your answer below", "instr");
     w.appendChild(instr);

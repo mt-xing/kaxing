@@ -74,7 +74,7 @@ export default class MapQuestionBoard {
 
     this.#instrWrap = Dom.div(
       Dom.p("⬇️ Pin the location on your maps now ⬇️"),
-      "answerwrap instr",
+      "answerRow instr",
     );
     this.#instrWrap.appendChild(
       Dom.p("(Don't forget to click Submit)", "extrainstr"),

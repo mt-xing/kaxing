@@ -36,7 +36,7 @@ export default class MapQuestion {
       callback(pos.lat, pos.lng);
     };
 
-    const w = Dom.div(undefined, "mapanswerwrap");
+    const w = Dom.div(undefined, "mapanswerRow");
 
     w.appendChild(
       Dom.p(
