@@ -20,22 +20,24 @@
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
 
         <script type="module">
-          import StandardQuestionBoard from "./ui/questions/standard.js";
+          import TFQuestionBoard from "./ui/questions/tf.js";
           window.addEventListener("load", () => {
-            const b = new StandardQuestionBoard(document.body, {
-              "t": "standard",
+            const b = new TFQuestionBoard(document.body, {
+              "t": "tf",
               "points": 1000,
               "time": 20,
               "img": "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png",
-              "text": "Which university is in upstate New York?",
-              "answers": ["Cornell College", "Cornell University", "UC Berkeley", "University of Washington"],
-              "correct": 1
+              "text": "Cornell exists",
+              // "answers": ["Cornell College", "Cornell University", "UC Berkeley", "University of Washington"],
+              "correct": true
             }, 10);
             setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
             setTimeout(() => {
               b.showResults({
-                t: "standard",
-                responses: [10, 50, 25, 15],
+                t: "tf",
+                // responses: [10, 50, 25, 15],
+                numTrue: 80,
+                numFalse: 20,
               }, 100);
             }, 5000);
             setTimeout(() => {

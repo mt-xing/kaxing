@@ -1,55 +1,17 @@
 import Dom from "../../../dom.js";
-import { Question } from "../../../../shared/question.js";
-import { playEnd, playQuestion, stopAudio } from "../../audio.js";
+import { Question, QuestionResults } from "../../../../shared/question.js";
+import QuestionBoard from "./base.js";
 
-export default class TFQuestionBoard {
-  #wrap: HTMLElement;
-
+export default class TFQuestionBoard extends QuestionBoard {
   #answers: HTMLElement[];
-
-  #countdown: HTMLElement;
-
-  #countdownBar: HTMLElement;
-
-  #countdownTime: HTMLElement;
-
-  #submissionWrap: HTMLElement;
-
-  #submissionBar: HTMLElement;
-
-  #submissionTextNum: HTMLElement;
-
-  #submissionTextDenom: HTMLElement;
-
-  #question: Extract<Question, { t: "tf" }>;
-
-  #timeout?: ReturnType<typeof setTimeout>;
 
   constructor(
     parent: HTMLElement,
     question: Extract<Question, { t: "tf" }>,
     numPlayers: number,
   ) {
-    this.#question = question;
-
-    this.#wrap = Dom.div(undefined, "questionWrap tfWrap");
-
-    this.#countdownBar = Dom.div(undefined, "timeLeft");
-    this.#countdownBar.setAttribute("style", `--time: ${question.time + 1}s`);
-    this.#countdown = Dom.div(this.#countdownBar, "countdown");
-    this.#countdownTime = Dom.p(`${question.time}`);
-    this.#countdown.appendChild(this.#countdownTime);
-    this.#wrap.appendChild(this.#countdown);
-
-    this.#wrap.appendChild(Dom.div(Dom.p(question.text), "questionContent"));
-
-    if (question.img !== undefined) {
-      const img = document.createElement("IMG") as HTMLImageElement;
-      img.src = question.img;
-      img.alt = "";
-      this.#wrap.appendChild(Dom.div(img, "imgWrap"));
-      this.#wrap.classList.add("hasImg");
-    }
+    const answerContent = Dom.div();
+    super(parent, question, numPlayers, answerContent, undefined, ["tfWrap"]);
 
     const answerRows = [];
     this.#answers = [];
@@ -65,29 +27,10 @@ export default class TFQuestionBoard {
     }
     answerRows.push(w);
 
-    answerRows.forEach((x) => this.#wrap.appendChild(x));
-
-    this.#submissionBar = Dom.div(undefined, "numSubmissions");
-    this.#submissionWrap = Dom.div(this.#submissionBar, "submissions");
-    const subTimeWrap = document.createElement("P");
-    this.#submissionTextNum = Dom.span("0");
-    const sep = Dom.span("of", "sep");
-    this.#submissionTextDenom = Dom.span(`${numPlayers}`);
-    subTimeWrap.appendChild(this.#submissionTextNum);
-    subTimeWrap.appendChild(sep);
-    subTimeWrap.appendChild(this.#submissionTextDenom);
-    this.#submissionWrap.appendChild(subTimeWrap);
-    this.#wrap.appendChild(this.#submissionWrap);
-
-    Dom.insertEl(this.#wrap, parent).then(() => {
-      this.#wrap.style.transform = "translateY(20vh)scale(1)";
-    });
+    answerRows.forEach((x) => answerContent.appendChild(x));
   }
 
-  showAnswers() {
-    this.#wrap.classList.add("smooth");
-    this.#wrap.classList.add("showingAnswers");
-    this.#wrap.style.transform = "translateY(0)";
+  protected showAnswersInner(): void {
     this.#answers.forEach((a, i) => {
       a.setAttribute("style", `--delay-time: ${(i * 125) / 1000}s`);
       // eslint-disable-next-line no-param-reassign
@@ -95,68 +38,34 @@ export default class TFQuestionBoard {
     });
   }
 
-  startCountdown() {
-    playQuestion(this.#question.time);
-
-    this.#countdown.style.opacity = "1";
-    this.#submissionWrap.style.opacity = "1";
-    this.#countdownBar.style.transform = "scaleY(1)";
-
-    let timeLeft = this.#question.time;
-    const adjustTime = () => {
-      timeLeft--;
-      this.#countdownTime.textContent = `${timeLeft}`;
-      if (timeLeft > 0) {
-        this.#timeout = setTimeout(adjustTime, 1000);
-      }
-    };
-    this.#timeout = setTimeout(adjustTime, 1500);
-  }
-
-  endCountdown() {
-    stopAudio();
-    if (this.#timeout) {
-      clearTimeout(this.#timeout);
+  protected showResultsInner(
+    results: QuestionResults,
+    numPlayers: number,
+  ): void {
+    if (this.question.t !== "tf") {
+      console.error("Question mismatch not tf", this.question);
+      return;
     }
-    this.#countdownTime.textContent = "";
-    this.#countdownBar.style.transition = "none";
-    this.#countdownBar.style.transform = "scaleY(1)";
-  }
+    if (results.t !== "tf") {
+      console.error("Results mismatch not tf", results);
+      return;
+    }
+    const q = this.question;
 
-  setNumAnswers(numAnswers: number, numPlayers: number) {
-    this.#submissionTextNum.textContent = `${numAnswers}`;
-    this.#submissionTextDenom.textContent = `${numPlayers}`;
-    this.#submissionBar.style.transform = `scaleY(${numAnswers / numPlayers})`;
-  }
-
-  showResults(responses: number[], numPlayers: number) {
-    this.endCountdown();
-    playEnd();
     const checkIfCorrect = (b: boolean) => {
-      return this.#question.correct === b;
+      return q.correct === b;
     };
     this.#answers.forEach((a, i) => {
       const correct = checkIfCorrect(i === 0);
+      const numRes = i === 0 ? results.numTrue : results.numFalse;
       a.setAttribute(
         "style",
-        `${a.getAttribute("style")}; --correct-percent: ${responses[i] / numPlayers}; --answer-text: "${responses[i]}${correct ? " ✅" : ""}"`,
+        `${a.getAttribute("style")}; --correct-percent: ${numRes / numPlayers}; --answer-text: "${numRes}${correct ? " ✅" : ""}"`,
       );
       if (correct) {
         a.classList.add("correct");
       }
       a.classList.add("done");
     });
-  }
-
-  async remove() {
-    await Dom.deleteOuterwrap(this.#wrap);
-    stopAudio();
-
-    this.#countdown.style.opacity = "0";
-    this.#submissionWrap.style.opacity = "0";
-    setTimeout(() => {
-      this.#countdown.parentElement?.removeChild(this.#countdown);
-      this.#submissionWrap.parentElement?.removeChild(this.#submissionWrap);
-    }, 1000);
   }
 }

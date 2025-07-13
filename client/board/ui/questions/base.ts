@@ -29,10 +29,14 @@ export default abstract class QuestionBoard {
     numPlayers: number,
     answerUi: HTMLDivElement,
     responseUi?: HTMLDivElement,
+    additionalClasses?: string[],
   ) {
     this.question = question;
 
     this.#wrap = Dom.div(undefined, "questionOuter");
+    additionalClasses?.forEach((c) => {
+      this.#wrap.classList.add(c);
+    });
 
     this.#countdownBar = Dom.div(undefined, "timeLeft");
     this.#countdownBar.setAttribute("style", `--time: ${question.time + 1}s`);

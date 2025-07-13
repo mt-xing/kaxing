@@ -318,10 +318,6 @@
     transition: opacity 0.5s ease-in-out;
 }
 
-.tfWrap .countdown, .tfWrap .submissions {
-    transform: translateY(-5vh);
-}
-
 .countdown {
     --time: 0s;
 }
@@ -478,6 +474,14 @@ audio {
     text-align: center;
     padding-left: 10vw;
     padding-right: 10vw;
+}
+
+.tfWrap .answer {
+    height: 30vh;
+}
+
+.tfWrap .answer > span {
+    font-size: 5vh;
 }
 
 .typeResponseWrap {
