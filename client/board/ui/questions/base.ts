@@ -28,7 +28,7 @@ export default abstract class QuestionBoard {
     question: Question,
     numPlayers: number,
     answerUi: HTMLDivElement,
-    responseUi?: HTMLDivElement,
+    resultsUi?: HTMLDivElement,
     additionalClasses?: string[],
   ) {
     this.question = question;
@@ -60,9 +60,9 @@ export default abstract class QuestionBoard {
     answerUi.classList.add("answerContent");
     questionInner.appendChild(answerUi);
 
-    if (responseUi) {
-      responseUi.classList.add("responseContent");
-      questionInner.appendChild(responseUi);
+    if (resultsUi) {
+      resultsUi.classList.add("resultsContent");
+      questionInner.appendChild(resultsUi);
     }
 
     this.#submissionBar = Dom.div(undefined, "numSubmissions");
@@ -129,6 +129,7 @@ export default abstract class QuestionBoard {
   }
 
   showResults(results: QuestionResults, numPlayers: number) {
+    this.#wrap.classList.add("showResults");
     this.endCountdown();
     playEnd();
     this.showResultsInner(results, numPlayers);

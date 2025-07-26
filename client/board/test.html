@@ -20,24 +20,26 @@
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
 
         <script type="module">
-          import TFQuestionBoard from "./ui/questions/tf.js";
+          import TypeQuestionBoard from "./ui/questions/type.js";
           window.addEventListener("load", () => {
-            const b = new TFQuestionBoard(document.body, {
-              "t": "tf",
+            const b = new TypeQuestionBoard(document.body, {
+              "t": "type",
               "points": 1000,
               "time": 20,
-              "img": "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png",
-              "text": "Cornell exists",
-              // "answers": ["Cornell College", "Cornell University", "UC Berkeley", "University of Washington"],
-              "correct": true
+              "img": "https://i.redd.it/6d52ezqlwj951.png",
+              "text": "What does Lea say?",
+              "maxChars": 50,
+              correct: {
+                regex: "yes",
+                representativeAnswers: ["hi", "bye", "lea"],
+              },
             }, 10);
             setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
             setTimeout(() => {
               b.showResults({
-                t: "tf",
+                t: "type",
                 // responses: [10, 50, 25, 15],
-                numTrue: 80,
-                numFalse: 20,
+                numCorrect: 86,
               }, 100);
             }, 5000);
             setTimeout(() => {
