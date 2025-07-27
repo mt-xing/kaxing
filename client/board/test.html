@@ -20,55 +20,33 @@
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
 
         <script type="module">
-          import TypeQuestionBoard from "./ui/questions/type.js";
-          window.addEventListener("load", () => {
-            const b = new TypeQuestionBoard(document.body, {
-              "t": "type",
+          import MapQuestionBoard from "./ui/questions/map.js";
+          window.addEventListener('load', () => {
+            const b = new MapQuestionBoard(document.body, {
+              "t": "map",
               "points": 1000,
               "time": 20,
-              "img": "https://i.redd.it/6d52ezqlwj951.png",
-              "text": "What does Lea say?",
-              "maxChars": 50,
+              "text": "Where is lecture?",
+              img: 'https://i.redd.it/6d52ezqlwj951.png',
+              startLat: 42.44597494631099, 
+              startLon: -76.47993615775893,
+              startZoom: 15,
+              minZoom: 15,
+              maxZoom: 19,
               correct: {
-                regex: "yes",
-                representativeAnswers: ["hi", "bye", "lea"],
+                matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
+                representativeAnswers: [[42.44490022247275, -76.48084649037085]],
               },
-            }, 10);
+            }, 1);
             setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
             setTimeout(() => {
               b.showResults({
-                t: "type",
-                // responses: [10, 50, 25, 15],
-                numCorrect: 86,
-              }, 100);
-            }, 5000);
-            setTimeout(() => {
-              b.remove();
-            }, 10000);
-          });
-
-            // import MapQuestionBoard from "./ui/questions/map.js";
-            // window.addEventListener('load', () => {
-            //   const b = new MapQuestionBoard(document.body, {
-            //     "t": "map",
-            //     "points": 1000,
-            //     "time": 20,
-            //     "text": "Where is lecture?",
-            //     startLat: 42.44597494631099, 
-            //     startLon: -76.47993615775893,
-            //     startZoom: 15,
-            //     minZoom: 15,
-            //     maxZoom: 19,
-            //     correct: {
-            //       matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
-            //       representativeAnswers: [[42.44490022247275, -76.48084649037085]],
-            //     },
-            //   }, 1);
-            //   setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
-            //   setTimeout(() => {
-            //     b.showResultsMap(18, 20, [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]]);
-            //   }, 4000);
-            // })
+                t: "map",
+                numCorrect: 18,
+                wrongCoords: [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]],
+              }, 20);
+            }, 4000);
+          })
         </script>
     </head>
     <body>

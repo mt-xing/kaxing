@@ -585,17 +585,9 @@ audio {
     transition: transform calc(0.7s + var(--delay-time) / 2) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
 }
 
-.mapWrap .map {
+.map {
     margin: 1em auto;
     width: 80%;
     display: block;
-    height: 43vh;
-}
-
-.mapWrap .typeResponseWrap {
-    height: 50vh;
-}
-
-.mapWrap .typeResponseWrap .responseBar {
-    height: 5vh;
+    height: 40vh;
 }
