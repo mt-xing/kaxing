@@ -325,12 +325,12 @@
 }
 
 .answerContent.instr p {
-    font-size: 4vh;
+    font-size: min(4vh, 2vw);
     margin: 0;
 }
 
 .answerContent.instr .extrainstr {
-    font-size: 2.5vh;
+    font-size: min(2.5vh, 1vw);
     margin: 2vh 0 0 0;
 }
 
