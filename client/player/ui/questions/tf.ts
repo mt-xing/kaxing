@@ -3,12 +3,12 @@ import Dom from "../../../dom.js";
 export default class TFQuestion {
   #wrap: HTMLElement;
 
-  #answerWraps: HTMLElement[];
+  #answerRows: HTMLElement[];
 
   constructor(parent: HTMLElement, callback: (isTrue: boolean) => void) {
-    this.#answerWraps = [];
+    this.#answerRows = [];
 
-    const w = Dom.div(undefined, "answerwrap tfWrap");
+    const w = Dom.div(undefined, "answerRow tfWrap");
     for (let j = 0; j < 2; j++) {
       w.appendChild(
         Dom.button(
@@ -20,11 +20,11 @@ export default class TFQuestion {
         ),
       );
     }
-    this.#answerWraps.push(w);
+    this.#answerRows.push(w);
 
     this.#wrap = Dom.outerwrap();
     this.#wrap.classList.add("answerouterwrap");
-    this.#answerWraps.forEach((x) => this.#wrap.appendChild(x));
+    this.#answerRows.forEach((x) => this.#wrap.appendChild(x));
 
     Dom.insertEl(this.#wrap, parent).then(() => {
       (

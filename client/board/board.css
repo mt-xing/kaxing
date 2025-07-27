@@ -95,25 +95,35 @@
     transition: transform 0.5s cubic-bezier(0.550, 0.055, 0.675, 0.190) 0.25s;
 }
 
-.tfWrap .answerwrap {
-    margin-top: 15vh;
-}
-
-.answerwrap {
+.answerRow {
     display: flex;
     flex-direction: row;
     align-items: center;
     justify-content: center;
+    flex-basis: 0;
+    flex-grow: 1;
+    width: 100%;
+    padding: min(2vw, 2vh) 0;
+    box-sizing: border-box;
+}
+
+.answerRow:first-child {
+    padding-top: 0;
+}
+
+.answerRow:last-child {
+    padding-bottom: 0;
 }
 
 .answer {
     --delay-time: 0;
     --correct-percent: 0;
     --answer-text: "";
-    width: 44vw;
-    height: 20vh;
-    margin: min(2vw, 2vh);
-    padding: min(10vw, 10vh) min(5vw, 5vh);
+    flex-grow: 1;
+    flex-basis: 0;
+    height: 100%;
+    margin: 0 min(2vw, 2vh);
+    padding: 0;
     box-sizing: border-box;
     position: relative;
 
@@ -130,19 +140,12 @@
     transition: box-shadow 0.5s ease-out 0.5s, transform calc(0.5s + var(--delay-time) / 3) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
 }
 
-.answerwrap.instr {
-    transform: translateY(100vh);
-    transition: opacity 0.5s ease-in, transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000) 250ms;
-    flex-direction: column;
-    font-size: 2vw;
-
-    min-height: 25vh;
-    box-sizing: border-box;
+.answer:first-child {
+    margin-left: 0;
 }
 
-.answerwrap .extrainstr {
-    font-size: 1vw;
-    margin: 0;
+.answer:last-child {
+    margin-right: 0;
 }
 
 .answer > div {
@@ -151,6 +154,7 @@
     background: rgba(255, 255, 255, 0.75);
     font-size: 0;
     flex-shrink: 0;
+    margin-left: min(5vw, 5vh);
 }
 
 .answer > span {
@@ -194,82 +198,172 @@
     font-size: 2vw;
     text-align: center;
     margin: 0 10vw;
-    height: 40vh;
+    height: 45vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    
+    transform: translateY(22.5vh);
+    transition: transform 0.5s cubic-bezier(0.25, 0, 0.07, 1.000);
+}
+
+.questionOuter {
+    width: 100%;
+    height: 100vh;
+    transform: translateY(100vh);
+    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    padding: 5vh 1.5vw;
+    box-sizing: border-box;
+}
+
+.questionOuter.out {
+    transform: translateY(0)scale(0) !important;
+    transition: transform 0.5s ease-in;
+}
+
+.questionInner {
+    width: 100%;
+    height: 100%;
+    margin: 0 1.5vw;
+    position: relative;
+}
+
+.questionOuter.showAnswers .questionContent,
+.questionOuter.showAnswers.miniAnswer.showResults .questionContent {
+    transform: translateY(0);
+}
+
+.questionOuter.showAnswers.miniAnswer .questionContent {
+    transform: translateY(12.5vh);
+}
+
+.answerContent {
+    height: 45vh;
     display: flex;
     flex-direction: column;
     align-items: center;
     justify-content: center;
 }
 
-.questionWrap {
-    width: 100%;
-    transform: translateY(100vh);
-    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+.hasImg .questionContent {
+    flex-direction: row;
+    margin: 0;
 }
 
-.questionWrap.hasImg {
-    transform: translateY(120vh);
+.hasImg.showAnswers .questionContent p,
+.hasImg.showAnswers.miniAnswer.showResults .questionContent p {
+    transform: translate(0, 0);
 }
 
-.questionWrap.hasImg .questionContent {
-    width: 45vw;
-    transform: translate(17.5vw, -30vh);
-    transition: transform 0.5s ease-in-out;
+.hasImg .questionContent p {
+    flex-grow: 1;
+    flex-basis: 0;
+    transform: translate(22.5vw, -32vh);
+    transition: transform 0.5s cubic-bezier(0.25, 0, 0.07, 1.000);
 }
 
-.questionWrap.hasImg.showingAnswers .questionContent {
-    transform: translate(-5vw, 0);
+.hasImg.showAnswers.miniAnswer .questionContent p {
+    transform: translate(22.5vw, -30vh);
 }
 
-.questionWrap.hasImg .imgWrap {
-    width: 45vw;
+.hasImg .imgWrap {
+    flex-grow: 1;
+    flex-basis: 0;
     height: 40vh;
-    position: absolute;
-    right: 5vw;
-    top: 0;
-    transform: translate(-22.5vw, 15vh);
-    transition: width 0.5s ease-in-out, transform 0.5s ease-in-out;
+    transform: translate(-22.5vw, 10vh)scale(1.5);
+    transition: transform 0.5s cubic-bezier(0.25, 0, 0.07, 1.000);
 
     display: flex;
     align-items: center;
     justify-content: center;
 }
 
-.questionWrap.hasImg img {
+.hasImg.showAnswers .imgWrap,
+.hasImg.showAnswers.showResults.miniAnswer .imgWrap {
+    transform: translate(0, 0)scale(1);
+}
+
+.hasImg.showAnswers.miniAnswer .imgWrap {
+    transform: translate(-22.5vw, 10vh)scale(1.5);
+}
+
+.hasImg .imgWrap img {
     max-width: 100%;
     max-height: 100%;
     display: block;
     margin: 0 auto;
-    transform: scale(1.5);
     transition: transform 0.5s ease-in-out;
     box-shadow: 5px 5px 10px 0 black;
 }
 
-.questionWrap.hasImg.showingAnswers .imgWrap {
-    width: 45vw;
-    transform: translate(0, 0);
+.miniAnswer .answerContent {
+    height: 10vh;
+    margin-top: 30vh;
+    transition: transform 0.5s cubic-bezier(0.25, 0, 0.07, 1.000), opacity 0.5s ease-out;
+    transform: translateY(30vh);
+    opacity: 0;
 }
 
-.questionWrap.hasImg.showingAnswers img {
-    transform: scale(1);
+.miniAnswer.showAnswers .answerContent {
+    transform: translateY(0);
+    opacity: 1;
+}
+
+.miniAnswer.showAnswers.hasImg .answerContent {
+    transform: translateY(5vh);
+}
+
+.miniAnswer.showAnswers.showResults .answerContent {
+    transition: opacity 0.3s ease-in;
+    opacity: 0;
+}
+
+.answerContent.instr p {
+    font-size: 4vh;
+    margin: 0;
+}
+
+.answerContent.instr .extrainstr {
+    font-size: 2.5vh;
+    margin: 2vh 0 0 0;
+}
+
+.resultsContent {
+    position: absolute;
+    top: 45vh;
+    height: 45vh;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.7s cubic-bezier(0.25, 0, 0.07, 1.000), opacity 0.7s ease-out;
+    transform: translateY(50vh);
+    opacity: 0;
+}
+
+.showResults .resultsContent {
+    opacity: 1;
+    transform: translateY(0);
 }
 
 .questionWrap.smooth {
     transition: transform 0.5s ease-in-out;
 }
 
-.questionWrap.out {
-    transform: translateY(0)scale(0) !important;
-    transition: transform 0.5s ease-in;
-}
-
 .countdown, .submissions {
-    height: 90vh;
+    height: 100%;
     width: 2vw;
     background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 10px 0 black;
-    position: absolute;
-    top: 0;
+
+    position: relative;
 
     display: flex;
     align-items: center;
@@ -279,12 +373,7 @@
     transition: opacity 0.5s ease-in-out;
 }
 
-.tfWrap .countdown, .tfWrap .submissions {
-    transform: translateY(-5vh);
-}
-
 .countdown {
-    left: 1.5vw;
     --time: 0s;
 }
 
@@ -311,10 +400,6 @@
     box-shadow: 0 0 1vw black inset;
 
     transition: transform var(--time) linear;
-}
-
-.submissions {
-    right: 1.5vw;
 }
 
 .submissions span.sep {
@@ -446,25 +531,15 @@ audio {
     padding-right: 10vw;
 }
 
-.typeResponseWrap {
-    position: absolute;
-    bottom: 0;
-    height: 25vh;
-    left: 0; right: 0;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-
-    transform: translateY(100vh);
-    transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+.tfWrap .answer {
+    height: 30vh;
 }
 
-.typeResponseWrap.show {
-    transform: translateY(0);
+.tfWrap .answer > span {
+    font-size: 5vh;
 }
 
-.typeResponseWrap .responseBar {
+.responseBar {
     height: 4vw;
     width: 60vw;
     background: rgba(255, 255, 255, 0.1);
@@ -478,7 +553,7 @@ audio {
     position: relative;
 }
 
-.typeResponseWrap .responseText {
+.responseBar .responseText {
     z-index: 5;
     position: relative;
     text-shadow: 0 0 5px black;
@@ -487,7 +562,7 @@ audio {
     opacity: 1;
 }
 
-.typeResponseWrap .responseBarInner {
+.responseBar .responseBarInner {
     position: absolute;
     top: 0; left: 0; right: 0; bottom: 0;
     transform: scaleX(0);
@@ -510,17 +585,9 @@ audio {
     transition: transform calc(0.7s + var(--delay-time) / 2) cubic-bezier(0.165, 0.840, 0.440, 1.000) var(--delay-time);
 }
 
-.mapWrap .map {
+.map {
     margin: 1em auto;
     width: 80%;
     display: block;
-    height: 43vh;
-}
-
-.mapWrap .typeResponseWrap {
-    height: 50vh;
-}
-
-.mapWrap .typeResponseWrap .responseBar {
-    height: 5vh;
+    height: 40vh;
 }

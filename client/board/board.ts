@@ -16,6 +16,7 @@ import TFQuestionBoard from "./ui/questions/tf.js";
 import TextQuestionBoard from "./ui/questions/text.js";
 import TypeQuestionBoard from "./ui/questions/type.js";
 import MapQuestionBoard from "./ui/questions/map.js";
+import QuestionBoard from "./ui/questions/base.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -104,21 +105,7 @@ function gameScreen(
 ): Promise<{ name: string; points: number }[]> {
   return new Promise((r) => {
     let ui: { remove: () => Promise<void> } | undefined;
-    let questionUi:
-      | {
-          showAnswers: () => void;
-          remove: () => Promise<void>;
-          startCountdown: () => void;
-          setNumAnswers: (n: number, d: number) => void;
-          showResults?: (answers: number[], numPlayers: number) => void;
-          showResultsType?: (numCorrect: number, numPlayers: number) => void;
-          showResultsMap?: (
-            numCorrect: number,
-            numPlayers: number,
-            wrongCoords: [number, number][],
-          ) => void;
-        }
-      | undefined;
+    let questionUi: QuestionBoard | undefined;
     let question: Question = questions[0];
 
     socket.on("gameState", (msg) => {
@@ -166,7 +153,11 @@ function gameScreen(
             }
             case "text": {
               ui?.remove();
-              questionUi = new TextQuestionBoard(document.body, question);
+              questionUi = new TextQuestionBoard(
+                document.body,
+                question,
+                payload.numPlayers,
+              );
               ui = questionUi;
               break;
             }
@@ -205,48 +196,7 @@ function gameScreen(
           questionUi?.setNumAnswers(payload.n, payload.d);
           break;
         case "displayAnswerResultsBoard": {
-          switch (question.t) {
-            case "standard": {
-              if (payload.results.t === "standard") {
-                questionUi?.showResults?.(
-                  payload.results.responses,
-                  payload.numPlayers,
-                );
-              }
-              break;
-            }
-            case "tf": {
-              if (payload.results.t === "tf") {
-                questionUi?.showResults?.(
-                  [payload.results.numTrue, payload.results.numFalse],
-                  payload.numPlayers,
-                );
-              }
-              break;
-            }
-            case "type": {
-              if (payload.results.t === "type") {
-                questionUi?.showResultsType?.(
-                  payload.results.numCorrect,
-                  payload.numPlayers,
-                );
-              }
-              break;
-            }
-            case "map": {
-              if (payload.results.t === "map") {
-                questionUi?.showResultsMap?.(
-                  payload.results.numCorrect,
-                  payload.numPlayers,
-                  payload.results.wrongCoords,
-                );
-              }
-              break;
-            }
-            default:
-              break;
-          }
-
+          questionUi?.showResults(payload.results, payload.numPlayers);
           break;
         }
         case "leaderboardBoard":
