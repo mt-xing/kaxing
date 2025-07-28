@@ -17,6 +17,7 @@ import TextQuestionBoard from "./ui/questions/text.js";
 import TypeQuestionBoard from "./ui/questions/type.js";
 import MapQuestionBoard from "./ui/questions/map.js";
 import QuestionBoard from "./ui/questions/base.js";
+import PersistentFooter from "./ui/persistentFooter.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -102,7 +103,10 @@ function homeScreen(code: string): Promise<void> {
 
 function gameScreen(
   questions: Question[],
+  gameCode: string,
 ): Promise<{ name: string; points: number }[]> {
+  const footer = new PersistentFooter(document.body, gameCode);
+
   return new Promise((r) => {
     let ui: { remove: () => Promise<void> } | undefined;
     let questionUi: QuestionBoard | undefined;
@@ -210,6 +214,7 @@ function gameScreen(
           break;
         case "ggBoard":
           ui?.remove();
+          footer.remove();
           r(payload.leaderboard);
           break;
         default:
@@ -270,7 +275,7 @@ async function gameLoop() {
   await pairController();
   await waitForGameToOpen();
   await homeScreen(code);
-  const finalResults = await gameScreen(questions);
+  const finalResults = await gameScreen(questions, code);
   await displayResults(finalResults);
 }
 

@@ -15,16 +15,19 @@ import MapQuestion from "./ui/questions/map.js";
 
 const socket = new Socket("http://localhost:8080/");
 
-function joinGame(): Promise<void> {
+/**
+ * @returns True if game is already in progress
+ */
+function joinGame(): Promise<boolean> {
   return new Promise((resolve) => {
     new Join(document.body, (id, name) => {
       return new Promise((r) => {
         const payload: JoinRoomPayload = { id, name };
-        socket.on("joinYes", () => {
+        socket.on("joinYes", (msg) => {
           r(true);
           socket.off("joinYes");
           socket.off("joinNo");
-          resolve();
+          resolve(msg === "inProgress");
         });
         socket.on("joinNo", () => {
           r(false);
@@ -37,10 +40,16 @@ function joinGame(): Promise<void> {
   });
 }
 
-async function gameScreen(): Promise<void> {
+async function gameScreen(inProgress: boolean): Promise<void> {
+  let rejoinSkipFirstTaunt = inProgress;
   return new Promise(() => {
     let ui: { remove: () => Promise<void> } | undefined;
-    ui = new TextUi(document.body, "You're in!");
+    ui = new TextUi(
+      document.body,
+      inProgress
+        ? "Welcome in! You'll rejoin with the next question"
+        : "You're in!",
+    );
     socket.on("gameState", (msg) => {
       const payload = JSON.parse(msg) as GameStateClientResponse;
       switch (payload.t) {
@@ -55,6 +64,7 @@ async function gameScreen(): Promise<void> {
           break;
         }
         case "acceptResponse": {
+          rejoinSkipFirstTaunt = false;
           const { q } = payload;
           switch (q.t) {
             case "standard": {
@@ -125,11 +135,15 @@ async function gameScreen(): Promise<void> {
         }
         case "result": {
           ui?.remove();
-          ui = new QuestionResponse(
-            document.body,
-            payload.correct ?? false,
-            getTaunt(payload),
-          );
+          if (rejoinSkipFirstTaunt) {
+            rejoinSkipFirstTaunt = false;
+          } else {
+            ui = new QuestionResponse(
+              document.body,
+              payload.correct ?? false,
+              getTaunt(payload),
+            );
+          }
           break;
         }
         default:
@@ -142,8 +156,8 @@ async function gameScreen(): Promise<void> {
 }
 
 async function gameLoop() {
-  await joinGame();
-  await gameScreen();
+  const inProgress = await joinGame();
+  await gameScreen(inProgress);
 }
 
 window.onload = () => {

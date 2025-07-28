@@ -65,6 +65,19 @@ export default class Communicator {
     });
   }
 
+  /**
+   * Add a player to the game
+   * @returns Whether joining was successful or not
+   */
+  addPlayer(id: string, name: string) {
+    this.#namespace
+      .to(this.#boardId)
+      .emit("join", JSON.stringify({ id, name }));
+    this.#namespace
+      .to(this.#controllerId)
+      .emit("join", JSON.stringify({ id, name }));
+  }
+
   sendQuestionReset(q: number) {
     this.sendToAllPlayers({ t: "blank" });
     this.sendToBoard({ t: "setupQ", n: q });

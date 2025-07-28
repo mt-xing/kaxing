@@ -210,7 +210,7 @@
 
 .questionOuter {
     width: 100%;
-    height: 100vh;
+    height: calc(100vh - 40px);
     transform: translateY(100vh);
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
 
@@ -304,7 +304,7 @@
 
 .miniAnswer .answerContent {
     height: 10vh;
-    margin-top: 30vh;
+    margin-top: calc(30vh - 20px);
     transition: transform 0.5s cubic-bezier(0.25, 0, 0.07, 1.000), opacity 0.5s ease-out;
     transform: translateY(30vh);
     opacity: 0;
@@ -336,8 +336,8 @@
 
 .resultsContent {
     position: absolute;
-    top: 45vh;
-    height: 45vh;
+    top: calc(45vh - 20px);
+    height: calc(45vh - 20px);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -590,4 +590,55 @@ audio {
     width: 80%;
     display: block;
     height: 40vh;
+}
+
+.persistentFooter {
+    height: 40px;
+    box-sizing: border-box;
+    box-shadow: 0 -1px 5px 0 white;
+
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    padding: 0 15px;
+
+    transform: translateY(0);
+    transition: transform 0.5s ease-out;
+}
+
+.persistentFooter .name {
+    flex-grow: 1;
+}
+
+.persistentFooter .name .logo {
+    font-weight: 900;
+    font-size: 25px;
+    margin-left: 5px;
+}
+
+.persistentFooter p {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: start;
+    margin: 0;
+}
+
+.persistentFooter code {
+    font-size: 18px;
+}
+
+.persistentFooter .gameCode {
+    font-size: 30px;
+    margin-left: 10px;
+}
+
+.persistentFooter.out {
+    transform: translateY(50px);
+    transition: transform 0.5s ease-in;
 }

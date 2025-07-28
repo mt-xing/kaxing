@@ -63,6 +63,20 @@ export default class KaXingGame {
     this.#firstQuestion = true;
   }
 
+  /**
+   * Add a player to the game
+   * @returns Whether joining was successful or not
+   */
+  addPlayer(id: string, name: string): boolean {
+    if (this.#players.has(id)) {
+      return false;
+    }
+
+    this.#players.set(id, { name, score: 0, answers: [], record: [] });
+    this.#comms.addPlayer(id, name);
+    return true;
+  }
+
   isController(socketId: string) {
     return socketId === this.#controllerId;
   }

@@ -152,6 +152,15 @@ export default class KaXingServer {
     const { id, name } = JSON.parse(roomInfo) as JoinRoomPayload;
     const game = this.#setups.get(id);
     if (game === undefined) {
+      // Try to rejoin game in progress
+      const inProgressGame = this.#games.get(id);
+      if (inProgressGame?.addPlayer(socket.id, name)) {
+        socket.emit("joinYes", "inProgress");
+        socket.join(id);
+        this.#socketRoom.set(socket.id, id);
+        return;
+      }
+
       const errorPayload: ErrorResponse = {
         reason: "This game code does not exist",
       };
