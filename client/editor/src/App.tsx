@@ -1,10 +1,10 @@
 import "./App.css";
-import StartScreen from "./components/StartScreen";
+import StartScreen from "./components/startScreen";
 
 function App() {
   return (
     <>
-      <StartScreen close={() => {}} />
+      <StartScreen startNew={() => {}} loadExisting={console.log} />
     </>
   );
 }
