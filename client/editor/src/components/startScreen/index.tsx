@@ -11,7 +11,7 @@ export default function StartScreen(props: StartScreenProps) {
   const { startNew, loadExisting } = props;
   const clickLoad = useCallback(async () => {
     const f = await clickUpload();
-    let reader = new FileReader();
+    const reader = new FileReader();
     reader.onload = function (e) {
       if (e.target?.result && typeof e.target.result === "string") {
         loadExisting(e.target.result);
