@@ -1,5 +1,14 @@
 import type { KaXingSaveFile } from "@shared/fileFormat";
-// TODO should use File API to allow in-place saving of game
+import { showSaveFilePicker, showOpenFilePicker } from "file-system-access";
+
+const types = [
+  {
+    description: "KaXing Games",
+    accept: {
+      "application/kaxing": [".kaxing" as const],
+    },
+  },
+];
 
 /**
  * Spawns a file picker for levels and then returns the selected filehandle and its contents as a string
@@ -7,15 +16,8 @@ import type { KaXingSaveFile } from "@shared/fileFormat";
 export async function clickUpload(): Promise<
   [FileSystemFileHandle, KaXingSaveFile]
 > {
-  const [fileHandle] = await window.showOpenFilePicker({
-    types: [
-      {
-        description: "KaXing Games",
-        accept: {
-          "application/kaxing": [".kaxing"],
-        },
-      },
-    ],
+  const [fileHandle] = await showOpenFilePicker({
+    types,
     excludeAcceptAllOption: false,
     multiple: false,
   });
@@ -29,18 +31,15 @@ export async function clickUpload(): Promise<
 /**
  * Download the level
  * @param content Object with content to turn into JSON and download
- * @param defaultName Default file name without extension
  */
-export function downloadFile(content: unknown, defaultName: string) {
-  const dataStr =
-    "data:text/json;charset=utf-8," +
-    encodeURIComponent(JSON.stringify(content));
-  const dlAnchorElem = document.getElementById("downloadAnchorElem");
-  if (!dlAnchorElem) {
-    alert("Failed to download");
-    return;
-  }
-  dlAnchorElem.setAttribute("href", dataStr);
-  dlAnchorElem.setAttribute("download", defaultName + ".kaxing");
-  dlAnchorElem.click();
+export async function downloadFile(
+  content: unknown,
+): Promise<FileSystemFileHandle> {
+  const handle = await showSaveFilePicker({
+    types,
+  });
+  const ws = await handle.createWritable();
+  ws.write(JSON.stringify(content));
+  ws.close();
+  return handle;
 }
