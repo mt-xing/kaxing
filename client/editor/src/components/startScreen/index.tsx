@@ -1,25 +1,18 @@
 import { useCallback } from "react";
 import "./StartScreen.css";
 import { clickUpload } from "../../utils/upload";
+import type { KaXingSaveFile } from "@shared/fileFormat";
 
 export type StartScreenProps = {
   startNew: () => void;
-  loadExisting: (fileString: string) => void;
+  loadExisting: (f: FileSystemFileHandle, game: KaXingSaveFile) => void;
 };
 
 export default function StartScreen(props: StartScreenProps) {
   const { startNew, loadExisting } = props;
   const clickLoad = useCallback(async () => {
-    const f = await clickUpload();
-    const reader = new FileReader();
-    reader.onload = function (e) {
-      if (e.target?.result && typeof e.target.result === "string") {
-        loadExisting(e.target.result);
-      } else {
-        alert("Could not read file");
-      }
-    };
-    reader.readAsText(f);
+    const [fileHandle, game] = await clickUpload();
+    loadExisting(fileHandle, game);
   }, [loadExisting]);
 
   return (
