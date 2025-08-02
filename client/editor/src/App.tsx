@@ -1,4 +1,4 @@
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import StartScreen from "./components/startScreen";
 import type { Question } from "@shared/question";
@@ -54,6 +54,19 @@ function App() {
       ws.close();
     });
   }, [questions, fileHandle]);
+
+  useEffect(() => {
+    const saveHandler = (evt: KeyboardEvent) => {
+      if (evt.ctrlKey && evt.key === "s") {
+        evt.preventDefault();
+        saveGame();
+      }
+    };
+    window.addEventListener("keydown", saveHandler);
+    return () => {
+      window.removeEventListener("keydown", saveHandler);
+    };
+  }, [saveGame]);
 
   return (
     <>
