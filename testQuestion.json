@@ -1,3 +1,9 @@
+{
+  "game": "kaxing",
+  "version": "1.0.0",
+  "questions": 
+
+
 [{
   "t": "map",
   "points": 1000,
@@ -48,3 +54,6 @@
   "correct": true,
   "img": "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png"
 }]
+
+
+}
