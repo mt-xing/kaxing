@@ -1,0 +1,111 @@
+.carousel {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: row;
+  max-width: 100%;
+  overflow-x: auto;
+  padding: 0 20px;
+}
+
+.carousel li {
+  height: 100%;
+  width: 200px;
+  margin: 0 10px;
+  box-sizing: border-box;
+}
+
+.carousel li div {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: 120px;
+  position: relative;
+}
+
+.carousel .qNumBg {
+  position: absolute;
+  top: 0; left: 0; bottom: 0; right: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 900;
+  font-size: 70px;
+  opacity: 0.2;
+  pointer-events: none;
+}
+
+.carousel li div strong {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.carousel li div p {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  max-width: 100%;
+  max-height: 80px;
+  display: -webkit-box;
+  line-clamp: 5;
+  -webkit-line-clamp: 5;
+  -webkit-box-orient: vertical;
+  margin: 0;
+}
+
+.carousel li .arrowBtn {
+  width: 25px;
+  color: white;
+  background: none;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.1s ease-in-out;
+}
+
+.carousel li .arrowBtn:hover,
+.carousel li .arrowBtn:focus {
+  transform: scale(1.2);
+}
+
+.carousel li .arrowBtn:active {
+  transform: scale(0.8);
+}
+
+.carousel li .arrowBtn:disabled {
+  opacity: 0.5;
+  pointer-events: none;
+}
+
+.carousel li .mainBtn {
+  width: 150px;
+  padding: 5px 10px;
+  color: white;
+  cursor: pointer;
+  z-index: 2;
+
+  transition: box-shadow 0.2s ease-in-out;
+}
+
+.carousel li .mainBtn:hover, 
+.carousel li .mainBtn:focus {
+  box-shadow: 0 0 5px white;
+}
+
+.carousel li .mainBtn:active {
+  box-shadow: 0 0 10px lightblue;
+}
+
+.carousel li .mainBtn.activeQ {
+  box-shadow: 0 0 15px white;
+  cursor: unset;
+}
+
+.carousel input {
+  background: none;
+  color: white;
+  border: none;
+  width: 100%;
+  text-align: center;
+  height: 16px;
+  display: block;
+}

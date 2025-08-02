@@ -4,9 +4,11 @@ import StartScreen from "./components/startScreen";
 import type { Question } from "@shared/question";
 import type { KaXingSaveFile } from "@shared/fileFormat";
 import { downloadFile } from "./utils/upload";
+import QuestionCarousel from "./components/questionCarousel";
 
 function App() {
   const [questions, setQuestions] = useState<Question[] | undefined>(undefined);
+  const [selectedQuestion, setSelectedQuestion] = useState(0);
   const [fileHandle, setFileHandle] = useState<
     FileSystemFileHandle | undefined
   >(undefined);
@@ -20,7 +22,15 @@ function App() {
   );
 
   const newGame = useCallback(() => {
-    setQuestions([]);
+    const blankQuestion: Question = {
+      t: "standard",
+      text: "",
+      time: 20,
+      points: 1000,
+      answers: ["", "", "", ""],
+      correct: 0,
+    };
+    setQuestions([blankQuestion]);
   }, []);
 
   const saveGame = useCallback(() => {
@@ -59,7 +69,14 @@ function App() {
           </header>
           <section className="question"></section>
           <section className="sidebar"></section>
-          <nav className="picker"></nav>
+          <nav className="picker">
+            <QuestionCarousel
+              questions={questions}
+              modifyQuestions={setQuestions}
+              selected={selectedQuestion}
+              selectQuestion={setSelectedQuestion}
+            />
+          </nav>
         </main>
       )}
     </>
