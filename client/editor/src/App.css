@@ -38,11 +38,13 @@
 .question {
   grid-area: question;
   background: red;
+  opacity: 0.2;
 }
 
 .sidebar {
   grid-area: sidebar;
   background: blue;
+  opacity: 0.2;
 }
 
 .picker {
