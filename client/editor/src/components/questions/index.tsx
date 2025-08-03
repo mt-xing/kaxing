@@ -5,6 +5,8 @@ import StandardQuestionAnswers from "./standard/answers";
 import StandardQuestionSidebar from "./standard/sidebar";
 import TfQuestionAnswers from "./tf/answers";
 import { useCallback, useState } from "react";
+import TypeQuestionAnswers from "./type/answers";
+import TypeQuestionSidebar from "./type/sidebar";
 
 export type QuestionEditorProps = {
   q: Question;
@@ -51,7 +53,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             ...base,
             t: "type",
             correct: {
-              regex: "",
+              regex: "^$",
               representativeAnswers: [""],
             },
             maxChars: 20,
@@ -123,6 +125,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
           <StandardQuestionAnswers q={q} modify={modify} />
         ) : null}
         {q.t === "tf" ? <TfQuestionAnswers q={q} modify={modify} /> : null}
+        {q.t === "type" ? <TypeQuestionAnswers q={q} modify={modify} /> : null}
       </section>
       <section className="sidebar card">
         <h2>{getQuestionShortString(q.t)}</h2>
@@ -191,6 +194,9 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             </p>
             {q.t === "standard" ? (
               <StandardQuestionSidebar q={q} modify={modify} />
+            ) : null}
+            {q.t === "type" ? (
+              <TypeQuestionSidebar q={q} modify={modify} />
             ) : null}
             <p>
               <button onClick={deleteQ} className="bigbtn">

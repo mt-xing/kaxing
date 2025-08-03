@@ -27,7 +27,8 @@
   "correct": {
     "regex": "(?:20|')?24",
     "representativeAnswers": ["2024"]
-  }
+  },
+  "caseInsensitive": true
 },{
   "t": "standard",
   "points": 1000,

@@ -21,6 +21,7 @@ export type Question = {
   | {
       t: "type";
       maxChars: number;
+      caseInsensitive: boolean;
       correct: {
         regex: string;
         representativeAnswers: string[];
@@ -96,7 +97,10 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
       if (a.t !== "type") {
         return false;
       }
-      return new RegExp(q.correct.regex, "i").test(a.a.trim());
+      return new RegExp(
+        q.correct.regex,
+        q.caseInsensitive ? "i" : undefined,
+      ).test(a.a.trim());
     case "tf":
       if (a.t !== "tf") {
         return false;

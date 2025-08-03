@@ -1,5 +1,7 @@
 .question {
   padding: 20px 40px;
+  overflow-y: auto;
+  overflow-x: hidden;
 }
 
 .sidebar {
@@ -51,7 +53,7 @@ textarea, input {
   border: none;
   color: white;
   text-align: center;
-  margin: 20px 40px 0 40px;
+  margin: 20px 0 0 0;
   font-size: 3vh;
   height: 8vh;
 }
