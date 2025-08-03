@@ -79,6 +79,20 @@ function App() {
     [selectedQuestion],
   );
 
+  const deleteSelectedQuestion = useCallback(() => {
+    if (!confirm("Are you sure you want to delete this question?")) {
+      return;
+    }
+    setQuestions((oldQ) => {
+      if (!oldQ || oldQ.length <= 1) {
+        return;
+      }
+      return oldQ.filter((_x, i) => i !== selectedQuestion);
+    });
+    const l = questions?.length ?? 0;
+    setSelectedQuestion((i) => (i >= l - 1 ? l - 2 : i));
+  }, [selectedQuestion, questions?.length]);
+
   return (
     <>
       {questions === undefined ? (
@@ -95,6 +109,7 @@ function App() {
             q={questions[selectedQuestion]}
             modify={modifySelectedQuestion}
             key={questions[selectedQuestion].t}
+            deleteQ={deleteSelectedQuestion}
           />
           <nav className="picker">
             <QuestionCarousel

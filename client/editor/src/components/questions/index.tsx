@@ -9,10 +9,11 @@ import { useCallback, useState } from "react";
 export type QuestionEditorProps = {
   q: Question;
   modify: (newQ: Question | ((o: Question) => Question)) => void;
+  deleteQ: () => void;
 };
 
 export default function QuestionEditor(props: QuestionEditorProps) {
-  const { q, modify } = props;
+  const { q, modify, deleteQ } = props;
   const [tentativeType, setTentativeType] = useState(q.t);
 
   const changeTentativeType = useCallback(
@@ -150,10 +151,9 @@ export default function QuestionEditor(props: QuestionEditorProps) {
           </button>
         </p>
         {tentativeType !== q.t ? (
-          <p>
-            Note that changing the type of the question will preserve the text,
-            image, points, and time, but delete all type-specific answer
-            information.
+          <p className="warning">
+            Changing the question type deletes all type-specific answer
+            information (not the text, image, points, or time)
           </p>
         ) : null}
         {q.t === "text" ? (
@@ -192,6 +192,11 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             {q.t === "standard" ? (
               <StandardQuestionSidebar q={q} modify={modify} />
             ) : null}
+            <p>
+              <button onClick={deleteQ} className="bigbtn">
+                Delete Question
+              </button>
+            </p>
           </>
         )}
       </section>
