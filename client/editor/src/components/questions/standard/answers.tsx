@@ -45,19 +45,17 @@ function SingleAnswer(props: StandardQuestionEditorProps & { i: number }) {
   );
   return (
     <div className="answer">
-      <label>
-        <input
-          type={typeof q.correct === "number" ? "radio" : "checkbox"}
-          name="standardQuestionCorrect"
-          checked={
-            typeof q.correct === "number"
-              ? q.correct === i
-              : q.correct.indexOf(i) !== -1
-          }
-          value={i}
-          onChange={toggleCorrect}
-        />
-      </label>
+      <input
+        type={typeof q.correct === "number" ? "radio" : "checkbox"}
+        name="standardQuestionCorrect"
+        checked={
+          typeof q.correct === "number"
+            ? q.correct === i
+            : q.correct.indexOf(i) !== -1
+        }
+        value={i}
+        onChange={toggleCorrect}
+      />
       <textarea
         value={q.answers[i]}
         onChange={(evt) => setAnswer(evt.target.value)}

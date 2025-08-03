@@ -3,6 +3,7 @@ import "./QuestionEditor.css";
 import { getQuestionShortString } from "../../utils/questions";
 import StandardQuestionAnswers from "./standard/answers";
 import StandardQuestionSidebar from "./standard/sidebar";
+import TfQuestionAnswers from "./tf/answers";
 
 export type QuestionEditorProps = {
   q: Question;
@@ -54,6 +55,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
         {q.t === "standard" ? (
           <StandardQuestionAnswers q={q} modify={modify} />
         ) : null}
+        {q.t === "tf" ? <TfQuestionAnswers q={q} modify={modify} /> : null}
       </section>
       <section className="sidebar card">
         <h2>{getQuestionShortString(q.t)}</h2>
