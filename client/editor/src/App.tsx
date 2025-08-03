@@ -5,6 +5,7 @@ import type { Question } from "@shared/question";
 import type { KaXingSaveFile } from "@shared/fileFormat";
 import { downloadFile } from "./utils/upload";
 import QuestionCarousel from "./components/questionCarousel";
+import QuestionEditor from "./components/questions";
 
 function App() {
   const [questions, setQuestions] = useState<Question[] | undefined>(undefined);
@@ -80,8 +81,7 @@ function App() {
               Save
             </button>
           </header>
-          <section className="question"></section>
-          <section className="sidebar"></section>
+          <QuestionEditor q={questions[selectedQuestion]} />
           <nav className="picker">
             <QuestionCarousel
               questions={questions}

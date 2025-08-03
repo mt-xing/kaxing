@@ -1,6 +1,7 @@
 import type { Question } from "@shared/question";
 import "./QuestionCarousel.css";
 import { useCallback } from "react";
+import { getQuestionShortString } from "../../utils/questions";
 
 export type CarouselProps = {
   questions: Question[];
@@ -8,23 +9,6 @@ export type CarouselProps = {
   modifyQuestions: (newQuestions: Question[]) => void;
   selectQuestion: (index: number) => void;
 };
-
-function getQuestionShortString(q: Question["t"]): string {
-  switch (q) {
-    case "standard":
-      return "Multiple Choice";
-    case "multi":
-      return "Multi-Select";
-    case "tf":
-      return "True or False";
-    case "type":
-      return "Type Answer";
-    case "map":
-      return "Map";
-    case "text":
-      return "Slide";
-  }
-}
 
 export default function QuestionCarousel(props: CarouselProps) {
   const { questions, selected, modifyQuestions, selectQuestion } = props;
