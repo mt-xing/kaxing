@@ -21,19 +21,17 @@ export default function QuestionEditor(props: QuestionEditorProps) {
           onChange={(evt) => modify({ ...q, text: evt.target.value })}
         ></textarea>
         <p className="imgUrlWrap">
-          <label>
-            Image URL (Optional):{" "}
-            <input
-              type="text"
-              value={q.img ?? ""}
-              onChange={(evt) =>
-                modify({
-                  ...q,
-                  img: evt.target.value ? evt.target.value : undefined,
-                })
-              }
-            />
-          </label>
+          <input
+            type="text"
+            value={q.img ?? ""}
+            placeholder="Image URL (Optional)"
+            onChange={(evt) =>
+              modify({
+                ...q,
+                img: evt.target.value ? evt.target.value : undefined,
+              })
+            }
+          />
         </p>
         {q.img ? (
           <img src={q.img} alt="" className="imgPreview" />

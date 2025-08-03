@@ -26,8 +26,8 @@
   object-fit: contain;
   margin: 5px auto;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
 }
 
 .imgPreview a {
@@ -36,10 +36,10 @@
 
 .imgPreview p {
   text-align: center;
-  max-width: 400px;
+  max-width: 450px;
 }
 
-textarea {
+textarea, input {
   resize: none;
   font-family: "Montserrat", sans-serif;
   font-weight: 500;
@@ -63,11 +63,11 @@ textarea {
 }
 
 .imgUrlWrap input {
-  text-align: left;
+  text-align: center;
   border: none;
   border-bottom: 1px white solid;
   color: white;
   background: none;
-  padding: 0 5px;
+  padding: 0 5px 3px 5px;
   width: calc(100% - 300px);
 }
