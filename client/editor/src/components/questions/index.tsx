@@ -5,15 +5,21 @@ import StandardQuestionAnswers from "./standard/answers";
 
 export type QuestionEditorProps = {
   q: Question;
+  modify: (newQ: Question) => void;
 };
 
 export default function QuestionEditor(props: QuestionEditorProps) {
-  const { q } = props;
+  const { q, modify } = props;
   return (
     <>
       <section className="question">
-        <textarea value={q.text}></textarea>
-        {q.t === "standard" ? <StandardQuestionAnswers q={q} /> : null}
+        <textarea
+          value={q.text}
+          onChange={(evt) => modify({ ...q, text: evt.target.value })}
+        ></textarea>
+        {q.t === "standard" ? (
+          <StandardQuestionAnswers q={q} modify={modify} />
+        ) : null}
       </section>
       <section className="sidebar card">
         <h2>{getQuestionShortString(q.t)}</h2>
@@ -27,12 +33,27 @@ export default function QuestionEditor(props: QuestionEditorProps) {
           <>
             <p>
               <label>
-                Points: <input type="number" value={q.points} />
+                Points:{" "}
+                <input
+                  type="number"
+                  value={q.points}
+                  onChange={(evt) =>
+                    modify({ ...q, points: parseInt(evt.target.value, 10) })
+                  }
+                />
               </label>
             </p>
             <p>
               <label>
-                Time: <input type="number" value={q.time} /> sec
+                Time:{" "}
+                <input
+                  type="number"
+                  value={q.time}
+                  onChange={(evt) =>
+                    modify({ ...q, time: parseInt(evt.target.value, 10) })
+                  }
+                />{" "}
+                sec
               </label>
             </p>
           </>
