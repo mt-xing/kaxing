@@ -48,6 +48,9 @@ export default function QuestionCarousel(props: CarouselProps) {
       if (startI === endI) {
         return;
       }
+      if (Number.isNaN(endI)) {
+        return;
+      }
       if (
         startI < 0 ||
         endI < 0 ||
