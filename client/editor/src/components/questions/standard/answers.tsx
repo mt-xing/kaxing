@@ -44,9 +44,8 @@ function SingleAnswer(props: StandardQuestionEditorProps & { i: number }) {
     [modify, q, i],
   );
   return (
-    <>
+    <div className="answer">
       <label>
-        Correct:{" "}
         <input
           type={typeof q.correct === "number" ? "radio" : "checkbox"}
           name="standardQuestionCorrect"
@@ -63,7 +62,7 @@ function SingleAnswer(props: StandardQuestionEditorProps & { i: number }) {
         value={q.answers[i]}
         onChange={(evt) => setAnswer(evt.target.value)}
       ></textarea>
-    </>
+    </div>
   );
 }
 
@@ -73,11 +72,11 @@ export default function StandardQuestionAnswers(
   const { q, modify } = props;
   return (
     <>
-      <div>
+      <div className="answerRow">
         <SingleAnswer q={q} modify={modify} i={0} />
         <SingleAnswer q={q} modify={modify} i={1} />
       </div>
-      <div>
+      <div className="answerRow">
         <SingleAnswer q={q} modify={modify} i={2} />
         <SingleAnswer q={q} modify={modify} i={3} />
       </div>
