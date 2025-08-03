@@ -63,14 +63,16 @@ function App() {
   }, [saveGame]);
 
   const modifySelectedQuestion = useCallback(
-    (newQ: Question) => {
+    (newQ: Question | ((q: Question) => Question)) => {
       setQuestions((oldQ) => {
         if (oldQ === undefined) {
           return undefined;
         }
+        const nq =
+          typeof newQ === "function" ? newQ(oldQ[selectedQuestion]) : newQ;
         return oldQ
           .slice(0, selectedQuestion)
-          .concat([newQ])
+          .concat([nq])
           .concat(oldQ.slice(selectedQuestion + 1));
       });
     },
@@ -92,6 +94,7 @@ function App() {
           <QuestionEditor
             q={questions[selectedQuestion]}
             modify={modifySelectedQuestion}
+            key={questions[selectedQuestion].t}
           />
           <nav className="picker">
             <QuestionCarousel

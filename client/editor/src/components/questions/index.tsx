@@ -4,14 +4,80 @@ import { getQuestionShortString } from "../../utils/questions";
 import StandardQuestionAnswers from "./standard/answers";
 import StandardQuestionSidebar from "./standard/sidebar";
 import TfQuestionAnswers from "./tf/answers";
+import { useCallback, useState } from "react";
 
 export type QuestionEditorProps = {
   q: Question;
-  modify: (newQ: Question) => void;
+  modify: (newQ: Question | ((o: Question) => Question)) => void;
 };
 
 export default function QuestionEditor(props: QuestionEditorProps) {
   const { q, modify } = props;
+  const [tentativeType, setTentativeType] = useState(q.t);
+
+  const changeTentativeType = useCallback(
+    (evt: React.ChangeEvent<HTMLSelectElement>) =>
+      setTentativeType(evt.target.value as Question["t"]),
+    [],
+  );
+
+  const confirmChangeType = useCallback(() => {
+    modify((oldQuestion) => {
+      const base = {
+        text: oldQuestion.text,
+        img: oldQuestion.img,
+        points: oldQuestion.points,
+        time: oldQuestion.time,
+      };
+      switch (tentativeType) {
+        case "standard":
+          return {
+            ...base,
+            t: "standard",
+            answers: ["", "", "", ""],
+            correct: 0,
+          };
+        case "tf":
+          return {
+            ...base,
+            t: "tf",
+            correct: true,
+          };
+        case "multi":
+          throw new Error("Unimplemented");
+        case "type":
+          return {
+            ...base,
+            t: "type",
+            correct: {
+              regex: "",
+              representativeAnswers: [""],
+            },
+            maxChars: 20,
+          };
+        case "map":
+          return {
+            ...base,
+            t: "map",
+            startLat: 0,
+            startLon: 0,
+            startZoom: 10,
+            minZoom: 8,
+            maxZoom: 14,
+            correct: {
+              matches: [],
+              representativeAnswers: [[0, 0]],
+            },
+          };
+        case "text":
+          return {
+            ...base,
+            t: "text",
+          };
+      }
+    });
+  }, [modify, tentativeType]);
+
   return (
     <>
       <section className="question">
@@ -59,6 +125,37 @@ export default function QuestionEditor(props: QuestionEditorProps) {
       </section>
       <section className="sidebar card">
         <h2>{getQuestionShortString(q.t)}</h2>
+        <p>
+          <label>
+            Change type:{" "}
+            <select
+              style={{ padding: "0.2em 0.2em" }}
+              value={tentativeType}
+              onChange={changeTentativeType}
+            >
+              <option value="standard">Multiple Choice</option>
+              <option value="tf">True or False</option>
+              <option value="type">Type Answer</option>
+              <option value="map">Map</option>
+              <option value="text">Slide</option>
+            </select>
+          </label>
+          <button
+            className="bigbtn"
+            style={{ marginLeft: "5px", padding: "0.2em 1.2em 0.3em 1em" }}
+            onClick={confirmChangeType}
+            disabled={tentativeType === q.t}
+          >
+            Confirm
+          </button>
+        </p>
+        {tentativeType !== q.t ? (
+          <p>
+            Note that changing the type of the question will preserve the text,
+            image, points, and time, but delete all type-specific answer
+            information.
+          </p>
+        ) : null}
         {q.t === "text" ? (
           <p>
             This is a static slide that does not involve players answering
