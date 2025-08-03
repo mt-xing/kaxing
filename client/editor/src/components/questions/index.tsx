@@ -15,9 +15,44 @@ export default function QuestionEditor(props: QuestionEditorProps) {
     <>
       <section className="question">
         <textarea
+          className="mainText"
+          placeholder="Question Text Here"
           value={q.text}
           onChange={(evt) => modify({ ...q, text: evt.target.value })}
         ></textarea>
+        <p className="imgUrlWrap">
+          <label>
+            Image URL (Optional):{" "}
+            <input
+              type="text"
+              value={q.img ?? ""}
+              onChange={(evt) =>
+                modify({
+                  ...q,
+                  img: evt.target.value ? evt.target.value : undefined,
+                })
+              }
+            />
+          </label>
+        </p>
+        {q.img ? (
+          <img src={q.img} alt="" className="imgPreview" />
+        ) : (
+          <div className="imgPreview">
+            <p>
+              I don't offer image hosting services. To add images, upload your
+              picture to a third-party host like{" "}
+              <a
+                href="https://imgur.com"
+                target="_blank"
+                referrerPolicy="no-referrer"
+              >
+                Imgur
+              </a>{" "}
+              and paste the URL of the image file above.
+            </p>
+          </div>
+        )}
         {q.t === "standard" ? (
           <StandardQuestionAnswers q={q} modify={modify} />
         ) : null}
