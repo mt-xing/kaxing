@@ -12,12 +12,12 @@ export default function StandardQuestionAnswers(
   return (
     <>
       <div>
-        <textarea>{q.answers[0]}</textarea>
-        <textarea>{q.answers[1]}</textarea>
+        <textarea value={q.answers[0]}></textarea>
+        <textarea value={q.answers[1]}></textarea>
       </div>
       <div>
-        <textarea>{q.answers[2]}</textarea>
-        <textarea>{q.answers[3]}</textarea>
+        <textarea value={q.answers[2]}></textarea>
+        <textarea value={q.answers[3]}></textarea>
       </div>
     </>
   );

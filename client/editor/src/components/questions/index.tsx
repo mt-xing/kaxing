@@ -12,7 +12,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
   return (
     <>
       <section className="question">
-        <textarea>{q.text}</textarea>
+        <textarea value={q.text}></textarea>
         {q.t === "standard" ? <StandardQuestionAnswers q={q} /> : null}
       </section>
       <section className="sidebar card">

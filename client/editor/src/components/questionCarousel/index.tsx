@@ -1,7 +1,10 @@
 import type { Question } from "@shared/question";
 import "./QuestionCarousel.css";
 import { useCallback } from "react";
-import { getQuestionShortString } from "../../utils/questions";
+import {
+  getDefaultQuestion,
+  getQuestionShortString,
+} from "../../utils/questions";
 
 export type CarouselProps = {
   questions: Question[];
@@ -12,6 +15,12 @@ export type CarouselProps = {
 
 export default function QuestionCarousel(props: CarouselProps) {
   const { questions, selected, modifyQuestions, selectQuestion } = props;
+
+  const addQ = useCallback(() => {
+    modifyQuestions(questions.concat([getDefaultQuestion()]));
+    selectQuestion(questions.length);
+  }, [questions, modifyQuestions, selectQuestion]);
+
   const moveDir = useCallback(
     (i: number, isRight: boolean) => {
       if (i <= 0 && !isRight) {
@@ -119,6 +128,11 @@ export default function QuestionCarousel(props: CarouselProps) {
           />
         </li>
       ))}
+      <li key="addBtn">
+        <button className="addBtn" onClick={addQ}>
+          +
+        </button>
+      </li>
     </ul>
   );
 }

@@ -6,6 +6,7 @@ import type { KaXingSaveFile } from "@shared/fileFormat";
 import { downloadFile } from "./utils/upload";
 import QuestionCarousel from "./components/questionCarousel";
 import QuestionEditor from "./components/questions";
+import { getDefaultQuestion } from "./utils/questions";
 
 function App() {
   const [questions, setQuestions] = useState<Question[] | undefined>(undefined);
@@ -23,15 +24,7 @@ function App() {
   );
 
   const newGame = useCallback(() => {
-    const blankQuestion: Question = {
-      t: "standard",
-      text: "",
-      time: 20,
-      points: 1000,
-      answers: ["", "", "", ""],
-      correct: 0,
-    };
-    setQuestions([blankQuestion]);
+    setQuestions([getDefaultQuestion()]);
   }, []);
 
   const saveGame = useCallback(() => {

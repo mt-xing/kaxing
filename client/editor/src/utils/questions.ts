@@ -16,3 +16,14 @@ export function getQuestionShortString(q: Question["t"]): string {
       return "Slide";
   }
 }
+
+export function getDefaultQuestion(): Question {
+  return {
+    t: "standard",
+    points: 1000,
+    time: 20,
+    text: "",
+    answers: ["", "", "", ""],
+    correct: 0,
+  };
+}
