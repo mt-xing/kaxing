@@ -1,11 +1,11 @@
 :root {
-  min-width: 800px;
+  min-width: 1000px;
   min-height: 600px;
   overflow: auto;
 }
 
 .main {
-  width: max(100vw, 800px);
+  width: max(100vw, 1000px);
   height: max(100vh, 600px);
   height: max(100svh, 600px);
   display: grid;

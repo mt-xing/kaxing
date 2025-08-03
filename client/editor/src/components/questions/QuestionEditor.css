@@ -2,4 +2,16 @@
   box-sizing: border-box;
   margin: 20px 30px;
   padding: 20px 50px;
+
+  overflow-y: auto;
+  overflow-x: hidden;
+}
+
+.sidebar .warning {
+  background: red;
+  font-weight: bold;
+  padding: 1em;
+  font-size: 1.2em;
+  position: relative;
+  overflow: hidden;
 }

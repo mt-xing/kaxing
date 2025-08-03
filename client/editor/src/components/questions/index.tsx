@@ -2,6 +2,7 @@ import type { Question } from "@shared/question";
 import "./QuestionEditor.css";
 import { getQuestionShortString } from "../../utils/questions";
 import StandardQuestionAnswers from "./standard/answers";
+import StandardQuestionSidebar from "./standard/sidebar";
 
 export type QuestionEditorProps = {
   q: Question;
@@ -56,6 +57,9 @@ export default function QuestionEditor(props: QuestionEditorProps) {
                 sec
               </label>
             </p>
+            {q.t === "standard" ? (
+              <StandardQuestionSidebar q={q} modify={modify} />
+            ) : null}
           </>
         )}
       </section>
