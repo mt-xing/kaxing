@@ -7,6 +7,7 @@ import TfQuestionAnswers from "./tf/answers";
 import { useCallback, useState } from "react";
 import TypeQuestionAnswers from "./type/answers";
 import TypeQuestionSidebar from "./type/sidebar";
+import MapQuestionAnswers from "./map/answers";
 
 export type QuestionEditorProps = {
   q: Question;
@@ -56,6 +57,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
               regex: "^$",
               representativeAnswers: [""],
             },
+            caseInsensitive: true,
             maxChars: 20,
           };
         case "map":
@@ -126,6 +128,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
         ) : null}
         {q.t === "tf" ? <TfQuestionAnswers q={q} modify={modify} /> : null}
         {q.t === "type" ? <TypeQuestionAnswers q={q} modify={modify} /> : null}
+        {q.t === "map" ? <MapQuestionAnswers q={q} modify={modify} /> : null}
       </section>
       <section className="sidebar card">
         <h2>{getQuestionShortString(q.t)}</h2>
