@@ -72,6 +72,7 @@ function MapCoordsPassthrough(props: {
 
   useEffect(() => {
     map.on("move", onMove);
+    onMove();
     return () => {
       map.off("move", onMove);
     };

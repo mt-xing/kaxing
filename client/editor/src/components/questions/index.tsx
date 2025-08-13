@@ -146,11 +146,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
         <p>
           <label>
             Change type:{" "}
-            <select
-              style={{ padding: "0.2em 0.2em" }}
-              value={tentativeType}
-              onChange={changeTentativeType}
-            >
+            <select value={tentativeType} onChange={changeTentativeType}>
               <option value="standard">Multiple Choice</option>
               <option value="tf">True or False</option>
               <option value="type">Type Answer</option>
@@ -159,8 +155,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             </select>
           </label>
           <button
-            className="bigbtn"
-            style={{ marginLeft: "5px", padding: "0.2em 1.2em 0.3em 1em" }}
+            className="bigbtn smallbtn"
             onClick={confirmChangeType}
             disabled={tentativeType === q.t}
           >

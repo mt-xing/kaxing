@@ -2,3 +2,7 @@
   position: "relative";
   z-index: 2;
 }
+
+input.disabledInput {
+  width: 120px;
+}

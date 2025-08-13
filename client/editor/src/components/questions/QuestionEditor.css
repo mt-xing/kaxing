@@ -73,3 +73,17 @@ textarea, input {
   padding: 0 5px 3px 5px;
   width: calc(100% - 300px);
 }
+
+.sidebar input[type="text"],
+.sidebar input[type="number"],
+.sidebar select {
+  text-align: left;
+  padding: 5px 10px;
+  font-size: 16px;
+  margin-bottom: 4px;
+}
+
+.sidebar .smallbtn {
+  margin-left: 5px;
+  padding: 0.2em 1.2em 0.3em 1em;
+}
