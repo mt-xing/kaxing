@@ -6,15 +6,17 @@ import {
   Marker,
   Popup,
   TileLayer,
+  useMap,
   useMapEvent,
 } from "react-leaflet";
 import haversineDistance from "haversine-distance";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import L from "leaflet";
 
 export type MapQuestionEditorProps = {
   q: Extract<Question, { t: "map" }>;
   modify: (newQ: Question) => void;
+  setMapCoords: (coord: [number, number, number]) => void;
 };
 
 type AddState =
@@ -57,8 +59,29 @@ function MapClickPassthrough(props: {
   return null;
 }
 
+function MapCoordsPassthrough(props: {
+  setMapCoords: (coord: [number, number, number]) => void;
+}) {
+  const map = useMap();
+  const { setMapCoords } = props;
+
+  const onMove = useCallback(() => {
+    const center = map.getCenter();
+    setMapCoords([center.lat, center.lng, map.getZoom()]);
+  }, [map, setMapCoords]);
+
+  useEffect(() => {
+    map.on("move", onMove);
+    return () => {
+      map.off("move", onMove);
+    };
+  }, [map, onMove]);
+
+  return null;
+}
+
 export default function MapQuestionAnswers(props: MapQuestionEditorProps) {
-  const { q, modify } = props;
+  const { q, modify, setMapCoords } = props;
   const [addState, setAddState] = useState<AddState | null>(null);
   const handleClick = useCallback(
     (lat: number, lng: number) => {
@@ -132,6 +155,7 @@ export default function MapQuestionAnswers(props: MapQuestionEditorProps) {
         style={{ height: "calc(60vh - 300px)" }}
       >
         <MapClickPassthrough onClick={handleClick} />
+        <MapCoordsPassthrough setMapCoords={setMapCoords} />
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"

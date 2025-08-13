@@ -8,6 +8,7 @@ import { useCallback, useState } from "react";
 import TypeQuestionAnswers from "./type/answers";
 import TypeQuestionSidebar from "./type/sidebar";
 import MapQuestionAnswers from "./map/answers";
+import MapQuestionSidebar from "./map/sidebar";
 
 export type QuestionEditorProps = {
   q: Question;
@@ -18,6 +19,10 @@ export type QuestionEditorProps = {
 export default function QuestionEditor(props: QuestionEditorProps) {
   const { q, modify, deleteQ } = props;
   const [tentativeType, setTentativeType] = useState(q.t);
+  // lat, lng, zoom
+  const [mapCoords, setMapCoords] = useState<[number, number, number]>([
+    0, 0, 0,
+  ]);
 
   const changeTentativeType = useCallback(
     (evt: React.ChangeEvent<HTMLSelectElement>) =>
@@ -128,7 +133,13 @@ export default function QuestionEditor(props: QuestionEditorProps) {
         ) : null}
         {q.t === "tf" ? <TfQuestionAnswers q={q} modify={modify} /> : null}
         {q.t === "type" ? <TypeQuestionAnswers q={q} modify={modify} /> : null}
-        {q.t === "map" ? <MapQuestionAnswers q={q} modify={modify} /> : null}
+        {q.t === "map" ? (
+          <MapQuestionAnswers
+            q={q}
+            modify={modify}
+            setMapCoords={setMapCoords}
+          />
+        ) : null}
       </section>
       <section className="sidebar card">
         <h2>{getQuestionShortString(q.t)}</h2>
@@ -200,6 +211,15 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             ) : null}
             {q.t === "type" ? (
               <TypeQuestionSidebar q={q} modify={modify} />
+            ) : null}
+            {q.t === "map" ? (
+              <MapQuestionSidebar
+                q={q}
+                modify={modify}
+                currentLat={mapCoords[0]}
+                currentLng={mapCoords[1]}
+                currentZoom={mapCoords[2]}
+              />
             ) : null}
             <p>
               <button onClick={deleteQ} className="bigbtn">
