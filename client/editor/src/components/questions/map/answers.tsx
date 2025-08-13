@@ -113,9 +113,12 @@ export default function MapQuestionAnswers(props: MapQuestionEditorProps) {
               matches: q.correct.matches.concat([
                 {
                   center: addState.center,
-                  radius: Math.sqrt(
-                    Math.pow(addState.center[0] - lat, 2) +
-                      Math.pow(addState.center[1] - lng, 2),
+                  radius: haversineDistance(
+                    {
+                      latitude: addState.center[0],
+                      longitude: addState.center[1],
+                    },
+                    { latitude: lat, longitude: lng },
                   ),
                 },
               ]),
@@ -165,13 +168,7 @@ export default function MapQuestionAnswers(props: MapQuestionEditorProps) {
           <Circle
             center={match.center}
             pathOptions={{ fillColor: "blue" }}
-            radius={haversineDistance(
-              { latitude: match.center[0], longitude: match.center[1] },
-              {
-                latitude: match.center[0] + match.radius,
-                longitude: match.center[1],
-              },
-            )}
+            radius={match.radius}
             key={JSON.stringify(match.center)}
           >
             <Popup>
