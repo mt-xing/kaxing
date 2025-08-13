@@ -69,11 +69,12 @@ export default function QuestionEditor(props: QuestionEditorProps) {
           return {
             ...base,
             t: "map",
-            startLat: 0,
-            startLon: 0,
-            startZoom: 10,
-            minZoom: 8,
-            maxZoom: 14,
+            // Hard-coded default: Cornell University Central Campus
+            startLat: 42.44597494631099,
+            startLon: -76.47993615775893,
+            startZoom: 15,
+            minZoom: 15,
+            maxZoom: 18,
             correct: {
               matches: [],
               representativeAnswers: [[0, 0]],

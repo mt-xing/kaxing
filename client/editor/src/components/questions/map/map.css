@@ -3,6 +3,6 @@
   z-index: 2;
 }
 
-input.disabledInput {
-  width: 120px;
+input.mapValInput {
+  width: 80px;
 }
