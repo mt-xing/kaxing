@@ -40,6 +40,15 @@ export default function MapQuestionSidebar(props: MapQuestionEditorProps) {
 
   return (
     <>
+      {q.correct.matches.length === 0 ? (
+        <p className="warning">WARNING: This question has no correct answer</p>
+      ) : null}
+      {q.correct.matches.length > 0 &&
+      q.correct.representativeAnswers.length === 0 ? (
+        <p className="warning">
+          WARNING: There are no sample answers to display
+        </p>
+      ) : null}
       <p>
         Current coords: [{currentLat.toFixed(2)}, {currentLng.toFixed(2)}]
       </p>

@@ -77,7 +77,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             maxZoom: 18,
             correct: {
               matches: [],
-              representativeAnswers: [[0, 0]],
+              representativeAnswers: [],
             },
           };
         case "text":
