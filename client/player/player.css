@@ -1,6 +1,7 @@
 .center {
     text-align: center;
     transform: translateY(100vh);
+    transform: translateY(100svh);
 
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
 }
@@ -35,9 +36,12 @@ form {
     --delay-time: 0;
     width: 45vw;
     height: 45vh;
+    height: 45svh;
     margin: min(2vw, 2vh);
+    margin: min(2vw, 2svh);
     cursor: pointer;
     padding: min(10vw, 10vh) min(15vw, 15vh);
+    padding: min(10vw, 10vh) min(15vw, 15svh);
 
     display: flex;
     align-items: center;
@@ -46,6 +50,7 @@ form {
     transform: scaleY(0);
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) var(--delay-time), box-shadow 0.1s ease-in-out;
     border-top: 1vh var(--accent-color) solid;
+    border-top: 1svh var(--accent-color) solid;
 }
 
 .answer:hover, .answer:focus {
@@ -58,7 +63,9 @@ form {
 
 .answer > div {
     width: min(15vw, 15vh);
+    width: min(15vw, 15svh);
     height: min(15vw, 15vh);
+    height: min(15vw, 15svh);
     background: rgba(255, 255, 255, 0.75);
     font-size: 0;
 }
@@ -95,11 +102,13 @@ form {
 .tfWrap .answer > div {
     background: none;
     font-size: 10vh;
+    font-size: 10svh;
     color: white;
 }
 
 .questionRes {
     transform: translateY(100vh);
+    transform: translateY(100svh);
     text-align: center;
     transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000);
 }
@@ -110,6 +119,7 @@ form {
 
 .questionRes h2 {
     font-size: min(15vw, 15vh);
+    font-size: min(15vw, 15svh);
     margin: 0;
 }
 
@@ -217,11 +227,13 @@ form {
 .mapanswerRow {
     text-align: center;
     transform: translateY(100vh);
+    transform: translateY(100svh);
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
 }
 
 .mapanswerRow .map {
     height: 60vh;
+    height: 60svh;
     width: 95vw;
     max-width: 1000px;
     position: relative;
@@ -239,7 +251,9 @@ form {
     z-index: 1000;
     top: 50%; left: 50%;
     width: 5vh;
+    width: 5svh;
     height: 10vh;
+    height: 10svh;
     transform: translate(-50%, -100%);
     pointer-events: none;
 }
