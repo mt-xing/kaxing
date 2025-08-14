@@ -116,8 +116,8 @@ export default function QuestionEditor(props: QuestionEditorProps) {
         ) : (
           <div className="imgPreview">
             <p>
-              I don't offer image hosting services. To add images, upload your
-              picture to a third-party host like{" "}
+              To add an image, paste its url above. I don't offer image hosting
+              services. Upload your picture to a third-party host like{" "}
               <a
                 href="https://imgur.com"
                 target="_blank"
@@ -125,7 +125,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
               >
                 Imgur
               </a>{" "}
-              and paste the URL of the image file above.
+              and get the URL from them.
             </p>
           </div>
         )}

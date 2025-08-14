@@ -39,6 +39,7 @@
 .imgPreview p {
   text-align: center;
   max-width: 450px;
+  font-size: 0.8em;
 }
 
 textarea, input {
