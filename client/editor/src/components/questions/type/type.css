@@ -1,0 +1,54 @@
+.regexWrap input, .repAnswers input {
+  background: none;
+  border: none;
+  color: white;
+  text-align: left;
+  border-bottom: 1px white solid;
+  font-family: 'Consolas', monospace;
+  padding: 5px 0;
+  width: calc(100% - 300px);
+  margin-bottom: 0;
+}
+
+.regexWrap code {
+  font-family: 'Consolas', monospace;
+}
+
+.regexWrap {
+  margin-bottom: 5px;
+}
+
+.regexDetails {
+  font-size: 0.8em;
+  margin: 0;
+}
+
+.repAnswers {
+  padding: 0;
+}
+
+.repAnswers li {
+  display: inline-block;
+  margin: 0 0 5px 0;
+  width: 45%;
+}
+
+.repAnswers li button {
+  margin: 0 10px;
+  color: white;
+  background: none;
+  cursor: pointer;
+  padding: 5px;
+}
+
+.repAnswers li button::before {
+  opacity: 0.7;
+}
+
+.repAnswers li button::after {
+  display: none;
+}
+
+.repAnswers input {
+  width: calc(100% - 50px);
+}

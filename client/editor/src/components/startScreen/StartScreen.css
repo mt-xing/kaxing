@@ -1,0 +1,30 @@
+.startCard {
+  width: 80vw;
+  min-width: 800px;
+  box-sizing: border-box;
+  text-align: center;
+}
+
+.startCard h1 {
+  font-weight: 900;
+  margin-top: 0;
+  font-size: 7vw;
+}
+
+.startbtn {
+  width: 50%;
+  font-size: 1.5vw;
+}
+
+.startbtn::after {
+  display: none;
+}
+
+.startbtn span {
+  font-weight: 900;
+}
+
+.startbtn div {
+  font-size: 8vw;
+  margin: 0 0 1vw 0;
+}

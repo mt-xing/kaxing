@@ -1,0 +1,8 @@
+.popupBtn {
+  position: "relative";
+  z-index: 2;
+}
+
+input.mapValInput {
+  width: 80px;
+}

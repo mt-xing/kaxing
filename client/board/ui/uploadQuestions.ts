@@ -36,7 +36,7 @@ export default class UploadQuestions {
     wrap.appendChild(Dom.h2("Choose Questions"));
     wrap.appendChild(Dom.p("Upload your question bank for this game"));
     const input = Dom.input("file");
-    input.accept = ".json";
+    input.accept = ".kaxing";
     wrap.appendChild(input);
     const btn = Dom.button(
       "Upload",

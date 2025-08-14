@@ -1,0 +1,48 @@
+:root {
+  min-width: 1000px;
+  min-height: 600px;
+  overflow: auto;
+}
+
+.main {
+  width: max(100vw, 1000px);
+  height: max(100vh, 600px);
+  height: max(100svh, 600px);
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  grid-template-rows: 50px auto 150px;
+  grid-template-areas:
+    "header header"
+    "question sidebar"
+    "picker picker"
+}
+
+.header {
+  grid-area: header;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  padding: 0 25px;
+}
+
+.header > span {
+  font-weight: 900;
+  flex-grow: 1;
+}
+
+.header .bigbtn {
+  padding: 0.5em 1.5em;
+}
+
+.question {
+  grid-area: question;
+}
+
+.sidebar {
+  grid-area: sidebar;
+}
+
+.picker {
+  grid-area: picker;
+}

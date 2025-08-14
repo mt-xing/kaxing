@@ -1,0 +1,49 @@
+.answerRow {
+  height: 10vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+}
+
+.answerRow .answer {
+  flex-grow: 1;
+  position: relative;
+}
+
+.answerRow .answer input {
+  position: absolute;
+  width: 5vh;
+  height: 5vh;
+  left: 0;
+  top: 0;
+  font-size: 5vh;
+  line-height: 5vh;
+  appearance: none;
+  cursor: pointer;
+}
+
+.answerRow .answer input::before {
+  content: "❌";
+}
+
+.answerRow .answer input:checked::before {
+  content: "✅";
+}
+
+.answerRow .answer textarea, .answerRow .answer .tfWrap {
+  width: 100%;
+  height: 100%;
+  background: none;
+  color: white;
+  border: none;
+  box-sizing: border-box;
+  padding: 10px;
+  padding-left: 8vh;
+}
+
+.answerRow .answer .tfWrap {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}

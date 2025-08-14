@@ -1,3 +1,9 @@
+{
+  "game": "kaxing",
+  "version": "1.0.0",
+  "questions": 
+
+
 [{
   "t": "map",
   "points": 1000,
@@ -9,7 +15,7 @@
   "minZoom": 15,
   "maxZoom": 19,
   "correct": {
-    "matches": [{"center": [42.44490022247275, -76.48084649037085], "radius": 0.000594}],
+    "matches": [{"center":[42.44493793194986,-76.48092091083528],"radius":49.101399887618086}],
     "representativeAnswers": [[42.44490022247275, -76.48084649037085]]
   }
 },{
@@ -21,7 +27,8 @@
   "correct": {
     "regex": "(?:20|')?24",
     "representativeAnswers": ["2024"]
-  }
+  },
+  "caseInsensitive": true
 },{
   "t": "standard",
   "points": 1000,
@@ -48,3 +55,6 @@
   "correct": true,
   "img": "https://www.cs.cornell.edu/courses/cs2112/2024fa/tournament/img/red-blue.png"
 }]
+
+
+}

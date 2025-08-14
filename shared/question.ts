@@ -21,6 +21,7 @@ export type Question = {
   | {
       t: "type";
       maxChars: number;
+      caseInsensitive: boolean;
       correct: {
         regex: string;
         representativeAnswers: string[];
@@ -36,7 +37,7 @@ export type Question = {
       correct: {
         matches: {
           center: [number, number];
-          radius: number;
+          radius: number; // in meters
         }[];
         representativeAnswers: [number, number][];
       };
@@ -68,6 +69,33 @@ export type Answer =
       a: [number, number];
     };
 
+function haversineDistance(
+  [lat1, lon1]: [number, number],
+  [lat2, lon2]: [number, number],
+) {
+  const toRadian = (angle: number) => (Math.PI / 180) * angle;
+  const distance = (a: number, b: number) => (Math.PI / 180) * (a - b);
+  const RADIUS_OF_EARTH_IN_KM = 6371;
+
+  const dLat = distance(lat2, lat1);
+  const dLon = distance(lon2, lon1);
+
+  // eslint-disable-next-line no-param-reassign
+  lat1 = toRadian(lat1);
+  // eslint-disable-next-line no-param-reassign
+  lat2 = toRadian(lat2);
+
+  // Haversine Formula
+  const a =
+    Math.sin(dLat / 2) ** 2 +
+    Math.sin(dLon / 2) ** 2 * Math.cos(lat1) * Math.cos(lat2);
+  const c = 2 * Math.asin(Math.sqrt(a));
+
+  const finalDistance = RADIUS_OF_EARTH_IN_KM * c;
+
+  return finalDistance * 1000;
+}
+
 export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
   if (a === null || a === undefined) {
     return false;
@@ -96,7 +124,10 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
       if (a.t !== "type") {
         return false;
       }
-      return new RegExp(q.correct.regex, "i").test(a.a.trim());
+      return new RegExp(
+        q.correct.regex,
+        q.caseInsensitive ? "i" : undefined,
+      ).test(a.a.trim());
     case "tf":
       if (a.t !== "tf") {
         return false;
@@ -108,10 +139,7 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
       }
       return q.correct.matches.some(
         (candidate) =>
-          Math.sqrt(
-            (candidate.center[0] - a.a[0]) ** 2 +
-              (candidate.center[1] - a.a[1]) ** 2,
-          ) <= candidate.radius,
+          haversineDistance(candidate.center, a.a) <= candidate.radius,
       );
     case "text":
       return true;
