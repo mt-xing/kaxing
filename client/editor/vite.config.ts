@@ -10,4 +10,5 @@ export default defineConfig({
       "@shared": resolve(__dirname, "../../shared"),
     },
   },
+  base: ""
 });

@@ -1,4 +1,4 @@
-import { Question } from "./question.js";
+import type { Question } from "./question.js";
 
 export type KaXingSaveFile = {
   game: "kaxing";
