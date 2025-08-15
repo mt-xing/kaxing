@@ -30,7 +30,7 @@ async function getCode(): Promise<string> {
 async function waitToJoin(code: string): Promise<ControllerSuccessResponse> {
   return new Promise((r) => {
     const wrap = Dom.div(undefined, "setup infoScreen");
-    wrap.appendChild(Dom.h1("KaXing"))
+    wrap.appendChild(Dom.h1("KaXing"));
     wrap.appendChild(Dom.h2("Remote Controller"));
     wrap.appendChild(
       Dom.p(
@@ -50,10 +50,7 @@ async function waitToJoin(code: string): Promise<ControllerSuccessResponse> {
 
 async function openGame(gameCode: string): Promise<void> {
   return new Promise((r) => {
-    const goBtn = Dom.div(
-      Dom.h2("Waiting to Start"),
-      "infoScreen"
-    );
+    const goBtn = Dom.div(Dom.h2("Waiting to Start"), "infoScreen");
     goBtn.appendChild(Dom.p("Click Start to allow players to join the game."));
     const codeWrap = Dom.p("The game code will be: ");
     codeWrap.appendChild(Dom.code(gameCode));
@@ -67,7 +64,7 @@ async function openGame(gameCode: string): Promise<void> {
           r();
         },
         "bigbtn",
-      )
+      ),
     );
     document.body.appendChild(goBtn);
   });
@@ -82,24 +79,55 @@ async function negotiateGameStart(
     const codeWrap = Dom.p("Game code: ");
     codeWrap.appendChild(Dom.code(gameCode));
     wrap.appendChild(codeWrap);
-    const ul = document.createElement("UL");
-    ul.classList.add("playerListWrap");
+
+    const table = document.createElement("TABLE");
+    table.classList.add("playerList");
+    const headerRow = document.createElement("TR");
+    const headerSpacer = document.createElement("TH");
+    headerSpacer.innerHTML = "&nbsp;";
+    headerRow.appendChild(headerSpacer);
+    const headerText = document.createElement("TH");
+    headerText.setAttribute("width", "99%");
+    headerText.textContent = "Players";
+    headerRow.appendChild(headerText);
+    table.appendChild(headerRow);
+
+    const emptyRow = document.createElement("TR");
+    emptyRow.appendChild(document.createElement("TD"));
+    const emptyText = document.createElement("TD");
+    emptyText.textContent = "No one here yet";
+    emptyRow.appendChild(emptyText);
+    table.appendChild(emptyRow);
+    let empty = true;
+
     const addPlayer = (val: { id: string; name: string }) => {
-      const li = document.createElement("LI");
-      li.appendChild(Dom.span(val.name));
-      const btn = Dom.button("Kick", () => {
+      const tr = document.createElement("TR");
+      const kickWrap = document.createElement("TD");
+
+      const btn = Dom.button("X", () => {
         // eslint-disable-next-line no-restricted-globals, no-alert
         if (confirm(`Do you really want to kick ${val.name}?`)) {
-          ul.removeChild(li);
+          table.removeChild(tr);
           const payload: KickPlayerPayload = { id: val.id };
           socket.send("kick", payload);
         }
-      }, "bigbtn");
-      li.appendChild(btn);
-      ul.appendChild(li);
+      });
+      kickWrap.appendChild(btn);
+      tr.appendChild(kickWrap);
+
+      const nameWrap = document.createElement("TD");
+      nameWrap.textContent = val.name;
+      tr.appendChild(nameWrap);
+      table.appendChild(tr);
+
+      if (empty) {
+        empty = false;
+        table.removeChild(emptyRow);
+      }
     };
+
     players.forEach(addPlayer);
-    wrap.appendChild(ul);
+    wrap.appendChild(table);
 
     const goBtn = Dom.button(
       "Begin Game",

@@ -14,6 +14,7 @@
   text-align: center;
   max-height: 100svh;
   box-sizing: border-box;
+  overflow-y: auto;
 }
 
 .setup h1 {
@@ -30,18 +31,38 @@
 }
 
 .playerJoin {
+  width: 100%;
+}
+
+.playerList {
+  width: 100%;
+  margin-bottom: 1em;
+  border-collapse: collapse;
+
+  display: block;
+  max-height: calc(100svh - 300px);
   overflow-y: auto;
 }
 
-.playerListWrap li span {
-  max-width: calc(100vw - 100px);
-  overflow-x: auto;
-  display: inline-block;
-  vertical-align: middle;
+.playerList th {
+  padding: 10px 0;
 }
 
-.playerListWrap li .bigbtn {
-  padding: 5px 10px;
-  margin-left: 5px;
-  vertical-align: middle;
+.playerList td {
+  padding: 5px 0;
+}
+
+.playerList button {
+  background: none;
+  color: white;
+  border: none;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.playerList tr:nth-child(odd) {
+  background: rgba(0, 0, 0, 0.2);
+}
+.playerList tr:nth-child(even) {
+  background: rgba(255, 255, 255, 0.2);
 }
