@@ -65,7 +65,7 @@ export default class KaXingServer {
         socket.join(id);
         this.#setups.set(
           id,
-          new Broker(this.#namespace, socket.id, JSON.parse(gameInfo)),
+          new Broker(this.#namespace, id, socket.id, JSON.parse(gameInfo)),
         );
         this.#socketRoom.set(socket.id, id);
 

@@ -29,8 +29,9 @@ async function getCode(): Promise<string> {
 
 async function waitToJoin(code: string): Promise<ControllerSuccessResponse> {
   return new Promise((r) => {
-    const wrap = Dom.div();
-    wrap.appendChild(Dom.h2("Welcome"));
+    const wrap = Dom.div(undefined, "setup infoScreen");
+    wrap.appendChild(Dom.h1("KaXing"))
+    wrap.appendChild(Dom.h2("Remote Controller"));
     wrap.appendChild(
       Dom.p(
         "Enter the following password for this controller on your game board:",
@@ -47,31 +48,45 @@ async function waitToJoin(code: string): Promise<ControllerSuccessResponse> {
   });
 }
 
-async function openGame(): Promise<void> {
+async function openGame(gameCode: string): Promise<void> {
   return new Promise((r) => {
-    const goBtn = Dom.button(
-      "Start",
-      () => {
-        socket.emit("openGame", "");
-        document.body.removeChild(goBtn);
-        r();
-      },
-      "bigbtn",
+    const goBtn = Dom.div(
+      Dom.h2("Waiting to Start"),
+      "infoScreen"
+    );
+    goBtn.appendChild(Dom.p("Click Start to allow players to join the game."));
+    const codeWrap = Dom.p("The game code will be: ");
+    codeWrap.appendChild(Dom.code(gameCode));
+    goBtn.appendChild(codeWrap);
+    goBtn.appendChild(
+      Dom.button(
+        "Start",
+        () => {
+          socket.emit("openGame", "");
+          document.body.removeChild(goBtn);
+          r();
+        },
+        "bigbtn",
+      )
     );
     document.body.appendChild(goBtn);
   });
 }
 
 async function negotiateGameStart(
+  gameCode: string,
   players: { id: string; name: string }[],
 ): Promise<void> {
   return new Promise((r) => {
-    const wrap = Dom.div(Dom.h2("Game Setup"));
+    const wrap = Dom.div(Dom.h2("Players Joining"), "playerJoin infoScreen");
+    const codeWrap = Dom.p("Game code: ");
+    codeWrap.appendChild(Dom.code(gameCode));
+    wrap.appendChild(codeWrap);
     const ul = document.createElement("UL");
     ul.classList.add("playerListWrap");
     const addPlayer = (val: { id: string; name: string }) => {
       const li = document.createElement("LI");
-      li.textContent = val.name;
+      li.appendChild(Dom.span(val.name));
       const btn = Dom.button("Kick", () => {
         // eslint-disable-next-line no-restricted-globals, no-alert
         if (confirm(`Do you really want to kick ${val.name}?`)) {
@@ -79,7 +94,7 @@ async function negotiateGameStart(
           const payload: KickPlayerPayload = { id: val.id };
           socket.send("kick", payload);
         }
-      });
+      }, "bigbtn");
       li.appendChild(btn);
       ul.appendChild(li);
     };
@@ -303,8 +318,8 @@ async function mainGame(numQuestions: number): Promise<void> {
 async function gameLoop() {
   const code = await getCode();
   const gameData = await waitToJoin(code);
-  await openGame();
-  await negotiateGameStart(gameData.players);
+  await openGame(gameData.gameCode);
+  await negotiateGameStart(gameData.gameCode, gameData.players);
   await mainGame(gameData.numQuestions);
 }
 

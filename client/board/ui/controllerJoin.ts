@@ -6,11 +6,10 @@ export default class ControllerJoin {
   constructor(parent: HTMLElement, connect: (pwd: string) => Promise<boolean>) {
     const wrap = Dom.div(undefined, "controllerWrap");
     wrap.appendChild(Dom.h2("Pair Controller"));
-    wrap.appendChild(
-      Dom.p(
-        "Join as a controller on another device to use as a remote control",
-      ),
-    );
+    const instrWrap = Dom.p("Go to ");
+    instrWrap.appendChild(Dom.code("michaelxing.com/kaxing"));
+    instrWrap.appendChild(document.createTextNode(" on your mobile device and choose \"Use as Remote Controller\""));
+    wrap.appendChild(instrWrap);
     const form = document.createElement("FORM");
     const input = Dom.input("text", "Password");
     form.appendChild(input);

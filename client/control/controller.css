@@ -1,12 +1,3 @@
-code {
-  font-size: 3em;
-}
-
-.playerListWrap {
-  max-height: 75vh;
-  overflow-y: auto;
-}
-
 .questionPreview {
   max-height: 200px;
   overflow-y: auto;
@@ -15,4 +6,42 @@ code {
   max-width: 90vw;
   display: block;
   margin: 0 auto;
+}
+
+.infoScreen {
+  max-width: 100%;
+  padding: 1em;
+  text-align: center;
+  max-height: 100svh;
+  box-sizing: border-box;
+}
+
+.setup h1 {
+  font-weight: 900;
+}
+
+.setup code {
+  background: white;
+  color: black;
+  padding: 0.5em 1em;
+  margin-top: 0.25em;
+  display: inline-block;
+  font-size: 3em;
+}
+
+.playerJoin {
+  overflow-y: auto;
+}
+
+.playerListWrap li span {
+  max-width: calc(100vw - 100px);
+  overflow-x: auto;
+  display: inline-block;
+  vertical-align: middle;
+}
+
+.playerListWrap li .bigbtn {
+  padding: 5px 10px;
+  margin-left: 5px;
+  vertical-align: middle;
 }

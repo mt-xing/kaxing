@@ -16,6 +16,7 @@ export type ErrorResponse = {
 export type ControllerSuccessResponse = {
   players: { name: string; id: string }[];
   numQuestions: number;
+  gameCode: string;
 };
 
 export type JoinRoomPayload = {

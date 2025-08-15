@@ -6,6 +6,8 @@ import { ControllerSuccessResponse, KickPlayerPayload } from "./payloads.js";
 export default class Broker {
   #namespace: io.Namespace;
 
+  #gameCode: string;
+
   #boardSocketId: string;
 
   #controlSocketId?: string;
@@ -19,6 +21,7 @@ export default class Broker {
    */
   constructor(
     namespace: io.Namespace,
+    gameCode: string,
     hostPlayerSocketId: string,
     questions: Question[],
   ) {
@@ -26,6 +29,7 @@ export default class Broker {
     this.#boardSocketId = hostPlayerSocketId;
     this.#players = new Map();
     this.#questions = questions;
+    this.#gameCode = gameCode;
   }
 
   /**
@@ -44,6 +48,7 @@ export default class Broker {
         id: x[0],
       })),
       numQuestions: this.#questions.length,
+      gameCode: this.#gameCode,
     };
     this.#namespace
       .to(socketId)
