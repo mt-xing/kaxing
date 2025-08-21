@@ -89,7 +89,10 @@ export type GameStateControllerResponse =
   | {
       t: "state";
       question: number;
+      questionType: Question["t"];
       questionString: string;
+      questionTime: number;
+      questionPoints: number;
       state: QuestionState;
     };
 

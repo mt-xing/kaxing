@@ -8,6 +8,7 @@ import {
   KickPlayerPayload,
 } from "../../shared/payloads.js";
 import Dom from "../dom.js";
+import { Question } from "../question.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -149,10 +150,31 @@ async function negotiateGameStart(
 }
 
 async function mainGame(numQuestions: number): Promise<void> {
+  function questionTypeShortString(t: Question["t"]): string {
+    switch (t) {
+      case "standard":
+        return "Multiple Choice";
+      case "tf":
+        return "True or False";
+      case "multi":
+        return "Multi-Select";
+      case "type":
+        return "Type Answer";
+      case "map":
+        return "Map";
+      case "text":
+        return "Slide";
+      default:
+        return ((x: never) => {
+          throw new Error(`Unreachable ${x}`);
+        })(t);
+    }
+  }
+
   await new Promise((r) => {
     setTimeout(r, 1000);
   });
-  return new Promise(() => {
+  return new Promise((r) => {
     let qID = 0;
 
     const send = (msg: GameStatePayload) => {
@@ -163,10 +185,12 @@ async function mainGame(numQuestions: number): Promise<void> {
       n: 0,
     });
 
-    const wrap = Dom.div(Dom.h2("Game Control"));
-    const qIdUi = Dom.p(`Question ${qID}`);
-    wrap.appendChild(qIdUi);
-    const prevQBtn = Dom.button("Previous Question", () => {
+    const wrap = Dom.div(Dom.h2("Manual Overrides"), "infoScreen gameControl");
+
+    // Question Number Header and Control
+    const qWrap = Dom.div(undefined, "questionNumWrap");
+    wrap.appendChild(qWrap);
+    const prevQBtn = Dom.button("⮜", () => {
       if (qID <= 0) {
         return;
       }
@@ -176,7 +200,12 @@ async function mainGame(numQuestions: number): Promise<void> {
         n: qID,
       });
     });
-    const nextQBtn = Dom.button("Next Question", () => {
+    qWrap.appendChild(prevQBtn);
+    const qIdUi = Dom.span(`${qID}`, "bigNum");
+    const qText = Dom.p("Question", "qNum");
+    qText.appendChild(qIdUi);
+    qWrap.appendChild(qText);
+    const nextQBtn = Dom.button("⮞", () => {
       if (qID >= numQuestions - 1) {
         return;
       }
@@ -186,82 +215,101 @@ async function mainGame(numQuestions: number): Promise<void> {
         n: qID,
       });
     });
-    wrap.appendChild(prevQBtn);
-    wrap.appendChild(nextQBtn);
-    const endGameBtn = Dom.button("END GAME (DANGER)", () => {
-      // eslint-disable-next-line no-restricted-globals, no-alert
-      if (!confirm("DO YOU REALLY WANT TO END THE GAME?")) {
-        return;
-      }
-      send({ t: "blank" });
-      setTimeout(() => {
-        send({ t: "gg" });
-      }, 1000);
-    });
-    wrap.appendChild(endGameBtn);
+    qWrap.appendChild(nextQBtn);
 
-    const questionInfo = document.createElement("PRE");
-    questionInfo.classList.add("questionPreview");
-    wrap.appendChild(questionInfo);
-
-    wrap.appendChild(Dom.h2("Question Progression"));
+    const progressWrap = Dom.div(undefined, "questionProgress");
+    wrap.appendChild(progressWrap);
 
     const blankBtn = Dom.button(
       "Blank",
       () => {
         send({ t: "blank" });
       },
-      "bigbtn",
+      "active",
     );
-    const showQBtn = Dom.button(
-      "Show Question",
-      () => {
-        send({ t: "showQuestion" });
-      },
-      "bigbtn",
-    );
-    const showABtn = Dom.button(
-      "Show Answers",
-      () => {
-        send({ t: "showAnswers" });
-      },
-      "bigbtn",
-    );
-    const countdownBtn = Dom.button(
-      "Start Countdown",
-      () => {
-        send({ t: "countdown" });
-      },
-      "bigbtn",
-    );
-    const resultsBtn = Dom.button(
-      "Skip to Results",
-      () => {
-        send({ t: "displayAnswerResults" });
-      },
-      "bigbtn",
-    );
-    const leaderboardBtn = Dom.button(
-      "Show Leaderboard",
-      () => {
-        send({ t: "leaderboard" });
-      },
-      "bigbtn",
-    );
+    const showQBtn = Dom.button("Question Only", () => {
+      send({ t: "showQuestion" });
+    });
+    const showABtn = Dom.button("Question + Answer", () => {
+      send({ t: "showAnswers" });
+    });
+    const countdownBtn = Dom.button("Accept Response", () => {
+      send({ t: "countdown" });
+    });
+    const resultsBtn = Dom.button("Results", () => {
+      send({ t: "displayAnswerResults" });
+    });
+    const leaderboardBtn = Dom.button("Leaderboard", () => {
+      send({ t: "leaderboard" });
+    });
 
-    wrap.appendChild(Dom.div(blankBtn));
-    wrap.appendChild(Dom.div(showQBtn));
-    wrap.appendChild(Dom.div(showABtn));
-    wrap.appendChild(Dom.div(countdownBtn));
-    wrap.appendChild(Dom.div(resultsBtn));
-    wrap.appendChild(Dom.div(leaderboardBtn));
+    progressWrap.appendChild(blankBtn);
+    progressWrap.appendChild(showQBtn);
+    progressWrap.appendChild(showABtn);
+    progressWrap.appendChild(countdownBtn);
+    progressWrap.appendChild(resultsBtn);
+    progressWrap.appendChild(leaderboardBtn);
 
     blankBtn.disabled = true;
     showABtn.disabled = true;
     countdownBtn.disabled = true;
     resultsBtn.disabled = true;
 
+    const questionMeta = document.createElement("p");
+    questionMeta.classList.add("questionMetadata");
+    wrap.appendChild(questionMeta);
+
+    const questionInfo = document.createElement("p");
+    questionInfo.classList.add("questionPreview");
+    wrap.appendChild(questionInfo);
+
+    wrap.appendChild(Dom.h2("Game Control"));
+
+    const bigBtnWrap = Dom.div(undefined, "bigBtnWrap");
+    wrap.appendChild(bigBtnWrap);
+
     document.body.appendChild(wrap);
+
+    function generateNextQuestionButton(isLeaderboard: boolean) {
+      bigBtnWrap.replaceChildren(
+        qID < numQuestions - 1
+          ? Dom.button(
+              isLeaderboard ? "Go to Leaderboard" : "Next Question",
+              isLeaderboard
+                ? () => {
+                    send({ t: "leaderboard" });
+                  }
+                : () => {
+                    qID++;
+                    send({
+                      t: "setupQ",
+                      n: qID,
+                    });
+                  },
+              "bigbtn",
+            )
+          : Dom.button(
+              "End Game",
+              () => {
+                if (
+                  // eslint-disable-next-line no-restricted-globals, no-alert
+                  !confirm(
+                    "Do you really want to end the game? This is permanent.",
+                  )
+                ) {
+                  return;
+                }
+                send({ t: "blank" });
+                setTimeout(() => {
+                  send({ t: "gg" });
+                  document.body.removeChild(wrap);
+                  r();
+                }, 1000);
+              },
+              "bigbtn",
+            ),
+      );
+    }
 
     socket.on("gameState", (msg) => {
       const payload = JSON.parse(msg) as GameStateControllerResponse;
@@ -270,8 +318,12 @@ async function mainGame(numQuestions: number): Promise<void> {
           break;
         case "state": {
           qID = payload.question;
-          qIdUi.textContent = `Question ${qID}`;
+          qIdUi.textContent = `${qID}`;
           questionInfo.textContent = payload.questionString;
+          questionMeta.textContent =
+            payload.questionType === "text"
+              ? "Text Slide"
+              : `${questionTypeShortString(payload.questionType)}, ${payload.questionPoints} pts, ${payload.questionTime} sec`;
           switch (payload.state) {
             case "blank": {
               blankBtn.disabled = true;
@@ -280,15 +332,74 @@ async function mainGame(numQuestions: number): Promise<void> {
               countdownBtn.disabled = true;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
+              blankBtn.className = "active";
+              showQBtn.className = "";
+              showABtn.className = "";
+              countdownBtn.className = "";
+              resultsBtn.className = "";
+              leaderboardBtn.className = "";
+              bigBtnWrap.replaceChildren(
+                Dom.button(
+                  "Show Question",
+                  () => {
+                    send({ t: "showQuestion" });
+                  },
+                  "bigbtn",
+                ),
+              );
               break;
             }
             case "question": {
               blankBtn.disabled = false;
               showQBtn.disabled = true;
-              showABtn.disabled = false;
-              countdownBtn.disabled = false;
+              // showABtn.disabled = ??? // see switch statement below
+              countdownBtn.disabled = payload.questionType === "text";
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
+              blankBtn.className = "";
+              showQBtn.className = "active";
+              showABtn.className = "";
+              countdownBtn.className = "";
+              resultsBtn.className = "";
+              leaderboardBtn.className = "";
+              switch (payload.questionType) {
+                case "text":
+                  showABtn.disabled = true;
+                  generateNextQuestionButton(false);
+                  break;
+                case "map":
+                case "type":
+                case "tf":
+                  showABtn.disabled = true;
+                  bigBtnWrap.replaceChildren(
+                    Dom.button(
+                      "Start Accepting Responses",
+                      () => {
+                        send({ t: "countdown" });
+                      },
+                      "bigbtn",
+                    ),
+                  );
+                  break;
+                default:
+                  showABtn.disabled = false;
+                  bigBtnWrap.replaceChildren(
+                    Dom.button(
+                      "Show Answers Only",
+                      () => {
+                        send({ t: "showAnswers" });
+                      },
+                      "bigbtn",
+                    ),
+                    Dom.button(
+                      "Start Accepting Responses",
+                      () => {
+                        send({ t: "countdown" });
+                      },
+                      "bigbtn",
+                    ),
+                  );
+              }
               break;
             }
             case "answers": {
@@ -298,6 +409,21 @@ async function mainGame(numQuestions: number): Promise<void> {
               countdownBtn.disabled = false;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
+              blankBtn.className = "";
+              showQBtn.className = "";
+              showABtn.className = "active";
+              countdownBtn.className = "";
+              resultsBtn.className = "";
+              leaderboardBtn.className = "";
+              bigBtnWrap.replaceChildren(
+                Dom.button(
+                  "Start Accepting Responses",
+                  () => {
+                    send({ t: "countdown" });
+                  },
+                  "bigbtn",
+                ),
+              );
               break;
             }
             case "countdown": {
@@ -307,6 +433,21 @@ async function mainGame(numQuestions: number): Promise<void> {
               countdownBtn.disabled = true;
               resultsBtn.disabled = false;
               leaderboardBtn.disabled = false;
+              blankBtn.className = "";
+              showQBtn.className = "";
+              showABtn.className = "";
+              countdownBtn.className = "active";
+              resultsBtn.className = "";
+              leaderboardBtn.className = "";
+              bigBtnWrap.replaceChildren(
+                Dom.button(
+                  "Stop Accepting Responses",
+                  () => {
+                    send({ t: "displayAnswerResults" });
+                  },
+                  "bigbtn",
+                ),
+              );
               break;
             }
             case "results": {
@@ -316,6 +457,13 @@ async function mainGame(numQuestions: number): Promise<void> {
               countdownBtn.disabled = true;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
+              blankBtn.className = "";
+              showQBtn.className = "";
+              showABtn.className = "";
+              countdownBtn.className = "";
+              resultsBtn.className = "active";
+              leaderboardBtn.className = "";
+              generateNextQuestionButton(true);
               break;
             }
             case "leaderboard": {
@@ -325,6 +473,13 @@ async function mainGame(numQuestions: number): Promise<void> {
               countdownBtn.disabled = true;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = true;
+              blankBtn.className = "";
+              showQBtn.className = "";
+              showABtn.className = "";
+              countdownBtn.className = "";
+              resultsBtn.className = "";
+              leaderboardBtn.className = "active";
+              generateNextQuestionButton(false);
               break;
             }
             default:
@@ -352,7 +507,7 @@ async function gameLoop() {
 }
 
 window.addEventListener("load", () => {
-  window.onbeforeunload = () => "Are you sure you want to leave the game?";
+  // window.onbeforeunload = () => "Are you sure you want to leave the game?";
   try {
     navigator.wakeLock.request("screen");
   } catch (err) {

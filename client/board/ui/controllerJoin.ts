@@ -8,7 +8,11 @@ export default class ControllerJoin {
     wrap.appendChild(Dom.h2("Pair Controller"));
     const instrWrap = Dom.p("Go to ");
     instrWrap.appendChild(Dom.code("michaelxing.com/kaxing"));
-    instrWrap.appendChild(document.createTextNode(" on your mobile device and choose \"Use as Remote Controller\""));
+    instrWrap.appendChild(
+      document.createTextNode(
+        ' on your mobile device and choose "Use as Remote Controller"',
+      ),
+    );
     wrap.appendChild(instrWrap);
     const form = document.createElement("FORM");
     const input = Dom.input("text", "Password");

@@ -60,7 +60,10 @@ export default class Communicator {
     this.sendToController({
       t: "state",
       question: currentQuestion,
-      questionString: `Type: ${q.t}\nText: ${q.text}\nTime: ${q.time} sec`,
+      questionType: q.t,
+      questionString: q.text,
+      questionTime: q.time,
+      questionPoints: q.points,
       state,
     });
   }

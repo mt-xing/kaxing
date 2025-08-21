@@ -1,13 +1,3 @@
-.questionPreview {
-  max-height: 200px;
-  overflow-y: auto;
-  border: 1px black solid;
-  white-space: pre-wrap;
-  max-width: 90vw;
-  display: block;
-  margin: 0 auto;
-}
-
 .infoScreen {
   max-width: 100%;
   padding: 1em;
@@ -65,4 +55,114 @@
 }
 .playerList tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.2);
+}
+
+.gameControl {
+  width: 100%;
+  padding: 2vw;
+}
+
+.gameControl h2 {
+  margin: 0;
+}
+
+.questionNumWrap {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  margin-top: 0;
+}
+
+.questionNumWrap button {
+  background: none;
+  border: none;
+  color: white;
+  margin-top: 2.2vh;
+  font-size: 1.5vh;
+  cursor: pointer;
+}
+
+.questionNumWrap .qNum {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 0;
+  margin-top: 1vh;
+}
+
+.questionNumWrap .bigNum {
+  font-weight: 900;
+  font-size: 5vh;
+  min-width: 15vh;
+}
+
+.questionProgress {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: stretch;
+  justify-content: center;
+}
+
+.questionProgress button {
+  flex-grow: 1;
+  flex-basis: 0;
+  font-size: 2.5vw;
+  background: rgba(0,0,0,0);
+  border: 1px white solid;
+  color: white;
+  padding: 5px 0;
+  cursor: pointer;
+  border-radius: 0;
+
+  transition: background 0.5s ease-in-out, color 0.5s ease-in-out, border 0.5s ease-in-out;
+}
+
+.questionProgress button:disabled {
+  background: rgba(0,0,0,0);
+  color: rgb(128,128,128);
+  border: 1px rgb(128,128,128) solid;
+}
+
+.questionProgress button.active,
+.questionProgress button:disabled.active {
+  color: black;
+  background: white;
+  border: 1px white solid;
+}
+
+.questionMetadata {
+  font-size: 0.8em;
+  margin-bottom: 0.2em;
+}
+
+.questionPreview {
+  height: 10vh;
+  overflow-y: auto;
+  border: 1px black solid;
+  white-space: pre-wrap;
+  display: flex;
+  margin: 0 auto;
+  align-items: center;
+  justify-content: center;
+}
+
+.gameControl .bigBtnWrap {
+  width: 90%;
+  height: 30vh;
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  justify-content: center;
+  margin: 0 auto;
+  padding: 2vh 0;
+}
+
+.gameControl .bigBtnWrap button {
+  margin: 1vh;
+  display: block;
+  flex-grow: 1;
+  flex-basis: 0;
 }
