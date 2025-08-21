@@ -59,6 +59,18 @@ export default class Home {
     this.#numPlayers.textContent = `${n} player${n === 1 ? "" : "s"}`;
   }
 
+  kickPlayer(pID: string) {
+    const li = this.#playerNames.get(pID);
+    if (!li) {
+      console.error("Invalid player ID", pID);
+      return;
+    }
+    this.#ul.removeChild(li);
+    this.#playerNames.delete(pID);
+    const n = this.#playerNames.size;
+    this.#numPlayers.textContent = `${n} player${n === 1 ? "" : "s"}`;
+  }
+
   async remove() {
     stopAudio();
     playEnd();

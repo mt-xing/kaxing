@@ -42,6 +42,10 @@
   padding: 5px 0;
 }
 
+.playerList td:last-child {
+  width: 100%;
+}
+
 .playerList button {
   background: none;
   color: white;

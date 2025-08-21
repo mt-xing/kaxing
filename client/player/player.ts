@@ -167,5 +167,13 @@ window.onload = () => {
   } catch (err) {
     console.error(err);
   }
+  socket.on("kick", () => {
+    window.onbeforeunload = null;
+    // eslint-disable-next-line no-alert
+    alert("You have been removed from the game");
+    setTimeout(() => {
+      window.location.replace("https://mxi.ng/kx");
+    }, 100);
+  });
   gameLoop();
 };

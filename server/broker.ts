@@ -96,6 +96,9 @@ export default class Broker {
           JSON.stringify({ reason: "You have been removed from the game" }),
         );
       this.#namespace.sockets.get(id)?.disconnect();
+      this.#namespace
+        .to(this.#boardSocketId)
+        .emit("kick", JSON.stringify({ id }));
       if (this.#controlSocketId) {
         this.#namespace
           .to(this.#controlSocketId)

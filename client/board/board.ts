@@ -4,6 +4,7 @@ import {
   ControllerJoinResponse,
   GameStateBoardResponse,
   JoinRoomPayload,
+  KickPlayerPayload,
 } from "../payloads.js";
 import ControllerJoin from "./ui/controllerJoin.js";
 import { Question } from "../question.js";
@@ -94,9 +95,14 @@ function homeScreen(code: string): Promise<void> {
       const payload = JSON.parse(msg) as JoinRoomPayload;
       h.addPlayer(payload.id, payload.name);
     });
+    socket.on("kick", (msg) => {
+      const payload = JSON.parse(msg) as KickPlayerPayload;
+      h.kickPlayer(payload.id);
+    });
     socket.on("startGame", () => {
-      socket.off("join"); // TODO: Join mid-game
+      socket.off("join");
       socket.off("startGame");
+      socket.off("kick");
       h.remove();
       r();
     });

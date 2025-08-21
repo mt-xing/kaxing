@@ -84,26 +84,27 @@ async function negotiateGameStart(
     const table = document.createElement("TABLE");
     table.classList.add("playerList");
     const headerRow = document.createElement("TR");
-    const headerSpacer = document.createElement("TH");
-    headerSpacer.innerHTML = "&nbsp;";
-    headerRow.appendChild(headerSpacer);
     const headerText = document.createElement("TH");
-    headerText.setAttribute("width", "99%");
+    headerText.setAttribute("colspan", "2");
     headerText.textContent = "Players";
     headerRow.appendChild(headerText);
     table.appendChild(headerRow);
 
-    const emptyRow = document.createElement("TR");
-    emptyRow.appendChild(document.createElement("TD"));
+    let emptyRow = document.createElement("TR");
+    const spacer = document.createElement("TD");
+    spacer.textContent = "-";
+    emptyRow.appendChild(spacer);
     const emptyText = document.createElement("TD");
     emptyText.textContent = "No one here yet";
     emptyRow.appendChild(emptyText);
     table.appendChild(emptyRow);
     let empty = true;
+    let numPlayers = 0;
 
     const addPlayer = (val: { id: string; name: string }) => {
       const tr = document.createElement("TR");
       const kickWrap = document.createElement("TD");
+      numPlayers++;
 
       const btn = Dom.button("X", () => {
         // eslint-disable-next-line no-restricted-globals, no-alert
@@ -111,6 +112,18 @@ async function negotiateGameStart(
           table.removeChild(tr);
           const payload: KickPlayerPayload = { id: val.id };
           socket.send("kick", payload);
+          numPlayers--;
+          if (numPlayers <= 0) {
+            emptyRow = document.createElement("TR");
+            const spacer2 = document.createElement("TD");
+            spacer2.textContent = "-";
+            emptyRow.appendChild(spacer2);
+            const emptyText2 = document.createElement("TD");
+            emptyText2.textContent = "No one here yet";
+            emptyRow.appendChild(emptyText2);
+            table.appendChild(emptyRow);
+            empty = true;
+          }
         }
       });
       kickWrap.appendChild(btn);
