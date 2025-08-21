@@ -1,4 +1,5 @@
-#qrcode {
+#qrcode,
+.controllerQr {
     border: 10px white solid;
     box-shadow: 0 0 20px 0 rgba(255,255,255,1);
     width: 12vw;
@@ -6,7 +7,8 @@
     margin: 0 auto;
 }
 
-#qrcode img {
+#qrcode img,
+.controllerQr img {
     width: 100%;
 }
 
@@ -19,6 +21,57 @@
 .controllerWrap input {
     display: block;
     margin: 1em auto;
+}
+
+.controllerWrap .fileUpload {
+    border: 5px rgba(255, 255, 255, 0.7) dashed;
+    display: block;
+    padding: 4em 10em;
+    cursor: pointer;
+    margin-bottom: 1em;
+    width: 600px;
+    white-space: nowrap;
+    box-sizing: border-box;
+    text-shadow: 0 0 15px black;
+    -webkit-text-stroke: 2px black;
+    paint-order: stroke fill;
+    font-weight: 700;
+
+    overflow: hidden;
+    position: relative;
+
+    transition: border 0.2s ease-in-out;
+}
+
+.controllerWrap .fileUpload:hover,
+.controllerWrap .fileUpload.hovering {
+    border: 5px white dashed;
+}
+
+.controllerWrap .fileUpload::after {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; bottom: 0; width: 200%;
+    background: linear-gradient(
+        to right,
+        #e6400e 0%,
+        #9366b3 25%,
+        #0596cf 50%,
+        rgba(0, 0, 255, 0) 100%
+    );
+    z-index: -1;
+
+    transform: translateX(-100%);
+    transition: transform 0.5s ease-in-out;
+}
+
+.controllerWrap .fileUpload:hover::after,
+.controllerWrap .fileUpload.hovering::after {
+    transform: translateX(0);
+}
+
+.controllerWrap input[type="file"] {
+    display: none;
 }
 
 .instructions {

@@ -1,5 +1,7 @@
 import Dom from "../../dom.js";
 
+declare const QRCode: any;
+
 export default class ControllerJoin {
   #wrap: HTMLElement;
 
@@ -10,10 +12,15 @@ export default class ControllerJoin {
     instrWrap.appendChild(Dom.code("michaelxing.com/kaxing"));
     instrWrap.appendChild(
       document.createTextNode(
-        ' on your mobile device and choose "Use as Remote Controller"',
+        ' on your mobile device and choose "Use as Remote Controller" or scan the code below',
       ),
     );
     wrap.appendChild(instrWrap);
+
+    const qr = Dom.div(undefined, "controllerQr");
+    wrap.appendChild(qr);
+    new QRCode(qr, "https://michaelxing.com/games/kaxing/client/control/");
+
     const form = document.createElement("FORM");
     const input = Dom.input("text", "Password");
     form.appendChild(input);

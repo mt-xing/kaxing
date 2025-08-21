@@ -35,9 +35,55 @@ export default class UploadQuestions {
     const wrap = Dom.div(undefined, "controllerWrap");
     wrap.appendChild(Dom.h2("Choose Questions"));
     wrap.appendChild(Dom.p("Upload your question bank for this game"));
+    const label = document.createElement("LABEL");
+    label.classList.add("fileUpload");
+    label.textContent = "Drop File Here or Click to Select";
     const input = Dom.input("file");
     input.accept = ".kaxing";
-    wrap.appendChild(input);
+    label.appendChild(input);
+    wrap.appendChild(label);
+
+    label.ondragover = (evt) => {
+      evt.preventDefault();
+    };
+    label.ondragenter = (evt) => {
+      evt.preventDefault();
+      label.classList.add("hovering");
+    };
+    label.ondragleave = () => {
+      label.classList.remove("hovering");
+    };
+    label.ondrop = (evt) => {
+      if (!evt.dataTransfer) {
+        return;
+      }
+      evt.preventDefault();
+      input.files = evt.dataTransfer.files;
+      const { files } = input;
+      if (files && files.length > 0) {
+        label.textContent = files[0].name;
+      } else {
+        label.textContent = "Drop File Here or Click to Select";
+      }
+      label.classList.remove("hovering");
+    };
+    label.onclick = (evt) => {
+      evt.preventDefault();
+      input.value = null as unknown as string;
+      label.textContent = "Drop File Here or Click to Select";
+      input.click();
+    };
+
+    input.onchange = (evt) => {
+      const files = (evt.target as HTMLInputElement | null)?.files;
+      console.log("File changed", files);
+      if (files && files.length > 0) {
+        label.textContent = files[0].name;
+      } else {
+        label.textContent = "Drop File Here or Click to Select";
+      }
+    };
+
     const btn = Dom.button(
       "Upload",
       async (e) => {
