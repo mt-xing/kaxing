@@ -162,7 +162,9 @@ async function negotiateGameStart(
   });
 }
 
-async function mainGame(numQuestions: number): Promise<void> {
+async function mainGame(
+  numQuestions: number,
+): Promise<{ id: string; name: string; score: number }[]> {
   function questionTypeShortString(t: Question["t"]): string {
     switch (t) {
       case "standard":
@@ -189,6 +191,7 @@ async function mainGame(numQuestions: number): Promise<void> {
   });
   return new Promise((r) => {
     let qID = 0;
+    let currentScores: { id: string; name: string; score: number }[] = [];
 
     const send = (msg: GameStatePayload) => {
       socket.send("gameState", msg);
@@ -233,13 +236,9 @@ async function mainGame(numQuestions: number): Promise<void> {
     const progressWrap = Dom.div(undefined, "questionProgress");
     wrap.appendChild(progressWrap);
 
-    const blankBtn = Dom.button(
-      "Blank",
-      () => {
-        send({ t: "blank" });
-      },
-      "active",
-    );
+    const blankBtn = Dom.button("Blank", () => {
+      send({ t: "blank" });
+    });
     const showQBtn = Dom.button("Question Only", () => {
       send({ t: "showQuestion" });
     });
@@ -264,9 +263,11 @@ async function mainGame(numQuestions: number): Promise<void> {
     progressWrap.appendChild(leaderboardBtn);
 
     blankBtn.disabled = true;
+    showQBtn.disabled = true;
     showABtn.disabled = true;
     countdownBtn.disabled = true;
     resultsBtn.disabled = true;
+    leaderboardBtn.disabled = true;
 
     const questionMeta = document.createElement("p");
     questionMeta.classList.add("questionMetadata");
@@ -315,9 +316,9 @@ async function mainGame(numQuestions: number): Promise<void> {
                 send({ t: "blank" });
                 setTimeout(() => {
                   send({ t: "gg" });
-                  document.body.removeChild(wrap);
-                  r();
                 }, 1000);
+                document.body.removeChild(wrap);
+                r(currentScores);
               },
               "bigbtn",
             ),
@@ -328,10 +329,11 @@ async function mainGame(numQuestions: number): Promise<void> {
       const payload = JSON.parse(msg) as GameStateControllerResponse;
       switch (payload.t) {
         case "scores":
+          currentScores = payload.players;
           break;
         case "state": {
           qID = payload.question;
-          qIdUi.textContent = `${qID}`;
+          qIdUi.textContent = `${qID + 1}`;
           questionInfo.textContent = payload.questionString;
           questionMeta.textContent =
             payload.questionType === "text"
@@ -511,12 +513,44 @@ async function mainGame(numQuestions: number): Promise<void> {
   });
 }
 
+function showFinalScores(
+  scores: { id: string; name: string; score: number }[],
+) {
+  const wrap = Dom.div(Dom.h2("Final Scores"), "finalScreen infoScreen");
+  const table = document.createElement("TABLE");
+  wrap.appendChild(table);
+  table.classList.add("finalList");
+
+  const addPlayer = (rank: number, score: number, name: string) => {
+    const tr = document.createElement("TR");
+
+    const rankWrap = document.createElement("TH");
+    rankWrap.textContent = `${rank}`;
+    tr.appendChild(rankWrap);
+
+    const nameWrap = document.createElement("TD");
+    nameWrap.textContent = name;
+    nameWrap.style.width = "100%";
+    tr.appendChild(nameWrap);
+
+    const kickWrap = document.createElement("TD");
+    kickWrap.textContent = `${Math.round(score)} pts`;
+    tr.appendChild(kickWrap);
+
+    table.appendChild(tr);
+  };
+
+  scores.forEach((p, i) => addPlayer(i + 1, p.score, p.name));
+  document.body.appendChild(wrap);
+}
+
 async function gameLoop() {
   const code = await getCode();
   const gameData = await waitToJoin(code);
   await openGame(gameData.gameCode);
   await negotiateGameStart(gameData.gameCode, gameData.players);
-  await mainGame(gameData.numQuestions);
+  const finalScores = await mainGame(gameData.numQuestions);
+  showFinalScores(finalScores);
 }
 
 window.addEventListener("load", () => {

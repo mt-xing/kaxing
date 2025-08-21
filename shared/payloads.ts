@@ -84,7 +84,7 @@ export type GameStateBoardResponse =
 export type GameStateControllerResponse =
   | {
       t: "scores";
-      players: Record<string, number>;
+      players: { id: string; name: string; score: number }[];
     }
   | {
       t: "state";

@@ -24,7 +24,8 @@
   width: 100%;
 }
 
-.playerList {
+.playerList,
+.finalList {
   width: 100%;
   margin-bottom: 1em;
   border-collapse: collapse;
@@ -34,11 +35,13 @@
   overflow-y: auto;
 }
 
-.playerList th {
+.playerList th,
+.finalList th {
   padding: 10px 0;
 }
 
-.playerList td {
+.playerList td,
+.finalList td {
   padding: 5px 0;
 }
 
@@ -54,10 +57,12 @@
   cursor: pointer;
 }
 
-.playerList tr:nth-child(odd) {
+.playerList tr:nth-child(odd),
+.finalList tr:nth-child(odd) {
   background: rgba(0, 0, 0, 0.2);
 }
-.playerList tr:nth-child(even) {
+.playerList tr:nth-child(even),
+.finalList tr:nth-child(even) {
   background: rgba(255, 255, 255, 0.2);
 }
 
@@ -169,4 +174,15 @@
   display: block;
   flex-grow: 1;
   flex-basis: 0;
+}
+
+.finalScreen {
+  width: 100%;
+}
+
+.finalList th,
+.finalList td:last-child {
+  white-space: nowrap;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
 }

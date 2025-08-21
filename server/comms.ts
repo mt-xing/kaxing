@@ -68,6 +68,19 @@ export default class Communicator {
     });
   }
 
+  private sendPlayerScoresToController() {
+    this.sendToController({
+      t: "scores",
+      players: Array.from(this.#players)
+        .map((x) => ({
+          id: x[0],
+          name: x[1].name,
+          score: x[1].score,
+        }))
+        .sort((a, b) => b.score - a.score),
+    });
+  }
+
   /**
    * Add a player to the game
    * @returns Whether joining was successful or not
@@ -123,17 +136,6 @@ export default class Communicator {
       n: num,
       d: this.#players.size,
     });
-
-    this.sendToController({
-      t: "scores",
-      players: Array.from(this.#players).reduce(
-        (a, x) => ({
-          ...a,
-          [x[0]]: x[1].score,
-        }),
-        {},
-      ),
-    });
   }
 
   sendCountdownEnd(q: number, results: QuestionResults) {
@@ -154,6 +156,7 @@ export default class Communicator {
       numPlayers: this.#players.size,
     });
     this.sendQuestionStateToController(q, "results");
+    this.sendPlayerScoresToController();
   }
 
   sendLeaderboard(q: number) {
