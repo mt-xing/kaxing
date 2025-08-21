@@ -16,6 +16,7 @@ export default class ControllerJoin {
       ),
     );
     wrap.appendChild(instrWrap);
+    instrWrap.style.maxWidth = "500px";
 
     const qr = Dom.div(undefined, "controllerQr");
     wrap.appendChild(qr);

@@ -183,3 +183,7 @@ input[type="text"] {
 .disconnectMsg.done {
     --accent-color: rgba(150,255,150,.5);
 }
+
+code {
+    font-family: 'Consolas', monospace;
+}

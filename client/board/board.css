@@ -12,10 +12,18 @@
     width: 100%;
 }
 
+.controllerQr {
+    margin: 4vh auto;
+}
+
 .controllerWrap {
     transform: translateY(100vh);
     transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
     text-align: center;
+}
+
+.controllerWrap code {
+    font-size: 16px;
 }
 
 .controllerWrap input {
