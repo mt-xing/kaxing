@@ -113,6 +113,15 @@ export type GameStateClientResponse =
       numPlayers: number;
     }
   | {
+      t: "standing";
+      points: number;
+      rank: number;
+      numPlayers: number;
+      pointsGained: number;
+      answerTime: number | undefined;
+      questionTime: number;
+    }
+  | {
       t: "text";
       text: string;
     };

@@ -12,6 +12,7 @@ import { getTaunt } from "./utils/taunts.js";
 import TFQuestion from "./ui/questions/tf.js";
 import TypeQuestion from "./ui/questions/type.js";
 import MapQuestion from "./ui/questions/map.js";
+import StandingsUi from "./ui/standings.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -144,6 +145,19 @@ async function gameScreen(inProgress: boolean): Promise<void> {
               getTaunt(payload),
             );
           }
+          break;
+        }
+        case "standing": {
+          ui?.remove();
+          ui = new StandingsUi(
+            document.body,
+            payload.points,
+            payload.rank,
+            payload.numPlayers,
+            payload.pointsGained,
+            payload.answerTime,
+            payload.questionTime,
+          );
           break;
         }
         default:

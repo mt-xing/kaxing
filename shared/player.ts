@@ -4,7 +4,8 @@ export type Player = {
   name: string;
   score: number;
   answers: (Answer | null)[];
-  record: boolean[];
+  record: number[];
+  answerTimes: number[];
   /** Previous rank number (NOT zero-indexed) */
   previousRank?: number;
 };
@@ -24,6 +25,7 @@ export function awardPoints(
   const points = halfPoints + percentTimeLeft * halfPoints;
   // eslint-disable-next-line no-param-reassign
   player.score += points;
+  return points;
 }
 
 export function computeRanks(

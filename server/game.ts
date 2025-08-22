@@ -72,7 +72,13 @@ export default class KaXingGame {
       return false;
     }
 
-    this.#players.set(id, { name, score: 0, answers: [], record: [] });
+    this.#players.set(id, {
+      name,
+      score: 0,
+      answers: [],
+      record: [],
+      answerTimes: [],
+    });
     this.#comms.addPlayer(id, name);
     return true;
   }
@@ -213,14 +219,18 @@ export default class KaXingGame {
     }
 
     player.answers[this.#currentQuestion] = response;
-    player.record[this.#currentQuestion] = wasAnswerCorrect(q, response);
-    if (player.record[this.#currentQuestion]) {
-      awardPoints(
+    const responseTime = new Date().getTime();
+    player.answerTimes[this.#currentQuestion] =
+      (responseTime - this.#currentCountdown.startTime) / 1000;
+    if (wasAnswerCorrect(q, response)) {
+      player.record[this.#currentQuestion] = awardPoints(
         player,
-        new Date().getTime(),
+        responseTime,
         this.#currentCountdown.startTime,
         q,
       );
+    } else {
+      player.record[this.#currentQuestion] = 0;
     }
 
     const result = this.#questionResults[this.#currentQuestion];
@@ -243,7 +253,7 @@ export default class KaXingGame {
       }
       case "type": {
         if (result.t === q.t && response.t === q.t) {
-          if (player.record[this.#currentQuestion]) {
+          if (player.record[this.#currentQuestion] > 0) {
             result.numCorrect++;
           }
         }
@@ -251,7 +261,7 @@ export default class KaXingGame {
       }
       case "map": {
         if (result.t === q.t && response.t === q.t) {
-          if (player.record[this.#currentQuestion]) {
+          if (player.record[this.#currentQuestion] > 0) {
             result.numCorrect++;
           } else {
             result.wrongCoords.push(response.a);

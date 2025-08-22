@@ -143,9 +143,9 @@ export default class Communicator {
     this.#players.forEach((p, pid) => {
       this.sendToPlayer(pid, {
         t: "result",
-        correct: p.record[q] ?? null,
+        correct: p.record[q] !== undefined ? p.record[q] > 0 : null,
         points: p.score,
-        history: p.record,
+        history: p.record.map((x) => x > 0),
         rank: ranks.get(p) ?? -1,
         numPlayers: this.#players.size,
       });
@@ -165,9 +165,18 @@ export default class Communicator {
 
     this.#players.forEach((p, pid) => {
       const rank = ranks.get(p) ?? Infinity;
+      const questionTime = this.#questions[q].time;
       this.sendToPlayer(pid, {
-        t: "text",
-        text: `Rank ${rank} with ${Math.round(p.score)} points`,
+        t: "standing",
+        points: Math.round(p.score),
+        rank,
+        numPlayers: this.#players.size,
+        pointsGained: p.record[q] ? Math.round(p.record[q]) : 0,
+        answerTime:
+          p.answerTimes[q] !== undefined
+            ? Math.round(Math.min(p.answerTimes[q], questionTime))
+            : undefined,
+        questionTime,
       });
       if (rank < 6) {
         currentPlayerRank[rank - 1] = p;
