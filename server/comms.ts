@@ -130,16 +130,31 @@ export default class Communicator {
     this.sendQuestionStateToController(qNum, "countdown");
   }
 
-  sendResponseReceived(num: number) {
+  sendResponseReceived(
+    num: number,
+    player: io.Socket,
+    time: number,
+    totalTime: number,
+  ) {
     this.sendToBoard({
       t: "answerReceived",
       n: num,
       d: this.#players.size,
     });
+    if (totalTime - time < 5) {
+      return;
+    }
+    const payload: GameStateClientResponse = {
+      t: "responseReceived",
+      time,
+      totalTime,
+    };
+    player.emit("gameState", JSON.stringify(payload));
   }
 
   sendCountdownEnd(q: number, results: QuestionResults) {
     const ranks = computeRanks(this.#players);
+    const questionTime = this.#questions[q].time;
     this.#players.forEach((p, pid) => {
       this.sendToPlayer(pid, {
         t: "result",
@@ -148,6 +163,8 @@ export default class Communicator {
         history: p.record.map((x) => x > 0),
         rank: ranks.get(p) ?? -1,
         numPlayers: this.#players.size,
+        answerTime: p.answerTimes[q],
+        questionTime,
       });
     });
     this.sendToBoard({

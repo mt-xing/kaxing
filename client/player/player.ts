@@ -8,7 +8,7 @@ import TextUi from "./ui/text.js";
 import StandardQuestion from "./ui/questions/standard.js";
 import { Answer } from "../../shared/question.js";
 import QuestionResponse from "./ui/qRes.js";
-import { getTaunt } from "./utils/taunts.js";
+import { getResponseText, getTaunt } from "./utils/taunts.js";
 import TFQuestion from "./ui/questions/tf.js";
 import TypeQuestion from "./ui/questions/type.js";
 import MapQuestion from "./ui/questions/map.js";
@@ -133,6 +133,14 @@ async function gameScreen(inProgress: boolean): Promise<void> {
             default:
               break;
           }
+          break;
+        }
+        case "responseReceived": {
+          ui?.remove();
+          ui = new TextUi(
+            document.body,
+            getResponseText(payload.time, payload.totalTime),
+          );
           break;
         }
         case "result": {

@@ -277,7 +277,12 @@ export default class KaXingGame {
     }
 
     this.#numAnswers++;
-    this.#comms.sendResponseReceived(this.#numAnswers);
+    this.#comms.sendResponseReceived(
+      this.#numAnswers,
+      socket,
+      player.answerTimes[this.#currentQuestion],
+      q.time,
+    );
   }
 
   #clearCountdown() {

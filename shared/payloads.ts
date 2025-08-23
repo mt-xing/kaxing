@@ -111,6 +111,8 @@ export type GameStateClientResponse =
       points: number;
       rank: number;
       numPlayers: number;
+      answerTime: number | undefined;
+      questionTime: number;
     }
   | {
       t: "standing";
@@ -128,6 +130,11 @@ export type GameStateClientResponse =
       numPlayers: number;
       numCorrect: number;
       numQ: number;
+    }
+  | {
+      t: "responseReceived";
+      time: number;
+      totalTime: number;
     }
   | {
       t: "text";
