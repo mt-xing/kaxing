@@ -141,7 +141,7 @@ export default class Communicator {
       n: num,
       d: this.#players.size,
     });
-    if (totalTime - time < 5) {
+    if (totalTime - time < 2) {
       return;
     }
     const payload: GameStateClientResponse = {
