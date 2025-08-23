@@ -27,15 +27,15 @@ export default class FinalUi {
       ),
     );
 
-    const brandingP = Dom.p("Create your own at ");
+    wrap.appendChild(Dom.p("Thank you for playing!", "final"));
+
+    const brandingP = Dom.p("Create your own at ", "small");
     const link = document.createElement("A");
     link.textContent = "michaelxing.com/kaxing";
     link.setAttribute("href", "https://michaelxing.com/kaxing");
     link.setAttribute("target", "_blank");
     brandingP.appendChild(link);
     wrap.appendChild(brandingP);
-
-    wrap.appendChild(Dom.p("Thank you for playing!", "final"));
 
     this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {
