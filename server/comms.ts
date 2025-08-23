@@ -220,11 +220,20 @@ export default class Communicator {
     setTimeout(() => {
       const ranks = computeRanks(this.#players);
 
+      const numQ = this.#questions.reduce(
+        (a, x) => (x.t === "text" ? a : a + 1),
+        0,
+      );
+
       this.#players.forEach((p, pid) => {
         const rank = ranks.get(p) ?? Infinity;
         this.sendToPlayer(pid, {
-          t: "text",
-          text: `Rank ${rank} with ${Math.round(p.score)} points`,
+          t: "final",
+          rank,
+          points: Math.round(p.score),
+          numPlayers: this.#players.size,
+          numCorrect: p.record.reduce((a, x) => (x > 0 ? a + 1 : a), 0),
+          numQ,
         });
       });
     }, 16000);

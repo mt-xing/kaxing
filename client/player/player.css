@@ -120,12 +120,22 @@ form {
 .questionRes h2 {
     font-size: min(15vw, 15vh);
     font-size: min(15vw, 15svh);
-    margin: 0;
+    margin: 0 0 1.5em 0;
 }
 
 .questionRes p {
     padding-left: 10vw;
     padding-right: 10vw;
+}
+
+.questionRes a {
+    color: white;
+    font-weight: "Consolas", monospace;
+    text-decoration: underline;
+}
+
+.questionRes .final {
+    font-size: 1.5em;
 }
 
 .loader {

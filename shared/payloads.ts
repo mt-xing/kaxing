@@ -122,6 +122,14 @@ export type GameStateClientResponse =
       questionTime: number;
     }
   | {
+      t: "final";
+      points: number;
+      rank: number;
+      numPlayers: number;
+      numCorrect: number;
+      numQ: number;
+    }
+  | {
       t: "text";
       text: string;
     };

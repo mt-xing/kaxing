@@ -13,6 +13,7 @@ import TFQuestion from "./ui/questions/tf.js";
 import TypeQuestion from "./ui/questions/type.js";
 import MapQuestion from "./ui/questions/map.js";
 import StandingsUi from "./ui/standings.js";
+import FinalUi from "./ui/final.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -157,6 +158,18 @@ async function gameScreen(inProgress: boolean): Promise<void> {
             payload.pointsGained,
             payload.answerTime,
             payload.questionTime,
+          );
+          break;
+        }
+        case "final": {
+          ui?.remove();
+          ui = new FinalUi(
+            document.body,
+            payload.points,
+            payload.rank,
+            payload.numPlayers,
+            payload.numCorrect,
+            payload.numQ,
           );
           break;
         }
