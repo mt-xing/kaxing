@@ -21,6 +21,8 @@ import MapQuestionBoard from "./ui/questions/map.js";
 import QuestionBoard from "./ui/questions/base.js";
 import PersistentFooter from "./ui/persistentFooter.js";
 import QuestionIntro from "./ui/questionIntro.js";
+import Dom from "../dom.js";
+import { downloadFile, generateGameSummaryCsv } from "./utils/summary.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -216,19 +218,34 @@ function gameScreen(
           break;
         }
         case "leaderboardBoard":
-          if (ui) {
-            ui.remove();
-          }
+          ui?.remove();
           questionUi = undefined;
           setTimeout(() => {
             ui = new Leaderboard(document.body, payload.leaderboard);
           }, 500);
           break;
-        case "ggBoard":
+        case "ggBoard": {
           ui?.remove();
           footer.remove();
+          setTimeout(() => {
+            const downloadBtn = Dom.button(
+              "Download Results",
+              () => {
+                const csv = generateGameSummaryCsv(
+                  payload.questionNums,
+                  payload.players,
+                );
+                downloadFile("kaxing_game_summary.csv", csv);
+              },
+              "bigbtn finalDownload",
+            );
+            Dom.insertEl(downloadBtn, document.body).then(() => {
+              downloadBtn.style.opacity = "1";
+            });
+          }, 20000);
           r(payload.leaderboard);
           break;
+        }
         default:
           ((x: never) => {
             throw new Error(x);

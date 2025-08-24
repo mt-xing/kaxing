@@ -1,3 +1,4 @@
+import { Player } from "./player.js";
 import { Question, QuestionResults } from "./question.js";
 import { QuestionState } from "./state.js";
 
@@ -83,6 +84,8 @@ export type GameStateBoardResponse =
         name: string;
         points: number;
       }[];
+      questionNums: number[];
+      players: Player[];
     };
 
 export type GameStateControllerResponse =

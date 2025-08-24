@@ -236,16 +236,17 @@ export default class Communicator {
   sendGG() {
     const currentPlayerRank: Player[] = [...this.#players]
       .map((x) => x[1])
-      .sort((a, b) => b.score - a.score)
-      .slice(0, 5);
+      .sort((a, b) => b.score - a.score);
 
     this.sendToAllPlayers({ t: "blank" });
     this.sendToBoard({
       t: "ggBoard",
-      leaderboard: currentPlayerRank.map((x) => ({
+      leaderboard: currentPlayerRank.slice(0, 5).map((x) => ({
         name: x.name,
         points: x.score,
       })),
+      players: currentPlayerRank,
+      questionNums: this.#questionNumbers,
     });
     setTimeout(() => {
       const ranks = computeRanks(this.#players);
