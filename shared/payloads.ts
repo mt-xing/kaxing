@@ -62,6 +62,10 @@ export type GameStateBoardResponse =
       numPlayers: number;
     }
   | {
+      t: "showQuestionIntro";
+      questionNum: number;
+    }
+  | {
       t: "showQuestionBoard";
       numPlayers: number;
     }
@@ -93,6 +97,7 @@ export type GameStateControllerResponse =
       questionString: string;
       questionTime: number;
       questionPoints: number;
+      questionDisplayNum: number;
       state: QuestionState;
     };
 

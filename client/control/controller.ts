@@ -218,7 +218,7 @@ async function mainGame(
     });
     qWrap.appendChild(prevQBtn);
     const qIdUi = Dom.span(`${qID}`, "bigNum");
-    const qText = Dom.p("Question", "qNum");
+    const qText = Dom.p("Slide", "qNum");
     qText.appendChild(qIdUi);
     qWrap.appendChild(qText);
     const nextQBtn = Dom.button("⮞", () => {
@@ -239,7 +239,10 @@ async function mainGame(
     const blankBtn = Dom.button("Blank", () => {
       send({ t: "blank" });
     });
-    const showQBtn = Dom.button("Question Only", () => {
+    const showQBtn = Dom.button("Question Intro", () => {
+      send({ t: "showQuestion" });
+    });
+    const mainQBtn = Dom.button("Question Main", () => {
       send({ t: "showQuestion" });
     });
     const showABtn = Dom.button("Question + Answer", () => {
@@ -257,6 +260,7 @@ async function mainGame(
 
     progressWrap.appendChild(blankBtn);
     progressWrap.appendChild(showQBtn);
+    progressWrap.appendChild(mainQBtn);
     progressWrap.appendChild(showABtn);
     progressWrap.appendChild(countdownBtn);
     progressWrap.appendChild(resultsBtn);
@@ -264,6 +268,7 @@ async function mainGame(
 
     blankBtn.disabled = true;
     showQBtn.disabled = true;
+    mainQBtn.disabled = true;
     showABtn.disabled = true;
     countdownBtn.disabled = true;
     resultsBtn.disabled = true;
@@ -338,17 +343,19 @@ async function mainGame(
           questionMeta.textContent =
             payload.questionType === "text"
               ? "Text Slide"
-              : `${questionTypeShortString(payload.questionType)}, ${payload.questionPoints} pts, ${payload.questionTime} sec`;
+              : `Question ${payload.questionDisplayNum}, ${questionTypeShortString(payload.questionType)}, ${payload.questionPoints} pts, ${payload.questionTime} sec`;
           switch (payload.state) {
             case "blank": {
               blankBtn.disabled = true;
-              showQBtn.disabled = false;
+              showQBtn.disabled = payload.questionType === "text";
+              mainQBtn.disabled = payload.questionType !== "text";
               showABtn.disabled = true;
               countdownBtn.disabled = true;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
               blankBtn.className = "active";
               showQBtn.className = "";
+              mainQBtn.className = "";
               showABtn.className = "";
               countdownBtn.className = "";
               resultsBtn.className = "";
@@ -364,15 +371,35 @@ async function mainGame(
               );
               break;
             }
-            case "question": {
+            case "questionIntro": {
+              blankBtn.disabled = true;
+              showQBtn.disabled = true;
+              mainQBtn.disabled = true;
+              showABtn.disabled = true;
+              countdownBtn.disabled = true;
+              resultsBtn.disabled = true;
+              leaderboardBtn.disabled = true;
+              blankBtn.className = "";
+              showQBtn.className = "active";
+              mainQBtn.className = "";
+              showABtn.className = "";
+              countdownBtn.className = "";
+              resultsBtn.className = "";
+              leaderboardBtn.className = "";
+              bigBtnWrap.replaceChildren();
+              break;
+            }
+            case "questionMain": {
               blankBtn.disabled = false;
               showQBtn.disabled = true;
+              mainQBtn.disabled = true;
               // showABtn.disabled = ??? // see switch statement below
               countdownBtn.disabled = payload.questionType === "text";
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
               blankBtn.className = "";
-              showQBtn.className = "active";
+              showQBtn.className = "";
+              mainQBtn.className = "active";
               showABtn.className = "";
               countdownBtn.className = "";
               resultsBtn.className = "";
@@ -420,12 +447,14 @@ async function mainGame(
             case "answers": {
               blankBtn.disabled = false;
               showQBtn.disabled = true;
+              mainQBtn.disabled = true;
               showABtn.disabled = true;
               countdownBtn.disabled = false;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
               blankBtn.className = "";
               showQBtn.className = "";
+              mainQBtn.className = "";
               showABtn.className = "active";
               countdownBtn.className = "";
               resultsBtn.className = "";
@@ -444,12 +473,14 @@ async function mainGame(
             case "countdown": {
               blankBtn.disabled = false;
               showQBtn.disabled = true;
+              mainQBtn.disabled = true;
               showABtn.disabled = true;
               countdownBtn.disabled = true;
               resultsBtn.disabled = false;
               leaderboardBtn.disabled = false;
               blankBtn.className = "";
               showQBtn.className = "";
+              mainQBtn.className = "";
               showABtn.className = "";
               countdownBtn.className = "active";
               resultsBtn.className = "";
@@ -468,12 +499,14 @@ async function mainGame(
             case "results": {
               blankBtn.disabled = false;
               showQBtn.disabled = true;
+              mainQBtn.disabled = true;
               showABtn.disabled = true;
               countdownBtn.disabled = true;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = false;
               blankBtn.className = "";
               showQBtn.className = "";
+              mainQBtn.className = "";
               showABtn.className = "";
               countdownBtn.className = "";
               resultsBtn.className = "active";
@@ -483,13 +516,15 @@ async function mainGame(
             }
             case "leaderboard": {
               blankBtn.disabled = false;
-              showQBtn.disabled = false;
+              showQBtn.disabled = payload.questionType === "text";
+              mainQBtn.disabled = payload.questionType !== "text";
               showABtn.disabled = true;
               countdownBtn.disabled = true;
               resultsBtn.disabled = true;
               leaderboardBtn.disabled = true;
               blankBtn.className = "";
               showQBtn.className = "";
+              mainQBtn.className = "";
               showABtn.className = "";
               countdownBtn.className = "";
               resultsBtn.className = "";

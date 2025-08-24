@@ -15,6 +15,8 @@ import { assertUnreachable } from "../shared/util.js";
 export default class KaXingGame {
   #questions: Question[];
 
+  #questionNumbers: number[];
+
   #questionResults: QuestionResults[];
 
   #controllerId: string;
@@ -50,17 +52,24 @@ export default class KaXingGame {
     this.#questionResults = questions.map(initResult);
     this.#controllerId = controllerId;
     this.#players = players;
+    this.#questionState = "blank";
+    this.#currentQuestion = 0;
+    this.#numAnswers = 0;
+    this.#firstQuestion = true;
+
+    let questionNum = 1;
+    this.#questionNumbers = this.#questions.map((x) =>
+      x.t === "text" ? -1 : questionNum++,
+    );
+
     this.#comms = new Communicator(
       namespace,
       boardId,
       controllerId,
       players,
       questions,
+      this.#questionNumbers,
     );
-    this.#questionState = "blank";
-    this.#currentQuestion = 0;
-    this.#numAnswers = 0;
-    this.#firstQuestion = true;
   }
 
   /**
@@ -89,6 +98,9 @@ export default class KaXingGame {
 
   handleControllerRequest(socket: io.Socket, msg: string) {
     if (!this.isController(socket.id)) {
+      return;
+    }
+    if (this.#questionState === "questionIntro") {
       return;
     }
     const payload = JSON.parse(msg) as GameStatePayload;
@@ -151,11 +163,26 @@ export default class KaXingGame {
 
   showQuestion() {
     this.#clearCountdown();
-    if (this.#questionState === "question") {
+    if (
+      this.#questionState === "questionIntro" ||
+      this.#questionState === "questionMain"
+    ) {
       return;
     }
-    this.#questionState = "question";
-    this.#comms.sendShowQuestion(this.#currentQuestion);
+
+    if (this.#questions[this.#currentQuestion].t === "text") {
+      this.#questionState = "questionMain";
+      this.#comms.sendShowQuestionMain(this.#currentQuestion);
+      return;
+    }
+
+    this.#questionState = "questionIntro";
+    this.#comms.sendShowQuestionIntro(this.#currentQuestion);
+
+    setTimeout(() => {
+      this.#questionState = "questionMain";
+      this.#comms.sendShowQuestionMain(this.#currentQuestion);
+    }, 2000);
   }
 
   showAnswers() {
@@ -175,7 +202,7 @@ export default class KaXingGame {
     if (this.#questions[this.#currentQuestion].t === "text") {
       return;
     }
-    if (this.#questionState === "question") {
+    if (this.#questionState === "questionMain") {
       this.#comms.sendShowAnswers(this.#currentQuestion);
     }
     this.#questionState = "countdown";

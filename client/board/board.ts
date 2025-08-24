@@ -20,6 +20,7 @@ import TypeQuestionBoard from "./ui/questions/type.js";
 import MapQuestionBoard from "./ui/questions/map.js";
 import QuestionBoard from "./ui/questions/base.js";
 import PersistentFooter from "./ui/persistentFooter.js";
+import QuestionIntro from "./ui/questionIntro.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -139,12 +140,15 @@ function gameScreen(
           ui = undefined;
           break;
         }
+        case "showQuestionIntro": {
+          ui?.remove();
+          ui = new QuestionIntro(document.body, payload.questionNum, question);
+          break;
+        }
         case "showQuestionBoard": {
           switch (question.t) {
             case "standard": {
-              if (ui) {
-                ui.remove();
-              }
+              ui?.remove();
               questionUi = new StandardQuestionBoard(
                 document.body,
                 question,

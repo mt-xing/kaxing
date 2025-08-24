@@ -1,6 +1,7 @@
 export type QuestionState =
   | "blank"
-  | "question"
+  | "questionIntro"
+  | "questionMain"
   | "answers"
   | "countdown"
   | "results"

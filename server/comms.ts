@@ -20,18 +20,22 @@ export default class Communicator {
 
   #questions: Question[];
 
+  #questionNumbers: number[];
+
   constructor(
     namespace: io.Namespace,
     boardId: string,
     controllerId: string,
     players: Map<string, Player>,
     questions: Question[],
+    questionNumbers: number[],
   ) {
     this.#namespace = namespace;
     this.#boardId = boardId;
     this.#controllerId = controllerId;
     this.#players = players;
     this.#questions = questions;
+    this.#questionNumbers = questionNumbers;
   }
 
   private sendToPlayer(pid: string, msg: GameStateClientResponse) {
@@ -64,6 +68,7 @@ export default class Communicator {
       questionString: q.text,
       questionTime: q.time,
       questionPoints: q.points,
+      questionDisplayNum: this.#questionNumbers[currentQuestion],
       state,
     });
   }
@@ -100,13 +105,21 @@ export default class Communicator {
     this.sendQuestionStateToController(q, "blank");
   }
 
-  sendShowQuestion(q: number) {
+  sendShowQuestionIntro(q: number) {
+    this.sendToBoard({
+      t: "showQuestionIntro",
+      questionNum: this.#questionNumbers[q],
+    });
+    this.sendToAllPlayers({ t: "blank" });
+    this.sendQuestionStateToController(q, "questionIntro");
+  }
+
+  sendShowQuestionMain(q: number) {
     this.sendToBoard({
       t: "showQuestionBoard",
       numPlayers: this.#players.size,
     });
-    this.sendToAllPlayers({ t: "blank" });
-    this.sendQuestionStateToController(q, "question");
+    this.sendQuestionStateToController(q, "questionMain");
   }
 
   sendShowAnswers(q: number) {

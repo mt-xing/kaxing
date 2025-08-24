@@ -273,7 +273,7 @@
     width: 100%;
     height: calc(100vh - 40px);
     transform: translateY(100vh);
-    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550) 0.2s;
 
     display: flex;
     flex-direction: row;
@@ -702,4 +702,54 @@ audio {
 .persistentFooter.out {
     transform: translateY(50px);
     transition: transform 0.5s ease-in;
+}
+
+.questionIntro {
+    position: relative;
+    transform: translateY(100vh);
+    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.questionIntro h2 {
+    text-align: center;
+    font-size: 12vh;
+}
+
+.questionIntro .questionNum {
+    position: absolute;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: -1;
+    opacity: 0.4;
+    font-weight: 900;
+    font-size: 70vh;
+    text-align: center;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+}
+
+.questionIntro .infoWrap {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 12vh;
+}
+
+.questionIntro .infoWrap p {
+    margin: 0 5vw;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    font-size: 4vh;
+}
+
+.questionIntro .infoWrap p span {
+    display: block;
+    font-size: 8vh;
+    font-weight: bold;
 }
