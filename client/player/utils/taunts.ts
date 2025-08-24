@@ -171,6 +171,7 @@ const SUPER_FAST_RESPONSES = [
   "Did you even have time to read the question?",
   "You know I spent a lot of time on that question UI you didn't see",
   "That was too fast",
+  "Suspiciously fast",
   "Fastest response in the west",
   "Are you sure sure?",
 ];
@@ -180,13 +181,18 @@ const FAST_RESPONSES = [
   "That was fast",
   "No second thoughts, I hope",
   "Too late to change answers now",
+  "Locked in",
+  "I believe in you",
 ];
 
 const SLOW_RESPONSES = [
   "Response received",
+  "Thanks for answering",
   "Locked in",
   "Let's hope that's right",
   "Too late to change answers now",
+  "You got this",
+  "I believe in you",
 ];
 
 export function getResponseText(time: number, totalTime: number) {
