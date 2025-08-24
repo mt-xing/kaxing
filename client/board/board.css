@@ -753,3 +753,55 @@ audio {
     font-size: 8vh;
     font-weight: bold;
 }
+
+@media(max-width: 700px) {
+    body::before {
+        content: "The board works best when fullscreen on a computer display";
+        position: fixed;
+        color: white;
+        background: black;
+        font-size: 3em;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: block;
+        z-index: 9999;
+        text-align: center;
+
+        --accent-color: rgba(255,100,100,.5);
+
+        background: rgba(0,0,0,0.5);
+        box-shadow: 2px 2px 10px #000;
+        border: none;
+        border-bottom: 5px var(--accent-color) solid;
+        backdrop-filter: blur(10px);
+
+        padding: 1em 20px 1.2em 20px;
+    }
+}
+
+@media(max-aspect-ratio: 1) {
+    body::before {
+        content: "The board works best when fullscreen on a computer display";
+        position: fixed;
+        color: white;
+        background: black;
+        font-size: 3em;
+        top: 0;
+        left: 0;
+        right: 0;
+        display: block;
+        z-index: 9999;
+        text-align: center;
+
+        --accent-color: rgba(255,100,100,.5);
+
+        background: rgba(0,0,0,0.5);
+        box-shadow: 2px 2px 10px #000;
+        border: none;
+        border-bottom: 5px var(--accent-color) solid;
+        backdrop-filter: blur(10px);
+
+        padding: 1em 20px 1.2em 20px;
+    }
+}
