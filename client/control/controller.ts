@@ -577,11 +577,13 @@ function showFinalScores(
 
   scores.forEach((p, i) => addPlayer(i + 1, p.score, p.name));
   document.body.appendChild(wrap);
+  window.onbeforeunload = null;
 }
 
 async function gameLoop() {
   const code = await getCode();
   const gameData = await waitToJoin(code);
+  window.onbeforeunload = () => "Are you sure you want to leave the game?";
   await openGame(gameData.gameCode);
   await negotiateGameStart(gameData.gameCode, gameData.players);
   const finalScores = await mainGame(gameData.numQuestions);
@@ -589,7 +591,6 @@ async function gameLoop() {
 }
 
 window.addEventListener("load", () => {
-  window.onbeforeunload = () => "Are you sure you want to leave the game?";
   try {
     navigator.wakeLock.request("screen");
   } catch (err) {

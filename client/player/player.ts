@@ -179,6 +179,7 @@ async function gameScreen(inProgress: boolean): Promise<void> {
             payload.numCorrect,
             payload.numQ,
           );
+          window.onbeforeunload = null;
           break;
         }
         default:
@@ -192,11 +193,11 @@ async function gameScreen(inProgress: boolean): Promise<void> {
 
 async function gameLoop() {
   const inProgress = await joinGame();
+  window.onbeforeunload = () => "Are you sure you want to leave the game?";
   await gameScreen(inProgress);
 }
 
 window.onload = () => {
-  window.onbeforeunload = () => "Are you sure you want to leave the game?";
   try {
     navigator.wakeLock.request("screen");
   } catch (err) {

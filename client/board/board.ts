@@ -300,6 +300,7 @@ async function displayResults(leaderboard: { name: string; points: number }[]) {
 
 async function gameLoop() {
   const questions = await uploadQuestions();
+  window.onbeforeunload = () => "Are you sure you want to leave the game?";
   const code = await getGameCode(questions);
   await pairController();
   await waitForGameToOpen();
@@ -309,7 +310,6 @@ async function gameLoop() {
 }
 
 window.onload = () => {
-  window.onbeforeunload = () => "Are you sure you want to leave the game?";
   try {
     navigator.wakeLock.request("screen");
   } catch (err) {
