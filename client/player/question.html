@@ -15,9 +15,13 @@
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.css">
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
         <script type="module">
-            import MapQuestion from "./ui/questions/map.js";
+            // import MapQuestion from "./ui/questions/map.js";
+            // window.onload = () => {
+            //     const x = new MapQuestion(document.body, console.log.bind(console), 42.44597494631099, -76.47993615775893, 15, 15, 19);
+            // }
+            import MultiQuestion from "./ui/questions/multi.js";
             window.onload = () => {
-                const x = new MapQuestion(document.body, console.log.bind(console), 42.44597494631099, -76.47993615775893, 15, 15, 19);
+                const x = new MultiQuestion(document.body, (y) => {console.log(y);x.remove();});
             }
         </script>
     </head>

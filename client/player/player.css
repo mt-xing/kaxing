@@ -42,6 +42,7 @@ form {
     cursor: pointer;
     padding: min(10vw, 10vh) min(15vw, 15vh);
     padding: min(10vw, 10vh) min(15vw, 15svh);
+    box-sizing: border-box;
 
     display: flex;
     align-items: center;
@@ -287,6 +288,62 @@ form {
 .mapanswerRow .smallbtn::after {
     display: none;
     content: '';
+}
+
+.multianswer input {
+    display: none;
+}
+
+.multianswer .answer {
+    height: calc(45vh - 50px);
+    height: calc(45svh - 50px);
+    font-size: 0;
+    position: relative;
+    overflow: hidden;
+}
+
+.multianswer input:checked + .answer {
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275), box-shadow 0.1s ease-in-out;
+    transform: scale(0.9) !important;
+}
+
+.multianswer .answer::after {
+    content: '✅';
+    position: absolute;
+    font-size: 5vh;
+    font-size: 5svh;
+    top: 0; left: 0;
+    transform: translate(-100%, -100%);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+.multianswer input:checked + .answer::after {
+    transform: translate(0, 0);
+}
+
+.multianswer .answer::before {
+    content: '';
+    background: rgb(200, 255, 200);
+    position: absolute;
+    font-size: 5vh;
+    font-size: 5svh;
+    top: 0; left: 0;
+    width: 30vh;
+    width: 30svh;
+    height: 30vh;
+    height: 30svh;
+    opacity: 0.4;
+    transform: translate(-100%, -100%)rotate(-45deg);
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275);
+}
+
+.multianswer input:checked + .answer::before {
+    transform: translate(-63%, -63%)rotate(-45deg);
+}
+
+.multianswer .bigbtn {
+    display: block;
+    min-width: 50vw;
 }
 
 .standings h2 span {

@@ -14,6 +14,7 @@ import TypeQuestion from "./ui/questions/type.js";
 import MapQuestion from "./ui/questions/map.js";
 import StandingsUi from "./ui/standings.js";
 import FinalUi from "./ui/final.js";
+import MultiQuestion from "./ui/questions/multi.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -93,6 +94,18 @@ async function gameScreen(inProgress: boolean): Promise<void> {
               });
               break;
             }
+            case "multi": {
+              ui?.remove();
+              ui = new MultiQuestion(document.body, (list) => {
+                const a: Answer = {
+                  t: "multi",
+                  a: list,
+                };
+                socket.send("response", a);
+                ui = undefined;
+              });
+              break;
+            }
             case "type": {
               ui?.remove();
               ui = new TypeQuestion(
@@ -129,7 +142,6 @@ async function gameScreen(inProgress: boolean): Promise<void> {
               );
               break;
             }
-            case "multi":
             default:
               break;
           }

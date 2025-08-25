@@ -5,6 +5,13 @@
 
 
 [{
+  "t": "multi",
+  "points": 2000,
+  "time": 20,
+  "text": "What is it about?",
+  "answers": ["Understanding data structures", "Designing good abstractions", "Learning to reason", "the points"],
+  "correct": [0,1,2]
+},{
   "t": "map",
   "points": 1000,
   "time": 20,

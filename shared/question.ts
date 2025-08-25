@@ -152,7 +152,7 @@ export function wasAnswerCorrect(q: Question, a: Answer | null | undefined) {
 
 export type QuestionResults =
   | {
-      t: "standard";
+      t: "standard" | "multi";
       responses: [number, number, number, number];
     }
   | {
@@ -175,7 +175,6 @@ export type QuestionResults =
 
 export function initResult(q: Question): QuestionResults {
   switch (q.t) {
-    case "multi":
     case "text":
       return {
         t: "other",
@@ -183,6 +182,11 @@ export function initResult(q: Question): QuestionResults {
     case "standard":
       return {
         t: "standard",
+        responses: [0, 0, 0, 0],
+      };
+    case "multi":
+      return {
+        t: "multi",
         responses: [0, 0, 0, 0],
       };
     case "tf":

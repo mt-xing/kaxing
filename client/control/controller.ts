@@ -172,7 +172,7 @@ async function mainGame(
       case "tf":
         return "True or False";
       case "multi":
-        return "Multi-Select";
+        return "Select All";
       case "type":
         return "Type Answer";
       case "map":

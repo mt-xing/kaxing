@@ -7,7 +7,9 @@ export default class StandardQuestionBoard extends QuestionBoard {
 
   constructor(
     parent: HTMLElement,
-    question: Extract<Question, { t: "standard" }>,
+    question:
+      | Extract<Question, { t: "standard" }>
+      | Extract<Question, { t: "multi" }>,
     numPlayers: number,
   ) {
     const answerContent = Dom.div();
@@ -75,12 +77,12 @@ export default class StandardQuestionBoard extends QuestionBoard {
     results: QuestionResults,
     numPlayers: number,
   ): void {
-    if (this.question.t !== "standard") {
-      console.error("Question mismatch not standard", this.question);
+    if (this.question.t !== "standard" && this.question.t !== "multi") {
+      console.error("Question mismatch not standard or multi", this.question);
       return;
     }
-    if (results.t !== "standard") {
-      console.error("Results mismatch not standard", results);
+    if (results.t !== "standard" && results.t !== "multi") {
+      console.error("Results mismatch not standard or multi", results);
       return;
     }
     const q = this.question;

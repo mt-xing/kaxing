@@ -297,7 +297,12 @@ export default class KaXingGame {
         break;
       }
       case "multi": {
-        throw new Error("TODO: Unimplemented");
+        if (result.t === q.t && response.t === q.t) {
+          response.a.forEach((aa) => {
+            result.responses[aa]++;
+          });
+        }
+        break;
       }
       default:
         assertUnreachable(q);

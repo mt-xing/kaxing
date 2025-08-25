@@ -23,6 +23,7 @@ import PersistentFooter from "./ui/persistentFooter.js";
 import QuestionIntro from "./ui/questionIntro.js";
 import Dom from "../dom.js";
 import { downloadFile, generateGameSummaryCsv } from "./utils/summary.js";
+import { assertUnreachable } from "./utils/assert.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -149,7 +150,8 @@ function gameScreen(
         }
         case "showQuestionBoard": {
           switch (question.t) {
-            case "standard": {
+            case "standard":
+            case "multi": {
               ui?.remove();
               questionUi = new StandardQuestionBoard(
                 document.body,
@@ -200,7 +202,7 @@ function gameScreen(
               break;
             }
             default:
-              break;
+              assertUnreachable(question);
           }
           break;
         }
