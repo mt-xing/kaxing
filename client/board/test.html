@@ -18,34 +18,46 @@
             crossorigin=""></script>
         <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.css">
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 
         <script type="module">
           import MapQuestionBoard from "./ui/questions/map.js";
+          import FinalResultsUi from "./ui/finalResults.js";
           window.addEventListener('load', () => {
-            const b = new MapQuestionBoard(document.body, {
-              "t": "map",
-              "points": 1000,
-              "time": 20,
-              "text": "Where is lecture?",
-              img: 'https://i.redd.it/6d52ezqlwj951.png',
-              startLat: 42.44597494631099, 
-              startLon: -76.47993615775893,
-              startZoom: 15,
-              minZoom: 15,
-              maxZoom: 19,
-              correct: {
-                matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
-                representativeAnswers: [[42.44490022247275, -76.48084649037085]],
-              },
-            }, 1);
-            setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
+            // const b = new MapQuestionBoard(document.body, {
+            //   "t": "map",
+            //   "points": 1000,
+            //   "time": 20,
+            //   "text": "Where is lecture?",
+            //   img: 'https://i.redd.it/6d52ezqlwj951.png',
+            //   startLat: 42.44597494631099, 
+            //   startLon: -76.47993615775893,
+            //   startZoom: 15,
+            //   minZoom: 15,
+            //   maxZoom: 19,
+            //   correct: {
+            //     matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
+            //     representativeAnswers: [[42.44490022247275, -76.48084649037085]],
+            //   },
+            // }, 1);
+            // setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
+            // setTimeout(() => {
+            //   b.showResults({
+            //     t: "map",
+            //     numCorrect: 18,
+            //     wrongCoords: [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]],
+            //   }, 20);
+            // }, 4000);
+            const b = new FinalResultsUi(document.body, 1, "Your Name Goes Here And Is Very Long ddddddddddddddddddddd", 2000);
+
             setTimeout(() => {
-              b.showResults({
-                t: "map",
-                numCorrect: 18,
-                wrongCoords: [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]],
-              }, 20);
-            }, 4000);
+              b.showName();
+
+              const count = 200,
+              defaults = {
+                origin: { y: 0.7 },
+              };
+            }, 2000);
           })
         </script>
     </head>

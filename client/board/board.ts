@@ -24,6 +24,8 @@ import QuestionIntro from "./ui/questionIntro.js";
 import Dom from "../dom.js";
 import { downloadFile, generateGameSummaryCsv } from "./utils/summary.js";
 import { assertUnreachable } from "./utils/assert.js";
+import FinalResultsUi from "./ui/finalResults.js";
+import { longConfetti, shortConfettiBlast } from "./utils/confetti.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -265,6 +267,7 @@ async function displayResults(leaderboard: { name: string; points: number }[]) {
   );
 
   let ui: TextUi | undefined;
+  let fui: FinalResultsUi | undefined;
   const showText = (text: string, start: number, end: number) => {
     setTimeout(() => {
       ui = new TextUi(document.body, text);
@@ -274,21 +277,55 @@ async function displayResults(leaderboard: { name: string; points: number }[]) {
       ui = undefined;
     }, end);
   };
+  const showPlace = (
+    rank: number,
+    name: string,
+    points: number,
+    start: number,
+    nameTime: number,
+    end: number,
+  ) => {
+    setTimeout(() => {
+      fui = new FinalResultsUi(document.body, rank, name, points);
+    }, start);
+    setTimeout(() => {
+      fui?.showName();
+    }, nameTime);
+    setTimeout(() => {
+      shortConfettiBlast();
+      if (rank === 1) {
+        longConfetti();
+      }
+    }, nameTime + 300);
+    setTimeout(() => {
+      fui?.remove();
+      fui = undefined;
+    }, end);
+  };
 
-  showText("Results", 0, 3000);
-  showText(
-    `3rd Place: ${fixedLeaderboard[2].name.substring(0, 25)} (${Math.round(fixedLeaderboard[2].points)})`,
+  showText("Results", 0, 2000);
+  showPlace(
+    3,
+    fixedLeaderboard[2].name,
+    Math.round(fixedLeaderboard[2].points),
+    2000,
     3500,
-    7000,
+    6000,
   );
-  showText(
-    `2nd Place: ${fixedLeaderboard[1].name.substring(0, 25)} (${Math.round(fixedLeaderboard[1].points)})`,
+  showPlace(
+    2,
+    fixedLeaderboard[1].name,
+    Math.round(fixedLeaderboard[1].points),
+    6000,
     7500,
-    11000,
+    10000,
   );
-  showText("Drumroll...", 12000, 13500);
-  showText(
-    `1st Place: ${fixedLeaderboard[0].name.substring(0, 25)} (${Math.round(fixedLeaderboard[0].points)})`,
+  showText("Pause for dramatic effect...", 10500, 12000);
+  showPlace(
+    1,
+    fixedLeaderboard[0].name,
+    Math.round(fixedLeaderboard[0].points),
+    12000,
     13500,
     15500,
   );

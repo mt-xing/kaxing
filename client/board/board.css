@@ -715,7 +715,8 @@ audio {
     font-size: 12vh;
 }
 
-.questionIntro .questionNum {
+.questionIntro .questionNum,
+.finalResult .rankNum {
     position: absolute;
     display: flex;
     align-items: center;
@@ -812,4 +813,36 @@ audio {
     left: 1em;
     opacity: 0;
     transition: opacity 2s ease-in-out;
+}
+
+.finalResult {
+    position: relative;
+    transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.finalResult h2 {
+    font-size: 15vh;
+    margin: 0;
+    opacity: 0;
+    transform: scale(0);
+    max-width: 90vw;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    transition: transform 0.5s cubic-bezier(0.680, -0.550, 0.265, 1.550), opacity 0.5s cubic-bezier(0.680, -0.550, 0.265, 1.550);
+}
+
+.showName .finalResult h2 {
+    opacity: 1;
+    transform: scale(1);
+}
+
+.finalResult p {
+    margin: 0;
+    opacity: 0;
+    transition: opacity 0.6s ease-in-out 0.4s;
+}
+
+.showName .finalResult p {
+    opacity: 1;
 }
