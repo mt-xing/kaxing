@@ -846,3 +846,85 @@ audio {
 .showName .finalResult p {
     opacity: 1;
 }
+
+.credits {
+    position: absolute;
+    height: 80vh;
+    width: 25vw;
+    right: 2vw;
+    top: 10vh;
+    box-sizing: border-box;
+    padding: 2vw;
+    text-align: center;
+
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 1s cubic-bezier(0.680, 0, 0.265, 1.550);
+
+    overflow-y: hidden;
+}
+
+.credits.show {
+    transform: scaleX(1);
+}
+
+.credits .scroll {
+    position: absolute;
+    bottom: 0;
+    left: 0; right: 0;
+    transform: translateY(100%);
+    transition: transform 50s ease-out;
+}
+
+.credits.show .scroll {
+    transform: translateY(0);
+}
+
+.credits h1 {
+    font-weight: 900;
+    font-size: 5vw;
+    margin-top: 0;
+}
+
+.credits .title {
+    margin-top: 20vh;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+.credits .main {
+    font-size: 2em;
+}
+
+.credits .main.sub {
+    font-size: 1.5em;
+    margin: 0;
+}
+
+.credits .smallMain {
+    font-size: 1.1em;
+}
+
+.credits .final {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    height: 80vh;
+    width: 100%;
+    font-size: 1.2vw;
+}
+
+.credits .final .logo {
+    font-weight: 900;
+}
+
+.credits .final .medium {
+    font-size: 1.5vw;
+}
+
+.credits .final .big {
+    font-size: 1.75vw;
+    margin-top: 10vh;
+    font-weight: bold;
+}

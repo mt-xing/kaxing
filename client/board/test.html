@@ -22,7 +22,7 @@
 
         <script type="module">
           import MapQuestionBoard from "./ui/questions/map.js";
-          import FinalResultsUi from "./ui/finalResults.js";
+          import CreditsUi from "./ui/credits.js";
           window.addEventListener('load', () => {
             // const b = new MapQuestionBoard(document.body, {
             //   "t": "map",
@@ -48,16 +48,7 @@
             //     wrongCoords: [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]],
             //   }, 20);
             // }, 4000);
-            const b = new FinalResultsUi(document.body, 1, "Your Name Goes Here And Is Very Long ddddddddddddddddddddd", 2000);
-
-            setTimeout(() => {
-              b.showName();
-
-              const count = 200,
-              defaults = {
-                origin: { y: 0.7 },
-              };
-            }, 2000);
+            new CreditsUi(document.body);
           })
         </script>
     </head>
