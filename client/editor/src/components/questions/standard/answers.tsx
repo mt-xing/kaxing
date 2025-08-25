@@ -3,7 +3,7 @@ import "./standard.css";
 import { useCallback } from "react";
 
 export type StandardQuestionEditorProps = {
-  q: Extract<Question, { t: "standard" }>;
+  q: Extract<Question, { t: "standard" }> | Extract<Question, { t: "multi" }>;
   modify: (newQ: Question) => void;
 };
 
@@ -26,6 +26,10 @@ function SingleAnswer(props: StandardQuestionEditorProps & { i: number }) {
     (evt: React.ChangeEvent<HTMLInputElement>) => {
       if (typeof q.correct === "number") {
         if (q.correct === i) {
+          return;
+        }
+        if (q.t === "multi") {
+          console.error("Mismatch multi-standard answer types");
           return;
         }
         modify({ ...q, correct: i });

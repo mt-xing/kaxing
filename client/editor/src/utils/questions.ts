@@ -5,7 +5,7 @@ export function getQuestionShortString(q: Question["t"]): string {
     case "standard":
       return "Multiple Choice";
     case "multi":
-      return "Multi-Select";
+      return "Select All";
     case "tf":
       return "True or False";
     case "type":

@@ -40,6 +40,18 @@ export default function QuestionEditor(props: QuestionEditorProps) {
       };
       switch (tentativeType) {
         case "standard":
+          if (oldQuestion.t === "multi") {
+            return {
+              ...oldQuestion,
+              t: "standard",
+              correct:
+                oldQuestion.correct.length > 0
+                  ? oldQuestion.correct.length > 1
+                    ? oldQuestion.correct
+                    : oldQuestion.correct[0]
+                  : 0,
+            };
+          }
           return {
             ...base,
             t: "standard",
@@ -53,7 +65,21 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             correct: true,
           };
         case "multi":
-          throw new Error("Unimplemented");
+          if (oldQuestion.t === "standard") {
+            return {
+              ...oldQuestion,
+              t: "multi",
+              correct: Array.isArray(oldQuestion.correct)
+                ? oldQuestion.correct
+                : [oldQuestion.correct],
+            };
+          }
+          return {
+            ...base,
+            t: "multi",
+            answers: ["", "", "", ""],
+            correct: [0],
+          };
         case "type":
           return {
             ...base,
@@ -129,7 +155,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             </p>
           </div>
         )}
-        {q.t === "standard" ? (
+        {q.t === "standard" || q.t === "multi" ? (
           <StandardQuestionAnswers q={q} modify={modify} />
         ) : null}
         {q.t === "tf" ? <TfQuestionAnswers q={q} modify={modify} /> : null}
@@ -149,6 +175,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
             Change type:{" "}
             <select value={tentativeType} onChange={changeTentativeType}>
               <option value="standard">Multiple Choice</option>
+              <option value="multi">Select All</option>
               <option value="tf">True or False</option>
               <option value="type">Type Answer</option>
               <option value="map">Map</option>
@@ -202,7 +229,7 @@ export default function QuestionEditor(props: QuestionEditorProps) {
                 sec
               </label>
             </p>
-            {q.t === "standard" ? (
+            {q.t === "standard" || q.t === "multi" ? (
               <StandardQuestionSidebar q={q} modify={modify} />
             ) : null}
             {q.t === "type" ? (
