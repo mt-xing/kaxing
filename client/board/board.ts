@@ -303,22 +303,22 @@ async function displayResults(leaderboard: { name: string; points: number }[]) {
     }, end);
   };
 
-  showText("Results", 0, 2000);
+  showText("Results", 0, 2500);
   showPlace(
     3,
     fixedLeaderboard[2].name,
     Math.round(fixedLeaderboard[2].points),
-    2000,
-    3500,
-    6000,
+    2500,
+    4000,
+    6500,
   );
   showPlace(
     2,
     fixedLeaderboard[1].name,
     Math.round(fixedLeaderboard[1].points),
-    6000,
-    7500,
-    10000,
+    6500,
+    8000,
+    10500,
   );
   showText("Pause for dramatic effect...", 10500, 12000);
   showPlace(
