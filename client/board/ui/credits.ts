@@ -24,6 +24,13 @@ export default class CreditsUi {
     wrap.appendChild(Dom.p("- CS 2110 Spring 2025", "main sub"));
     wrap.appendChild(Dom.p("(DIS 206 and DIS 212)", "main sub"));
 
+    wrap.appendChild(Dom.p("Open Source Libraries", "title"));
+    wrap.appendChild(Dom.p("- socket.io", "main sub"));
+    wrap.appendChild(Dom.p("- OpenStreetMap", "main sub"));
+    wrap.appendChild(Dom.p("- Leaflet", "main sub"));
+    wrap.appendChild(Dom.p("- qrcode.js", "main sub"));
+    wrap.appendChild(Dom.p("- tsParticles", "main sub"));
+
     wrap.appendChild(Dom.p("Additional Special Thanks", "title"));
     wrap.appendChild(Dom.p("Goldman Sachs", "main"));
     wrap.appendChild(

@@ -26,6 +26,7 @@ import { downloadFile, generateGameSummaryCsv } from "./utils/summary.js";
 import { assertUnreachable } from "./utils/assert.js";
 import FinalResultsUi from "./ui/finalResults.js";
 import { longConfetti, shortConfettiBlast } from "./utils/confetti.js";
+import CreditsUi from "./ui/credits.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -330,10 +331,15 @@ async function displayResults(leaderboard: { name: string; points: number }[]) {
     15500,
   );
   setTimeout(() => {
-    new Leaderboard(
+    const l = new Leaderboard(
       document.body,
       leaderboard.map((x) => ({ ...x, diff: 0 })),
     );
+
+    setTimeout(() => {
+      l.slideLeft();
+      new CreditsUi(document.body);
+    }, 1000);
   }, 16000);
 }
 

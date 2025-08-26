@@ -3,11 +3,14 @@ import Dom from "../../dom.js";
 export default class Leaderboard {
   #wrap: HTMLElement;
 
+  #innerWrap: HTMLElement;
+
   constructor(
     parent: HTMLElement,
     data: { name: string; points: number; diff: number }[],
   ) {
     const wrap = Dom.div(Dom.h2("Leaderboard"), "leaderboard");
+    this.#innerWrap = wrap;
 
     const ol = document.createElement("OL");
     const list: HTMLElement[] = [];
@@ -36,13 +39,17 @@ export default class Leaderboard {
 
     this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {
-      wrap.style.transform = "translateY(0)";
+      wrap.classList.add("show");
       list.forEach((a, i) => {
         a.setAttribute("style", `--delay-time: ${(i * 125) / 1000}s`);
         // eslint-disable-next-line no-param-reassign
         a.style.transform = "translateY(0)";
       });
     });
+  }
+
+  slideLeft() {
+    this.#innerWrap.classList.add("slideLeft");
   }
 
   async remove() {

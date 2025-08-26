@@ -21,8 +21,9 @@
         <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 
         <script type="module">
-          import MapQuestionBoard from "./ui/questions/map.js";
+          // import MapQuestionBoard from "./ui/questions/map.js";
           import CreditsUi from "./ui/credits.js";
+          import Leaderboard from "./ui/leaderboard.js";
           window.addEventListener('load', () => {
             // const b = new MapQuestionBoard(document.body, {
             //   "t": "map",
@@ -48,7 +49,12 @@
             //     wrongCoords: [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]],
             //   }, 20);
             // }, 4000);
-            new CreditsUi(document.body);
+            // { name: string; points: number; diff: number }[]
+            const l = new Leaderboard(document.body, [{name: "a", points: 9999, diff: 0}, {name: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", points: 2000, diff: 0}, {name: "c", points: 1, diff: 0}]);
+            setTimeout(() => {
+              l.slideLeft();
+              new CreditsUi(document.body);
+            }, 1000);
           })
         </script>
     </head>
