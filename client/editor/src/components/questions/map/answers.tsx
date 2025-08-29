@@ -164,61 +164,65 @@ export default function MapQuestionAnswers(props: MapQuestionEditorProps) {
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
-        {q.correct.matches.map((match) => (
-          <Circle
-            center={match.center}
-            pathOptions={{ fillColor: "blue" }}
-            radius={match.radius}
-            key={JSON.stringify(match.center)}
-          >
-            <Popup>
-              <button
-                className="bigbtn popupBtn"
-                onClick={() => {
-                  modify({
-                    ...q,
-                    correct: {
-                      ...q.correct,
-                      matches: q.correct.matches.filter(
-                        (candidate) =>
-                          candidate.radius !== match.radius ||
-                          candidate.center !== match.center,
-                      ),
-                    },
-                  });
-                }}
+        {addState !== null
+          ? null
+          : q.correct.matches.map((match) => (
+              <Circle
+                center={match.center}
+                pathOptions={{ fillColor: "blue" }}
+                radius={match.radius}
+                key={JSON.stringify(match.center)}
               >
-                Delete This Range
-              </button>
-            </Popup>
-          </Circle>
-        ))}
-        {q.correct.representativeAnswers.map((answer) => (
-          <Marker position={answer} key={`${answer[0]}-${answer[1]}`}>
-            <Popup>
-              <button
-                style={{ position: "relative", zIndex: 2 }}
-                className="bigbtn"
-                onClick={() => {
-                  modify({
-                    ...q,
-                    correct: {
-                      ...q.correct,
-                      representativeAnswers:
-                        q.correct.representativeAnswers.filter(
-                          (candidate) =>
-                            candidate[0] !== answer[0] ||
-                            candidate[1] !== answer[1],
-                        ),
-                    },
-                  });
-                }}
-              >
-                Delete This Pin
-              </button>
-            </Popup>
-          </Marker>
-        ))}
+                <Popup>
+                  <button
+                    className="bigbtn popupBtn"
+                    onClick={() => {
+                      modify({
+                        ...q,
+                        correct: {
+                          ...q.correct,
+                          matches: q.correct.matches.filter(
+                            (candidate) =>
+                              candidate.radius !== match.radius ||
+                              candidate.center !== match.center,
+                          ),
+                        },
+                      });
+                    }}
+                  >
+                    Delete This Range
+                  </button>
+                </Popup>
+              </Circle>
+            ))}
+        {addState !== null
+          ? null
+          : q.correct.representativeAnswers.map((answer) => (
+              <Marker position={answer} key={`${answer[0]}-${answer[1]}`}>
+                <Popup>
+                  <button
+                    style={{ position: "relative", zIndex: 2 }}
+                    className="bigbtn"
+                    onClick={() => {
+                      modify({
+                        ...q,
+                        correct: {
+                          ...q.correct,
+                          representativeAnswers:
+                            q.correct.representativeAnswers.filter(
+                              (candidate) =>
+                                candidate[0] !== answer[0] ||
+                                candidate[1] !== answer[1],
+                            ),
+                        },
+                      });
+                    }}
+                  >
+                    Delete This Pin
+                  </button>
+                </Popup>
+              </Marker>
+            ))}
         {addState && addState.t === "range radius" ? (
           <Marker position={addState.center} icon={redIcon} />
         ) : null}
