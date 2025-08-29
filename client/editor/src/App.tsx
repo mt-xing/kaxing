@@ -34,6 +34,7 @@ function App() {
     const saveFile: KaXingSaveFile = {
       game: "kaxing",
       version: "1.0.0",
+      title: "KaXing Game",
       questions,
     };
     if (fileHandle === undefined) {
