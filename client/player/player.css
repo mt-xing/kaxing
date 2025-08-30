@@ -111,7 +111,7 @@ form {
     transform: translateY(100vh);
     transform: translateY(100svh);
     text-align: center;
-    transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000);
+    transition: transform 0.5s cubic-bezier(0.165, 0.840, 0.440, 1.000) 0.25s;
 }
 
 .questionRes h2, .questionRes p {
