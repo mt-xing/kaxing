@@ -11,8 +11,11 @@ import { QuestionState } from "../shared/state.js";
 import Communicator from "./comms.js";
 import { GameStatePayload } from "./payloads.js";
 import { assertUnreachable } from "../shared/util.js";
+import { KaXingSaveFile } from "./fileFormat.js";
 
 export default class KaXingGame {
+  #fullGameConfig: KaXingSaveFile;
+
   #questions: Question[];
 
   #questionNumbers: number[];
@@ -43,13 +46,14 @@ export default class KaXingGame {
 
   constructor(
     namespace: io.Namespace,
-    questions: Question[],
+    gameConfig: KaXingSaveFile,
     boardId: string,
     controllerId: string,
     players: Map<string, Player>,
   ) {
-    this.#questions = questions;
-    this.#questionResults = questions.map(initResult);
+    this.#fullGameConfig = gameConfig;
+    this.#questions = gameConfig.questions;
+    this.#questionResults = gameConfig.questions.map(initResult);
     this.#controllerId = controllerId;
     this.#players = players;
     this.#questionState = "blank";
@@ -67,7 +71,7 @@ export default class KaXingGame {
       boardId,
       controllerId,
       players,
-      questions,
+      gameConfig.questions,
       this.#questionNumbers,
     );
   }
@@ -76,9 +80,27 @@ export default class KaXingGame {
    * Add a player to the game
    * @returns Whether joining was successful or not
    */
-  addPlayer(id: string, name: string): boolean {
+  addPlayer(
+    id: string,
+    name: string,
+    addlQuestions?: string[],
+  ):
+    | { t: "status"; status: boolean }
+    | { t: "questions"; questions: string[] } {
     if (this.#players.has(id)) {
-      return false;
+      return { t: "status", status: false };
+    }
+
+    if (this.#fullGameConfig.addlQuestions) {
+      if (
+        !addlQuestions ||
+        addlQuestions.length !== this.#fullGameConfig.addlQuestions.length
+      ) {
+        return {
+          t: "questions",
+          questions: this.#fullGameConfig.addlQuestions,
+        };
+      }
     }
 
     this.#players.set(id, {
@@ -87,9 +109,10 @@ export default class KaXingGame {
       answers: [],
       record: [],
       answerTimes: [],
+      addlQuestions,
     });
     this.#comms.addPlayer(id, name);
-    return true;
+    return { t: "status", status: true };
   }
 
   isController(socketId: string) {

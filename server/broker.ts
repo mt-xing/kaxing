@@ -1,7 +1,7 @@
 import * as io from "socket.io";
 import { Player } from "../shared/player.js";
-import { Question } from "./question.js";
 import { ControllerSuccessResponse, KickPlayerPayload } from "./payloads.js";
+import { KaXingSaveFile } from "./fileFormat.js";
 
 export default class Broker {
   #namespace: io.Namespace;
@@ -14,7 +14,7 @@ export default class Broker {
 
   #players: Map<string, Player>;
 
-  #questions: Question[];
+  #questions: KaXingSaveFile;
 
   /**
    * Create a helper to setup a new game
@@ -23,7 +23,7 @@ export default class Broker {
     namespace: io.Namespace,
     gameCode: string,
     hostPlayerSocketId: string,
-    questions: Question[],
+    questions: KaXingSaveFile,
   ) {
     this.#namespace = namespace;
     this.#boardSocketId = hostPlayerSocketId;
@@ -47,7 +47,7 @@ export default class Broker {
         name: x[1].name,
         id: x[0],
       })),
-      numQuestions: this.#questions.length,
+      numQuestions: this.#questions.questions.length,
       gameCode: this.#gameCode,
     };
     this.#namespace
@@ -64,9 +64,27 @@ export default class Broker {
    * Add a player to the game
    * @returns Whether joining was successful or not
    */
-  addPlayer(id: string, name: string): boolean {
+  addPlayer(
+    id: string,
+    name: string,
+    addlQuestions?: string[],
+  ):
+    | { t: "status"; status: boolean }
+    | { t: "questions"; questions: string[] } {
     if (this.#players.has(id)) {
-      return false;
+      return { t: "status", status: false };
+    }
+
+    if (this.#questions.addlQuestions) {
+      if (
+        !addlQuestions ||
+        addlQuestions.length !== this.#questions.addlQuestions.length
+      ) {
+        return {
+          t: "questions",
+          questions: this.#questions.addlQuestions,
+        };
+      }
     }
 
     this.#players.set(id, {
@@ -75,6 +93,7 @@ export default class Broker {
       answers: [],
       record: [],
       answerTimes: [],
+      addlQuestions,
     });
     this.#namespace
       .to(this.#boardSocketId)
@@ -84,7 +103,7 @@ export default class Broker {
         .to(this.#controlSocketId)
         .emit("join", JSON.stringify({ id, name }));
     }
-    return true;
+    return { t: "status", status: true };
   }
 
   /**

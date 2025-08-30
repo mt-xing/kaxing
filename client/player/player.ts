@@ -15,6 +15,7 @@ import MapQuestion from "./ui/questions/map.js";
 import StandingsUi from "./ui/standings.js";
 import FinalUi from "./ui/final.js";
 import MultiQuestion from "./ui/questions/multi.js";
+import JoinQuestions from "./ui/joinQuestions.js";
 
 const socket = new Socket("http://localhost:8080/");
 
@@ -29,13 +30,69 @@ function joinGame(): Promise<boolean> {
         socket.on("joinYes", (msg) => {
           r(true);
           socket.off("joinYes");
+          socket.off("joinQuestions");
           socket.off("joinNo");
           resolve(msg === "inProgress");
+        });
+        socket.on("joinQuestions", (msg) => {
+          const questions = JSON.parse(msg) as string[];
+          r(true);
+          socket.off("joinYes");
+          socket.off("joinQuestions");
+          socket.off("joinNo");
+          // eslint-disable-next-line @typescript-eslint/no-use-before-define
+          resolve(joinGameQuestions(id, name, questions));
         });
         socket.on("joinNo", () => {
           r(false);
           socket.off("joinYes");
+          socket.off("joinQuestions");
           socket.off("joinNo");
+        });
+        socket.emit("join", JSON.stringify(payload));
+      });
+    });
+  });
+}
+function joinGameQuestions(
+  id: string,
+  name: string,
+  questions: string[],
+): Promise<boolean> {
+  return new Promise((resolve) => {
+    new JoinQuestions(document.body, questions, (responses) => {
+      return new Promise((r) => {
+        const payload: JoinRoomPayload = {
+          id,
+          name,
+          addlQResponses: responses,
+        };
+        socket.on("joinYes", (msg) => {
+          r(true);
+          socket.off("joinYes");
+          socket.off("joinQuestions");
+          socket.off("joinNo");
+          resolve(msg === "inProgress");
+        });
+        socket.on("joinQuestions", (msg) => {
+          // Should never happen but try again if it does
+          const newQuestions = JSON.parse(msg) as string[];
+          r(true);
+          socket.off("joinYes");
+          socket.off("joinQuestions");
+          socket.off("joinNo");
+          resolve(joinGameQuestions(id, name, newQuestions));
+        });
+        socket.on("joinNo", () => {
+          // Something has gone horribly wrong. Bail and start over.
+          r(false);
+          socket.off("joinYes");
+          socket.off("joinQuestions");
+          socket.off("joinNo");
+          setTimeout(() => {
+            // @ts-ignore
+            window.location = window.location.pathname;
+          }, 1000);
         });
         socket.emit("join", JSON.stringify(payload));
       });

@@ -8,6 +8,7 @@ export type Player = {
   answerTimes: number[];
   /** Previous rank number (NOT zero-indexed) */
   previousRank?: number;
+  addlQuestions?: string[];
 };
 
 export function awardPoints(

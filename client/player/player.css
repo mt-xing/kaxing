@@ -357,3 +357,12 @@ form {
     text-align: center;
     font-size: 3vh;
 }
+
+.joinQuestionsWrap {
+    max-height: 100svh;
+    overflow-y: auto;
+    padding: 1em;
+    box-sizing: border-box;
+    max-width: 600px;
+    transition: transform 0.5s cubic-bezier(0.175, 0.885, 0.320, 1.275) 0.5s;
+}

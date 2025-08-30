@@ -23,6 +23,7 @@ export type ControllerSuccessResponse = {
 export type JoinRoomPayload = {
   name: string;
   id: string;
+  addlQResponses?: string[];
 };
 
 export type KickPlayerPayload = {

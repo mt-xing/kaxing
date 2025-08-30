@@ -149,15 +149,22 @@ export default class KaXingServer {
    */
   #joinRoom(socket: io.Socket, roomInfo: string, callback: () => void) {
     callback();
-    const { id, name } = JSON.parse(roomInfo) as JoinRoomPayload;
+    const { id, name, addlQResponses } = JSON.parse(
+      roomInfo,
+    ) as JoinRoomPayload;
     const game = this.#setups.get(id);
     if (game === undefined) {
       // Try to rejoin game in progress
       const inProgressGame = this.#games.get(id);
-      if (inProgressGame?.addPlayer(socket.id, name)) {
+      const result = inProgressGame?.addPlayer(socket.id, name, addlQResponses);
+      if (result?.t === "status" && result.status) {
         socket.emit("joinYes", "inProgress");
         socket.join(id);
         this.#socketRoom.set(socket.id, id);
+        return;
+      }
+      if (result?.t === "questions") {
+        socket.emit("joinQuestions", JSON.stringify(result.questions));
         return;
       }
 
@@ -167,14 +174,17 @@ export default class KaXingServer {
       socket.emit("joinNo", JSON.stringify(errorPayload));
       return;
     }
-    const addResult = game.addPlayer(socket.id, name);
-    if (!addResult) {
+    const addResult = game.addPlayer(socket.id, name, addlQResponses);
+    if (addResult.t === "status" && !addResult.status) {
       socket.emit(
         "joinNo",
         JSON.stringify({
           reason: "This game is no longer accepting more players",
         }),
       );
+    } else if (addResult.t === "questions") {
+      socket.emit("joinQuestions", JSON.stringify(addResult.questions));
+      return;
     } else {
       socket.emit("joinYes");
       socket.join(id);

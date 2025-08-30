@@ -22,9 +22,13 @@ function toCSV(table: string[][]) {
 export function generateGameSummaryCsv(
   questionNumbers: number[],
   players: Player[],
+  addlQuestions?: string[],
 ) {
   const table: string[][] = [];
   const headerRow = ["Player", "Rank", "Final Score"];
+  addlQuestions?.forEach((question) => {
+    headerRow.push(question);
+  });
   questionNumbers.forEach((num, i) => {
     if (num === -1) {
       headerRow.push(`S${i + 1} (Slide)`);
@@ -43,6 +47,9 @@ export function generateGameSummaryCsv(
     .sort((a, b) => b.score - a.score)
     .forEach((player, playerRank) => {
       const playerRow = [player.name, `${playerRank + 1}`, `${player.score}`];
+      addlQuestions?.forEach((_, i) => {
+        playerRow.push(player.addlQuestions?.[i] ?? "No response");
+      });
       questionNumbers.forEach((qNum, sNum) => {
         if (qNum === -1) {
           playerRow.push("-");

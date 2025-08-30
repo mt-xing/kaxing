@@ -26,18 +26,19 @@ import { assertUnreachable } from "./utils/assert.js";
 import FinalResultsUi from "./ui/finalResults.js";
 import { longConfetti, shortConfettiBlast } from "./utils/confetti.js";
 import CreditsUi from "./ui/credits.js";
+import { KaXingSaveFile } from "../fileFormat.js";
 
 const socket = new Socket("http://localhost:8080/");
 
-function uploadQuestions(): Promise<Question[]> {
+function uploadQuestions(): Promise<KaXingSaveFile> {
   return new Promise((resolve) => {
     new UploadQuestions(document.body, (file) => {
-      resolve(file.questions);
+      resolve(file);
     });
   });
 }
 
-function getGameCode(questions: Question[]): Promise<string> {
+function getGameCode(questions: KaXingSaveFile): Promise<string> {
   return new Promise((r) => {
     socket.emit("createRoom", JSON.stringify(questions));
     socket.on("createYes", (x) => {
@@ -108,9 +109,10 @@ function homeScreen(code: string): Promise<void> {
 }
 
 function gameScreen(
-  questions: Question[],
+  gameFile: KaXingSaveFile,
   gameCode: string,
 ): Promise<{ name: string; points: number }[]> {
+  const { questions } = gameFile;
   const footer = new PersistentFooter(document.body, gameCode);
 
   return new Promise((r) => {
@@ -230,6 +232,7 @@ function gameScreen(
                 const csv = generateGameSummaryCsv(
                   payload.questionNums,
                   payload.players,
+                  gameFile.addlQuestions,
                 );
                 downloadFile("kaxing_game_summary.csv", csv);
               },
