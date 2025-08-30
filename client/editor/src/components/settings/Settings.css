@@ -1,0 +1,12 @@
+.settingsWrap {
+  margin: 1em 5em;
+}
+
+.settingsWrap input[type="text"] {
+  margin: 0.5em 1em;
+  text-align: left;
+}
+
+.settingsWrap ul input[type="text"] {
+  min-width: 60%;
+}

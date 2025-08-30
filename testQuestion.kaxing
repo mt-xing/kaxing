@@ -1,6 +1,8 @@
 {
   "game": "kaxing",
   "version": "1.0.0",
+  "title": "Test Questions",
+  "addlQuestions": ["What's your favorite color?"],
   "questions": 
 
 

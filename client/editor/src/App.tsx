@@ -7,9 +7,15 @@ import { downloadFile } from "./utils/upload";
 import QuestionCarousel from "./components/questionCarousel";
 import QuestionEditor from "./components/questions";
 import { getDefaultQuestion } from "./utils/questions";
+import Settings from "./components/settings";
 
 function App() {
   const [questions, setQuestions] = useState<Question[] | undefined>(undefined);
+  const [showSettings, setShowSettings] = useState(true);
+  const [title, setTitle] = useState("");
+  const [addlQuestions, setAddlQuestions] = useState<string[] | undefined>(
+    undefined,
+  );
   const [selectedQuestion, setSelectedQuestion] = useState(0);
   const [fileHandle, setFileHandle] = useState<
     FileSystemFileHandle | undefined
@@ -18,7 +24,10 @@ function App() {
   const loadExisting = useCallback(
     (f: FileSystemFileHandle, game: KaXingSaveFile) => {
       setQuestions(game.questions);
+      setTitle(game.title);
+      setAddlQuestions(game.addlQuestions);
       setFileHandle(f);
+      setShowSettings(false);
     },
     [],
   );
@@ -34,7 +43,8 @@ function App() {
     const saveFile: KaXingSaveFile = {
       game: "kaxing",
       version: "1.0.0",
-      title: "KaXing Game",
+      title,
+      addlQuestions,
       questions,
     };
     if (fileHandle === undefined) {
@@ -48,7 +58,7 @@ function App() {
       ws.write(JSON.stringify(saveFile));
       ws.close();
     });
-  }, [questions, fileHandle]);
+  }, [questions, fileHandle, title, addlQuestions]);
 
   useEffect(() => {
     const saveHandler = (evt: KeyboardEvent) => {
@@ -94,14 +104,33 @@ function App() {
     setSelectedQuestion((i) => (i >= l - 1 ? l - 2 : i));
   }, [selectedQuestion, questions?.length]);
 
+  if (questions === undefined) {
+    return <StartScreen startNew={newGame} loadExisting={loadExisting} />;
+  }
+
   return (
     <>
-      {questions === undefined ? (
-        <StartScreen startNew={newGame} loadExisting={loadExisting} />
+      {showSettings ? (
+        <Settings
+          startName={title}
+          startAddlQuestions={addlQuestions}
+          close={(newName, additionalQuestions) => {
+            setTitle(newName);
+            setAddlQuestions(additionalQuestions);
+            setShowSettings(false);
+          }}
+        />
       ) : (
         <main className="main">
           <header className="header">
             <span>KaXing</span>
+            <button
+              className="bigbtn"
+              onClick={() => setShowSettings(true)}
+              style={{ marginRight: "1em" }}
+            >
+              Settings
+            </button>
             <button className="bigbtn" onClick={saveGame}>
               Save
             </button>
