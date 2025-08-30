@@ -8,7 +8,6 @@ import {
 } from "../payloads.js";
 import ControllerJoin from "./ui/controllerJoin.js";
 import { Question } from "../question.js";
-import { KaXingSaveFile } from "../fileFormat.js";
 import UploadQuestions from "./ui/uploadQuestions.js";
 import StandardQuestionBoard from "./ui/questions/standard.js";
 import Leaderboard from "./ui/leaderboard.js";
@@ -32,16 +31,8 @@ const socket = new Socket("http://localhost:8080/");
 
 function uploadQuestions(): Promise<Question[]> {
   return new Promise((resolve) => {
-    new UploadQuestions(document.body, (text) => {
-      return new Promise((r) => {
-        const saveFile: KaXingSaveFile = JSON.parse(text);
-        const { questions } = saveFile;
-        if (!Array.isArray(questions)) {
-          r(false);
-        }
-        r(true);
-        resolve(questions);
-      });
+    new UploadQuestions(document.body, (file) => {
+      resolve(file.questions);
     });
   });
 }

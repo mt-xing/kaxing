@@ -1,4 +1,5 @@
 import Dom from "../../dom.js";
+import { KaXingSaveFile } from "../../fileFormat.js";
 
 async function readSelectedFile(file: File): Promise<string> {
   const reader = new FileReader();
@@ -25,13 +26,28 @@ async function readSelectedFile(file: File): Promise<string> {
   });
 }
 
+async function verifyFile(file: File): Promise<KaXingSaveFile | undefined> {
+  const text = await readSelectedFile(file);
+  try {
+    const saveFile: KaXingSaveFile = JSON.parse(text);
+    const { title, questions } = saveFile;
+    if (!Array.isArray(questions)) {
+      return undefined;
+    }
+    if (!title) {
+      return undefined;
+    }
+    return saveFile;
+  } catch (e) {
+    console.warn("Failed to parse", e);
+    return undefined;
+  }
+}
+
 export default class UploadQuestions {
   #wrap: HTMLElement;
 
-  constructor(
-    parent: HTMLElement,
-    gotFile: (text: string) => Promise<boolean>,
-  ) {
+  constructor(parent: HTMLElement, gotFile: (game: KaXingSaveFile) => void) {
     const wrap = Dom.div(undefined, "controllerWrap");
     wrap.appendChild(Dom.h2("Choose Questions"));
     wrap.appendChild(Dom.p("Upload your question bank for this game"));
@@ -61,7 +77,11 @@ export default class UploadQuestions {
       input.files = evt.dataTransfer.files;
       const { files } = input;
       if (files && files.length > 0) {
-        label.textContent = files[0].name;
+        verifyFile(files[0]).then((x) => {
+          if (x) {
+            label.textContent = x.title;
+          }
+        });
       } else {
         label.textContent = "Drop File Here or Click to Select";
       }
@@ -78,7 +98,11 @@ export default class UploadQuestions {
       const files = (evt.target as HTMLInputElement | null)?.files;
       console.log("File changed", files);
       if (files && files.length > 0) {
-        label.textContent = files[0].name;
+        verifyFile(files[0]).then((x) => {
+          if (x) {
+            label.textContent = x.title;
+          }
+        });
       } else {
         label.textContent = "Drop File Here or Click to Select";
       }
@@ -93,9 +117,9 @@ export default class UploadQuestions {
           return;
         }
         btn.disabled = true;
-        const text = await readSelectedFile(fileList[0]);
-        const result = await gotFile(text);
+        const result = await verifyFile(fileList[0]);
         if (result) {
+          gotFile(result);
           this.remove();
         } else {
           // eslint-disable-next-line no-alert
