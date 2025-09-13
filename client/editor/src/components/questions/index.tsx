@@ -244,13 +244,13 @@ export default function QuestionEditor(props: QuestionEditorProps) {
                 currentZoom={mapCoords[2]}
               />
             ) : null}
-            <p>
-              <button onClick={deleteQ} className="bigbtn">
-                Delete Question
-              </button>
-            </p>
           </>
         )}
+        <p>
+          <button onClick={deleteQ} className="bigbtn">
+            Delete Question
+          </button>
+        </p>
       </section>
     </>
   );
