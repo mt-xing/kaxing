@@ -205,7 +205,7 @@ export default class KaXingGame {
     setTimeout(() => {
       this.#questionState = "questionMain";
       this.#comms.sendShowQuestionMain(this.#currentQuestion);
-    }, 2000);
+    }, 1500);
   }
 
   showAnswers() {
