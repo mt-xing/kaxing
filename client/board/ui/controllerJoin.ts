@@ -1,11 +1,18 @@
 import Dom from "../../dom.js";
+import { KaXingSaveFile } from "../../fileFormat.js";
+import { spawnWindow } from "../utils/sideDispComm.js";
 
 declare const QRCode: any;
 
 export default class ControllerJoin {
   #wrap: HTMLElement;
 
-  constructor(parent: HTMLElement, connect: (pwd: string) => Promise<boolean>) {
+  constructor(
+    parent: HTMLElement,
+    connect: (pwd: string) => Promise<boolean>,
+    questions: KaXingSaveFile,
+    code: string,
+  ) {
     const wrap = Dom.div(undefined, "controllerWrap");
     wrap.appendChild(Dom.h2("Pair Controller"));
     const instrWrap = Dom.p("Go to ");
@@ -47,6 +54,19 @@ export default class ControllerJoin {
     );
     form.appendChild(btn);
     wrap.appendChild(form);
+
+    const secondDispWrap = Dom.div(
+      Dom.button(
+        "Open second display for images",
+        () => {
+          secondDispWrap.parentElement?.removeChild(secondDispWrap);
+          spawnWindow(questions, code);
+        },
+        "bigbtn",
+      ),
+      "finalDownload visible",
+    );
+    wrap.appendChild(secondDispWrap);
 
     this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {

@@ -844,6 +844,11 @@ audio {
     transition: opacity 2s ease-in-out;
 }
 
+.finalDownload.visible {
+    opacity: 1;
+    transition: none;
+}
+
 .finalResult {
     position: relative;
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550);

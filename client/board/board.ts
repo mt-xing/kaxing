@@ -1,31 +1,12 @@
-import Home from "./ui/home.js";
-import Socket from "../player/socket.js";
-import {
-  ControllerJoinResponse,
-  GameStateBoardResponse,
-  JoinRoomPayload,
-  KickPlayerPayload,
-} from "../payloads.js";
+import { ControllerJoinResponse } from "../payloads.js";
 import ControllerJoin from "./ui/controllerJoin.js";
-import { Question } from "../question.js";
 import UploadQuestions from "./ui/uploadQuestions.js";
-import StandardQuestionBoard from "./ui/questions/standard.js";
-import Leaderboard from "./ui/leaderboard.js";
 import { startupAudio } from "./audio.js";
-import TFQuestionBoard from "./ui/questions/tf.js";
-import TextQuestionBoard from "./ui/questions/text.js";
-import TypeQuestionBoard from "./ui/questions/type.js";
-import MapQuestionBoard from "./ui/questions/map.js";
-import QuestionBoard from "./ui/questions/base.js";
-import PersistentFooter from "./ui/persistentFooter.js";
-import QuestionIntro from "./ui/questionIntro.js";
-import Dom from "../dom.js";
-import { downloadFile, generateGameSummaryCsv } from "./utils/summary.js";
-import { assertUnreachable } from "./utils/assert.js";
 import { KaXingSaveFile } from "../fileFormat.js";
-import displayResults from "./gameFlow/displayFinalResults.js";
+import mainGameLoop from "./gameFlow/gameBoard.js";
+import BoardSocket from "./utils/boardSocket.js";
 
-const socket = new Socket("http://localhost:8080/");
+const socket = new BoardSocket("http://localhost:8080/");
 
 function uploadQuestions(): Promise<KaXingSaveFile> {
   return new Promise((resolve) => {
@@ -53,201 +34,33 @@ function getGameCode(questions: KaXingSaveFile): Promise<string> {
   });
 }
 
-function pairController(): Promise<void> {
+function pairController(
+  questions: KaXingSaveFile,
+  code: string,
+): Promise<void> {
   return new Promise((resolve) => {
-    new ControllerJoin(document.body, (password) => {
-      return new Promise((r) => {
-        const payload: ControllerJoinResponse = { password };
-        socket.on("controllerClaimYes", () => {
-          r(true);
-          socket.off("controllerClaimYes");
-          socket.off("controllerClaimNo");
-          resolve();
+    new ControllerJoin(
+      document.body,
+      (password) => {
+        return new Promise((r) => {
+          const payload: ControllerJoinResponse = { password };
+          socket.on("controllerClaimYes", () => {
+            r(true);
+            socket.off("controllerClaimYes");
+            socket.off("controllerClaimNo");
+            resolve();
+          });
+          socket.on("controllerClaimNo", () => {
+            r(false);
+            socket.off("controllerClaimYes");
+            socket.off("controllerClaimNo");
+          });
+          socket.emit("controllerClaim", JSON.stringify(payload));
         });
-        socket.on("controllerClaimNo", () => {
-          r(false);
-          socket.off("controllerClaimYes");
-          socket.off("controllerClaimNo");
-        });
-        socket.emit("controllerClaim", JSON.stringify(payload));
-      });
-    });
-  });
-}
-
-function waitForGameToOpen(): Promise<void> {
-  return new Promise((resolve) => {
-    socket.on("openGame", () => {
-      socket.off("openGame");
-      resolve();
-    });
-  });
-}
-
-function homeScreen(code: string): Promise<void> {
-  return new Promise((r) => {
-    const h = new Home(document.body, code);
-    socket.on("join", (msg) => {
-      const payload = JSON.parse(msg) as JoinRoomPayload;
-      h.addPlayer(payload.id, payload.name);
-    });
-    socket.on("kick", (msg) => {
-      const payload = JSON.parse(msg) as KickPlayerPayload;
-      h.kickPlayer(payload.id);
-    });
-    socket.on("startGame", () => {
-      socket.off("join");
-      socket.off("startGame");
-      socket.off("kick");
-      h.remove();
-      r();
-    });
-  });
-}
-
-function gameScreen(
-  gameFile: KaXingSaveFile,
-  gameCode: string,
-): Promise<{ name: string; points: number }[]> {
-  const { questions } = gameFile;
-  const footer = new PersistentFooter(document.body, gameCode);
-
-  return new Promise((r) => {
-    let ui: { remove: () => Promise<void> } | undefined;
-    let questionUi: QuestionBoard | undefined;
-    let question: Question = questions[0];
-
-    socket.on("gameState", (msg) => {
-      const payload = JSON.parse(msg) as GameStateBoardResponse;
-      switch (payload.t) {
-        case "adjustScore":
-        case "displayAnswerResults":
-        case "showQuestion":
-        case "leaderboard":
-        case "gg":
-          break;
-        case "setupQ":
-          question = questions[payload.n];
-        // eslint-disable-next-line no-fallthrough
-        case "blank": {
-          if (ui) {
-            ui.remove();
-          }
-          ui = undefined;
-          break;
-        }
-        case "showQuestionIntro": {
-          ui?.remove();
-          ui = new QuestionIntro(document.body, payload.questionNum, question);
-          break;
-        }
-        case "showQuestionBoard": {
-          switch (question.t) {
-            case "standard":
-            case "multi": {
-              ui?.remove();
-              questionUi = new StandardQuestionBoard(
-                document.body,
-                question,
-                payload.numPlayers,
-              );
-              ui = questionUi;
-              break;
-            }
-            case "tf": {
-              ui?.remove();
-              questionUi = new TFQuestionBoard(
-                document.body,
-                question,
-                payload.numPlayers,
-              );
-              ui = questionUi;
-              break;
-            }
-            case "text": {
-              ui?.remove();
-              questionUi = new TextQuestionBoard(
-                document.body,
-                question,
-                payload.numPlayers,
-              );
-              ui = questionUi;
-              break;
-            }
-            case "type": {
-              ui?.remove();
-              questionUi = new TypeQuestionBoard(
-                document.body,
-                question,
-                payload.numPlayers,
-              );
-              ui = questionUi;
-              break;
-            }
-            case "map": {
-              ui?.remove();
-              questionUi = new MapQuestionBoard(
-                document.body,
-                question,
-                payload.numPlayers,
-              );
-              ui = questionUi;
-              break;
-            }
-            default:
-              assertUnreachable(question);
-          }
-          break;
-        }
-        case "showAnswers":
-          questionUi?.showAnswers();
-          break;
-        case "countdown":
-          questionUi?.startCountdown();
-          break;
-        case "answerReceived":
-          questionUi?.setNumAnswers(payload.n, payload.d);
-          break;
-        case "displayAnswerResultsBoard": {
-          questionUi?.showResults(payload.results, payload.numPlayers);
-          break;
-        }
-        case "leaderboardBoard":
-          ui?.remove();
-          questionUi = undefined;
-          setTimeout(() => {
-            ui = new Leaderboard(document.body, payload.leaderboard);
-          }, 500);
-          break;
-        case "ggBoard": {
-          ui?.remove();
-          footer.remove();
-          setTimeout(() => {
-            const downloadBtn = Dom.button(
-              "Download Results",
-              () => {
-                const csv = generateGameSummaryCsv(
-                  payload.questionNums,
-                  payload.players,
-                  gameFile.addlQuestions,
-                );
-                downloadFile("kaxing_game_summary.csv", csv);
-              },
-              "bigbtn finalDownload",
-            );
-            Dom.insertEl(downloadBtn, document.body).then(() => {
-              downloadBtn.style.opacity = "1";
-            });
-          }, 20000);
-          r(payload.leaderboard);
-          break;
-        }
-        default:
-          ((x: never) => {
-            throw new Error(x);
-          })(payload);
-      }
-    });
+      },
+      questions,
+      code,
+    );
   });
 }
 
@@ -255,11 +68,8 @@ async function gameLoop() {
   const questions = await uploadQuestions();
   window.onbeforeunload = () => "Are you sure you want to leave the game?";
   const code = await getGameCode(questions);
-  await pairController();
-  await waitForGameToOpen();
-  await homeScreen(code);
-  const finalResults = await gameScreen(questions, code);
-  await displayResults(finalResults);
+  await pairController(questions, code);
+  await mainGameLoop(socket, questions, code, false);
 }
 
 window.onload = () => {
