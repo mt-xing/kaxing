@@ -7,6 +7,8 @@ declare const QRCode: any;
 export default class ControllerJoin {
   #wrap: HTMLElement;
 
+  #secondDispBtn: HTMLButtonElement;
+
   constructor(
     parent: HTMLElement,
     connect: (pwd: string) => Promise<boolean>,
@@ -55,18 +57,18 @@ export default class ControllerJoin {
     form.appendChild(btn);
     wrap.appendChild(form);
 
-    const secondDispWrap = Dom.div(
-      Dom.button(
-        "Open second display for images",
-        () => {
-          secondDispWrap.parentElement?.removeChild(secondDispWrap);
-          spawnWindow(questions, code);
-        },
-        "bigbtn",
-      ),
-      "finalDownload visible",
+    const secondDispBtn = Dom.button(
+      "Open second display for images",
+      () => {
+        secondDispBtn.disabled = true;
+        spawnWindow(questions, code);
+      },
+      "bigbtn finalDownload",
     );
-    wrap.appendChild(secondDispWrap);
+    Dom.insertEl(secondDispBtn, document.body).then(() => {
+      secondDispBtn.style.opacity = "1";
+    });
+    this.#secondDispBtn = secondDispBtn;
 
     this.#wrap = Dom.outerwrap(wrap);
     Dom.insertEl(this.#wrap, parent).then(() => {
@@ -76,5 +78,12 @@ export default class ControllerJoin {
 
   async remove() {
     await Dom.deleteOuterwrap(this.#wrap);
+
+    this.#secondDispBtn.disabled = true;
+    this.#secondDispBtn.style.opacity = "0";
+
+    setTimeout(() => {
+      this.#secondDispBtn.parentElement?.removeChild(this.#secondDispBtn);
+    }, 2000);
   }
 }

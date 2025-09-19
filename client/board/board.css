@@ -842,11 +842,7 @@ audio {
     left: 1em;
     opacity: 0;
     transition: opacity 2s ease-in-out;
-}
-
-.finalDownload.visible {
-    opacity: 1;
-    transition: none;
+    z-index: 2;
 }
 
 .finalResult {
