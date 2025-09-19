@@ -1,4 +1,3 @@
-import { startupAudio } from "./audio.js";
 import mainGameLoop from "./gameFlow/gameBoard.js";
 
 const socket = (() => {
@@ -29,7 +28,6 @@ window.onload = () => {
   } catch (err) {
     console.error(err);
   }
-  startupAudio();
   if (window.opener) {
     window.opener.postMessage("sideScreenReady");
   }
