@@ -662,6 +662,26 @@ audio {
     height: 40vh;
 }
 
+.imgOnly .questionContent {
+    height: 100%;
+    transform: none;
+}
+
+.imgOnly .questionContent p {
+    display: none;
+}
+
+.imgOnly.hasImg .imgWrap {
+    flex-grow: 1;
+    flex-basis: 0;
+    height: 100%;
+    transform: none;
+
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
 .persistentFooter {
     height: 40px;
     box-sizing: border-box;
