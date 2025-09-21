@@ -63,6 +63,7 @@ function SingleAnswer(props: StandardQuestionEditorProps & { i: number }) {
       <textarea
         value={q.answers[i]}
         onChange={(evt) => setAnswer(evt.target.value)}
+        placeholder="Answer Choice Here"
       ></textarea>
     </div>
   );
