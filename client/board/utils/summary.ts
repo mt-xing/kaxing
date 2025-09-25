@@ -57,7 +57,7 @@ export function generateGameSummaryCsv(
         }
 
         const answer = player.answers[sNum];
-        if (answer === null) {
+        if (!answer) {
           playerRow.push("No Response", "-", "-", "0");
           return;
         }
