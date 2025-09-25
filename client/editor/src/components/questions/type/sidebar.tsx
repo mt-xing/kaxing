@@ -22,6 +22,22 @@ export default function TypeQuestionSidebar(props: TypeQuestionEditorProps) {
           Case Insensitive
         </label>
       </p>
+      <p>
+        <label>
+          Max Characters:{' '}
+          <input
+            type="number"
+            value={q.maxChars}
+            onChange={(evt) => {
+              const maxChars = parseInt(evt.target.value, 10);
+              if (Number.isNaN(maxChars) || maxChars < 1) {
+                return;
+              }
+              modify({ ...q, maxChars });
+            }}
+          />
+        </label>
+      </p>
     </>
   );
 }
