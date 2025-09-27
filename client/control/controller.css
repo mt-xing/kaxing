@@ -1,3 +1,10 @@
+@font-face {
+  font-family: 'SymbolaRegular';
+  src: url('https://michaelxing.com/blog/SymbolaRegular.ttf') format('truetype');
+  font-weight: normal;
+  font-style: normal;
+}
+
 .infoScreen {
   max-width: 100%;
   padding: 1em;
@@ -90,6 +97,7 @@
   margin-top: 2.2vh;
   font-size: 1.5vh;
   cursor: pointer;
+  font-family: 'SymbolaRegular', sans-serif;
 }
 
 .questionNumWrap .qNum {
