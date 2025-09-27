@@ -14,7 +14,11 @@ export function spawnWindow(questions: KaXingSaveFile, code: string) {
     }
   });
 
-  extraWindow = window.open("extra.html", "KaXing Display");
+  extraWindow = window.open(
+    "extra.html",
+    "KaXing Display",
+    "height=600,width=800",
+  );
   return extraWindow;
 }
 
