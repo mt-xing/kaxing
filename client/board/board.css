@@ -424,6 +424,9 @@
     background: rgba(255, 255, 255, 0.1);
     box-shadow: 0 0 10px 0 black;
 
+    box-sizing: border-box;
+    overflow: visible;
+
     position: relative;
 
     display: flex;
@@ -440,7 +443,7 @@
 
 .countdown p, .submissions p {
     z-index: 5;
-    position: relative;
+    position: absolute;
     text-shadow: 0 0 5px black;
     font-size: 1.25vw;
     text-align: center;
@@ -448,7 +451,7 @@
 }
 
 .countdown p {
-    font-size: 2vw;
+    font-size: 2.3vw;
     opacity: 1;
 }
 
