@@ -62,7 +62,7 @@ export function generateGameSummaryCsv(
           return;
         }
 
-        playerRow.push(player.record[sNum] > 0 ? "Correct" : "Wrong");
+        playerRow.push(player.correct[sNum] ? "Correct" : "Wrong");
         switch (answer.t) {
           case "standard":
           case "tf":
