@@ -4,6 +4,7 @@ export type Player = {
   name: string;
   score: number;
   answers: (Answer | null)[];
+  correct: boolean[];
   record: number[];
   answerTimes: number[];
   /** Previous rank number (NOT zero-indexed) */

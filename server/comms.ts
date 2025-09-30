@@ -171,9 +171,9 @@ export default class Communicator {
     this.#players.forEach((p, pid) => {
       this.sendToPlayer(pid, {
         t: "result",
-        correct: p.record[q] !== undefined ? p.record[q] > 0 : null,
+        correct: p.correct[q] !== undefined ? p.correct[q] : null,
         points: p.score,
-        history: p.record.map((x) => x > 0),
+        history: p.correct,
         rank: ranks.get(p) ?? -1,
         numPlayers: this.#players.size,
         answerTime: p.answerTimes[q],
@@ -263,7 +263,7 @@ export default class Communicator {
           rank,
           points: Math.round(p.score),
           numPlayers: this.#players.size,
-          numCorrect: p.record.reduce((a, x) => (x > 0 ? a + 1 : a), 0),
+          numCorrect: p.correct.reduce((a, x) => (x ? a + 1 : a), 0),
           numQ,
         });
       });

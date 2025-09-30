@@ -107,6 +107,7 @@ export default class KaXingGame {
       name,
       score: 0,
       answers: [],
+      correct: [],
       record: [],
       answerTimes: [],
       addlQuestions,
@@ -273,6 +274,7 @@ export default class KaXingGame {
     player.answerTimes[this.#currentQuestion] =
       (responseTime - this.#currentCountdown.startTime) / 1000;
     if (wasAnswerCorrect(q, response)) {
+      player.correct[this.#currentQuestion] = true;
       player.record[this.#currentQuestion] = awardPoints(
         player,
         responseTime,
@@ -280,6 +282,7 @@ export default class KaXingGame {
         q,
       );
     } else {
+      player.correct[this.#currentQuestion] = false;
       player.record[this.#currentQuestion] = 0;
     }
 
@@ -303,7 +306,7 @@ export default class KaXingGame {
       }
       case "type": {
         if (result.t === q.t && response.t === q.t) {
-          if (player.record[this.#currentQuestion] > 0) {
+          if (player.correct[this.#currentQuestion]) {
             result.numCorrect++;
           }
         }
@@ -311,7 +314,7 @@ export default class KaXingGame {
       }
       case "map": {
         if (result.t === q.t && response.t === q.t) {
-          if (player.record[this.#currentQuestion] > 0) {
+          if (player.correct[this.#currentQuestion]) {
             result.numCorrect++;
           } else {
             result.wrongCoords.push(response.a);
