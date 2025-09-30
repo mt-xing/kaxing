@@ -91,6 +91,7 @@ export default class Broker {
       name,
       score: 0,
       answers: [],
+      correct: [],
       record: [],
       answerTimes: [],
       addlQuestions,
