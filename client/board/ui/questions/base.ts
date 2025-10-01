@@ -1,6 +1,7 @@
 import Dom from "../../../dom.js";
 import { Question, QuestionResults } from "../../../../shared/question.js";
 import { playEnd, playQuestion, stopAudio } from "../../audio.js";
+import { renderMdLatexToP } from "../../utils/markdownLatex.js";
 
 export default abstract class QuestionBoard {
   #wrap: HTMLElement;
@@ -45,7 +46,10 @@ export default abstract class QuestionBoard {
     this.#countdown.appendChild(this.#countdownTime);
     this.#wrap.appendChild(this.#countdown);
 
-    const questionContent = Dom.div(Dom.p(question.text), "questionContent");
+    const questionContent = Dom.div(
+      renderMdLatexToP(question.text),
+      "questionContent",
+    );
     const questionInner = Dom.div(questionContent, "questionInner");
     this.#wrap.appendChild(questionInner);
 

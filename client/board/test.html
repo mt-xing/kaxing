@@ -20,45 +20,56 @@
         <script src="https://cdn.jsdelivr.net/npm/@drustack/leaflet.resetview/dist/L.Control.ResetView.min.js"></script>
         <script src="https://cdn.jsdelivr.net/npm/@tsparticles/confetti@3.0.3/tsparticles.confetti.bundle.min.js"></script>
 
+        <script src="./deps/katex.min.js"></script>
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.8/dist/katex.min.css" integrity="sha384-GvrOXuhMATgEsSwCs4smul74iXGOixntILdUW9XmUC6+HX0sLNAK3q71HotJqlAn" crossorigin="anonymous">
+
         <script type="module">
-          // import MapQuestionBoard from "./ui/questions/map.js";
+          import MapQuestionBoard from "./ui/questions/map.js";
           import CreditsUi from "./ui/credits.js";
           import Leaderboard from "./ui/leaderboard.js";
+
+          import { marked } from "https://cdn.jsdelivr.net/npm/marked/lib/marked.esm.js";
+          import markedKatex from "./deps/marked-katex.js";
+
           window.addEventListener('load', () => {
-            // const b = new MapQuestionBoard(document.body, {
-            //   "t": "map",
-            //   "points": 1000,
-            //   "time": 20,
-            //   "text": "Where is lecture?",
-            //   img: 'https://i.redd.it/6d52ezqlwj951.png',
-            //   startLat: 42.44597494631099, 
-            //   startLon: -76.47993615775893,
-            //   startZoom: 15,
-            //   minZoom: 15,
-            //   maxZoom: 19,
-            //   correct: {
-            //     matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
-            //     representativeAnswers: [[42.44490022247275, -76.48084649037085]],
-            //   },
-            // }, 1);
-            // setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
-            // setTimeout(() => {
-            //   b.showResults({
-            //     t: "map",
-            //     numCorrect: 18,
-            //     wrongCoords: [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]],
-            //   }, 20);
-            // }, 4000);
-            // { name: string; points: number; diff: number }[]
-            const l = new Leaderboard(document.body, [{name: "a", points: 9999, diff: 0}, {name: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", points: 2000, diff: 0}, {name: "c", points: 1, diff: 0}]);
+            const b = new MapQuestionBoard(document.body, {
+              "t": "map",
+              "points": 1000,
+              "time": 20,
+              "text": "Where is lecture? This is **inline** Markdown _stuff_ with \`code\` and $1+1\\implies2$ stuff",
+              img: 'https://i.redd.it/6d52ezqlwj951.png',
+              startLat: 42.44597494631099, 
+              startLon: -76.47993615775893,
+              startZoom: 15,
+              minZoom: 15,
+              maxZoom: 19,
+              correct: {
+                matches: [{center: [42.44490022247275, -76.48084649037085], radius: 0.000594}],
+                representativeAnswers: [[42.44490022247275, -76.48084649037085]],
+              },
+            }, 1);
+            setTimeout(() => {b.showAnswers();b.startCountdown();}, 2000);
             setTimeout(() => {
-              l.slideLeft();
-              new CreditsUi(document.body);
-            }, 1000);
+              b.showResults({
+                t: "map",
+                numCorrect: 18,
+                wrongCoords: [[42.44597494631099, -76.47993615775893], [42.44597494631099, -76.4992]],
+              }, 20);
+            }, 4000);
+            // { name: string; points: number; diff: number }[]
+            // const l = new Leaderboard(document.body, [{name: "a", points: 9999, diff: 0}, {name: "bbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbbb", points: 2000, diff: 0}, {name: "c", points: 1, diff: 0}]);
+            // setTimeout(() => {
+            //   l.slideLeft();
+            //   new CreditsUi(document.body);
+            // }, 1000);
+
+            // marked.use(markedKatex({throwOnError: false}));
+            // document.getElementById("text").innerHTML = marked.parseInline(`This is **inline** Markdown _stuff_ with \`code\` and $1+1\\implies2$ stuff`);
           })
         </script>
     </head>
     <body>
+      <!-- <div id="text" style="position:fixed;z-index:10;top:0;left:0;min-width:100px;min-height:100px;background:green;"></div> -->
       <div class="persistentFooter">
         <p class="name"><span>This is </span><span class="logo">KaXing</span></p>
         <p><span>Join at <code>mxi.ng/kx</code> with code: </span><code class="gameCode">abcde</code></p>
