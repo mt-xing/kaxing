@@ -1,6 +1,7 @@
 import Dom from "../../../dom.js";
 import { Question, QuestionResults } from "../../../../shared/question.js";
 import QuestionBoard from "./base.js";
+import { renderMdLatexToSpan } from "../../utils/markdownLatex.js";
 
 export default class StandardQuestionBoard extends QuestionBoard {
   #answers: HTMLElement[];
@@ -55,7 +56,7 @@ export default class StandardQuestionBoard extends QuestionBoard {
           Dom.div(getButtonText(i, j)),
           `card answer ${getButtonType(i, j)}`,
         );
-        answer.appendChild(Dom.span(question.answers[i * 2 + j]));
+        answer.appendChild(renderMdLatexToSpan(question.answers[i * 2 + j]));
         w.appendChild(answer);
         this.#answers.push(answer);
       }
