@@ -26,10 +26,13 @@ export default class CreditsUi {
 
     wrap.appendChild(Dom.p("Open Source Libraries", "title"));
     wrap.appendChild(Dom.p("- socket.io", "main sub"));
-    wrap.appendChild(Dom.p("- OpenStreetMap", "main sub"));
-    wrap.appendChild(Dom.p("- Leaflet", "main sub"));
     wrap.appendChild(Dom.p("- qrcode.js", "main sub"));
     wrap.appendChild(Dom.p("- tsParticles", "main sub"));
+    wrap.appendChild(Dom.p("- Marked", "main sub"));
+    wrap.appendChild(Dom.p("- KaTeX", "main sub"));
+    wrap.appendChild(Dom.p("- marked-katex-extension", "main sub"));
+    wrap.appendChild(Dom.p("- OpenStreetMap", "main sub"));
+    wrap.appendChild(Dom.p("- Leaflet", "main sub"));
 
     wrap.appendChild(Dom.p("Additional Special Thanks", "title"));
     wrap.appendChild(Dom.p("Goldman Sachs", "main"));
