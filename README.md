@@ -8,9 +8,29 @@ A real-time quiz game where questions are displayed on a screen and players answ
 
 Works just like that other quiz game, except free and open source and not owned by private equity.
 
+Includes many core features, such as:
+- Multiple choice questions
+- True / false questions
+- Short answer questions
+- Image support
+- Static, non-question slides
+
+Also includes a bunch of features I wanted, including:
+- Remotely control the game from your phone
+- A map / geo-guesser style question type
+- Custom regex matching on short answer questions
+- Advanced timing controls, pausing on the question intro for as long as needed
+- Option to show answer choices without accepting responses
+- Ability to jump around questions
+- Custom game joining questions (eg: student ID)
+- Dual screen mode with image-only display on second screen
+- Customizable music
+
 ## Play
 
 Create your own or play a game at [https://michaelxing.com/kaxing](https://michaelxing.com/kaxing)
+
+My site hosts no user content. All games are saved as a proprietary `.kaxing` file (totally not a renamed JSON) to your local machine.
 
 ### Custom Music
 
