@@ -72,4 +72,4 @@ The main game itself is written in TypeScript with no UI libraries or frameworks
 
 Run `npm run server-build` and `npm run client-build` to build the output bundles for the server and client, respectively.
 
-The equation editor is a separate project, inside the `client/editor` directory. This is a React app running on Vue, requiring a separate `npm ci` from inside the folder to install dependencies. Then, `npm run dev` to start the dev server. `npm run build` builds the final editor.
+The question editor is a separate project, inside the `client/editor` directory. This is a React app running on Vite, requiring a separate `npm ci` from inside the folder to install dependencies. Then, `npm run dev` to start the dev server. `npm run build` builds the final editor.
