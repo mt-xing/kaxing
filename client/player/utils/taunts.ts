@@ -33,6 +33,7 @@ const WRONG = [
   `Not very brat coded`,
   `"2 + 2 = 10... in base 4 I'M FINE" - GLaDOS`,
   `Unfortunate`,
+  `Chat, are we cooked?`,
 ];
 const WRONG_MEAN = [
   `git gud`,
