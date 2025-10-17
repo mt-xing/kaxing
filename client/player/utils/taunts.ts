@@ -43,6 +43,7 @@ const WRONG_MEAN = [
   `When I say failure, you say yeah!`,
   `Neener neener`,
   `Cooked`,
+  `Get owned`,
 ];
 const NONE = [
   `There's no guessing penalty in this game`,
@@ -69,6 +70,7 @@ const FAST_WRONG = [
   "Did you misclick?",
   "Try taking the time to pick the correct answer",
   "Maybe slow down a bit",
+  "Womp womp",
 ];
 // Taunts for when players answer very slowly
 const SLOW_CORRECT = [
@@ -78,6 +80,7 @@ const SLOW_CORRECT = [
   "Nice work. Slow work, but nice work.",
   "Incredible last second guess",
   "Sometimes a hail mary pays off",
+  "What's that saying about the turtle and the hare?",
 ];
 const SLOW_WRONG = [
   "Worth a try",
