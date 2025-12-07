@@ -23,6 +23,7 @@ export default class CreditsUi {
     wrap.appendChild(Dom.p("- CS 2112 Fall 2024", "main sub"));
     wrap.appendChild(Dom.p("- CS 2110 Spring 2025", "main sub"));
     wrap.appendChild(Dom.p("(DIS 206 and DIS 212)", "main sub"));
+    wrap.appendChild(Dom.p("- CS 2112 Fall 2025", "main sub"));
 
     wrap.appendChild(Dom.p("Open Source Libraries", "title"));
     wrap.appendChild(Dom.p("- socket.io", "main sub"));
