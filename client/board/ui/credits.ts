@@ -7,8 +7,9 @@ export default class CreditsUi {
     const wrap = Dom.div(Dom.h1("KaXing"), "scroll");
     wrapOuter.appendChild(wrap);
 
-    wrap.appendChild(Dom.p("Created by", "title"));
+    wrap.appendChild(Dom.p("Designed and Programmed by", "title"));
     wrap.appendChild(Dom.p("Michael Xing", "main"));
+    wrap.appendChild(Dom.p("Question content not by me", "smallMain"));
 
     wrap.appendChild(Dom.p("Inspired by", "title"));
     wrap.appendChild(Dom.p("Kahoot", "main"));
