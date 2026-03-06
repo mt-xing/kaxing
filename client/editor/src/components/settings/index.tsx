@@ -33,7 +33,7 @@ export default function Settings(props: SettingsProps) {
           Game Author:
           <input
             type="text"
-            value={name}
+            value={author}
             onChange={(e) => setAuthor(e.target.value)}
             placeholder="Unknown"
           />
