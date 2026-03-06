@@ -46,6 +46,7 @@ function App() {
       game: "kaxing",
       version: "1.0.0",
       title,
+      author,
       addlQuestions,
       questions,
     };
