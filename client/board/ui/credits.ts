@@ -1,7 +1,7 @@
 import Dom from "../../dom.js";
 
 export default class CreditsUi {
-  constructor(parent: HTMLElement) {
+  constructor(parent: HTMLElement, author?: string) {
     const wrapOuter = Dom.div(undefined, "credits card");
 
     const wrap = Dom.div(Dom.h1("KaXing"), "scroll");
@@ -9,7 +9,9 @@ export default class CreditsUi {
 
     wrap.appendChild(Dom.p("Designed and Programmed by", "title"));
     wrap.appendChild(Dom.p("Michael Xing", "main"));
-    wrap.appendChild(Dom.p("Question content not by me", "smallMain"));
+
+    wrap.appendChild(Dom.p("Question Content by", "title"));
+    wrap.appendChild(Dom.p(author ?? "Unknown", "main"));
 
     wrap.appendChild(Dom.p("Inspired by", "title"));
     wrap.appendChild(Dom.p("Kahoot", "main"));

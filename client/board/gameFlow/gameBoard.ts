@@ -225,5 +225,5 @@ export default async function mainGameLoop(
   await waitForGameToOpen(socket);
   await homeScreen(socket, code);
   const finalResults = await gameScreen(socket, questions, code, isSideScreen);
-  await displayResults(finalResults);
+  await displayResults(finalResults, questions.author);
 }

@@ -4,6 +4,7 @@ export type KaXingSaveFile = {
   game: "kaxing";
   version: "1.0.0";
   title: string;
+  author?: string;
   addlQuestions?: string[];
   questions: Question[];
 };

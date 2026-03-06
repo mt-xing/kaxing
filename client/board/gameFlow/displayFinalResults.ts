@@ -7,6 +7,7 @@ import Leaderboard from "../ui/leaderboard.js";
 
 export default async function displayResults(
   leaderboard: { name: string; points: number }[],
+  author?: string,
 ) {
   playGG();
 
@@ -85,7 +86,7 @@ export default async function displayResults(
 
     setTimeout(() => {
       l.slideLeft();
-      new CreditsUi(document.body);
+      new CreditsUi(document.body, author);
     }, 1000);
   }, 16000);
 }

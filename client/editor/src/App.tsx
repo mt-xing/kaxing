@@ -13,6 +13,7 @@ function App() {
   const [questions, setQuestions] = useState<Question[] | undefined>(undefined);
   const [showSettings, setShowSettings] = useState(true);
   const [title, setTitle] = useState("");
+  const [author, setAuthor] = useState("");
   const [addlQuestions, setAddlQuestions] = useState<string[] | undefined>(
     undefined,
   );
@@ -25,6 +26,7 @@ function App() {
     (f: FileSystemFileHandle, game: KaXingSaveFile) => {
       setQuestions(game.questions);
       setTitle(game.title);
+      setAuthor(game.author ?? "Unknown");
       setAddlQuestions(game.addlQuestions);
       setFileHandle(f);
       setShowSettings(false);
@@ -113,9 +115,11 @@ function App() {
       {showSettings ? (
         <Settings
           startName={title}
+          startAuthor={author}
           startAddlQuestions={addlQuestions}
-          close={(newName, additionalQuestions) => {
+          close={(newName, author, additionalQuestions) => {
             setTitle(newName);
+            setAuthor(author);
             setAddlQuestions(additionalQuestions);
             setShowSettings(false);
           }}
