@@ -61,7 +61,7 @@ function App() {
       ws.write(JSON.stringify(saveFile));
       ws.close();
     });
-  }, [questions, fileHandle, title, addlQuestions]);
+  }, [questions, author, fileHandle, title, addlQuestions]);
 
   useEffect(() => {
     const saveHandler = (evt: KeyboardEvent) => {
