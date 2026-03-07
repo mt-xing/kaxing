@@ -9,9 +9,20 @@ export default class TFQuestionBoard extends QuestionBoard {
     parent: HTMLElement,
     question: Extract<Question, { t: "tf" }>,
     numPlayers: number,
+    questionNum: number,
+    totalQuestions: number,
   ) {
     const answerContent = Dom.div();
-    super(parent, question, numPlayers, answerContent, undefined, ["tfWrap"]);
+    super(
+      parent,
+      question,
+      numPlayers,
+      questionNum,
+      totalQuestions,
+      answerContent,
+      undefined,
+      ["tfWrap"],
+    );
 
     const answerRows = [];
     this.#answers = [];

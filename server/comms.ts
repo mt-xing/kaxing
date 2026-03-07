@@ -118,6 +118,7 @@ export default class Communicator {
     this.sendToBoard({
       t: "showQuestionBoard",
       numPlayers: this.#players.size,
+      questionNum: this.#questionNumbers[q],
     });
     this.sendQuestionStateToController(q, "questionMain");
   }

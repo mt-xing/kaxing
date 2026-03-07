@@ -1,7 +1,7 @@
 import Dom from "../../dom.js";
 import { Question } from "../../question.js";
 
-function getQuestionType(t: Question["t"]): string {
+export function getQuestionType(t: Question["t"]): string {
   switch (t) {
     case "standard":
       return "Multiple Choice";

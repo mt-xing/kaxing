@@ -12,6 +12,8 @@ export default class TypeQuestionBoard extends QuestionBoard {
     parent: HTMLElement,
     question: Extract<Question, { t: "type" }>,
     numPlayers: number,
+    questionNum: number,
+    totalQuestions: number,
   ) {
     const answerContent = Dom.div(Dom.p("⬇️ Type your answer now ⬇️"), "instr");
     answerContent.appendChild(
@@ -20,10 +22,16 @@ export default class TypeQuestionBoard extends QuestionBoard {
 
     const responseContent = Dom.div();
 
-    super(parent, question, numPlayers, answerContent, responseContent, [
-      "miniAnswer",
-      "typeResponseWrap",
-    ]);
+    super(
+      parent,
+      question,
+      numPlayers,
+      questionNum,
+      totalQuestions,
+      answerContent,
+      responseContent,
+      ["miniAnswer", "typeResponseWrap"],
+    );
 
     this.#responseBar = new ResponseBar(responseContent);
 

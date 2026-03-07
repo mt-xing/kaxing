@@ -2,6 +2,7 @@ import Dom from "../../../dom.js";
 import { Question, QuestionResults } from "../../../../shared/question.js";
 import { playEnd, playQuestion, stopAudio } from "../../audio.js";
 import { renderMdLatexToP } from "../../utils/markdownLatex.js";
+import { getQuestionType } from "../questionIntro.js";
 
 export default abstract class QuestionBoard {
   #wrap: HTMLElement;
@@ -20,6 +21,8 @@ export default abstract class QuestionBoard {
 
   #submissionTextDenom: HTMLElement;
 
+  #questionHeader: HTMLElement;
+
   protected question: Question;
 
   #timeout?: ReturnType<typeof setTimeout>;
@@ -28,6 +31,8 @@ export default abstract class QuestionBoard {
     parent: HTMLElement,
     question: Question,
     numPlayers: number,
+    questionNum: number,
+    totalQuestions: number,
     answerUi: HTMLDivElement,
     resultsUi?: HTMLDivElement,
     additionalClasses?: string[],
@@ -45,6 +50,16 @@ export default abstract class QuestionBoard {
     this.#countdownTime = Dom.p(`${question.time}`);
     this.#countdown.appendChild(this.#countdownTime);
     this.#wrap.appendChild(this.#countdown);
+
+    this.#questionHeader = Dom.div(undefined, "questionHeader");
+    this.#questionHeader.appendChild(
+      Dom.p(`Question ${questionNum} / ${totalQuestions}`),
+    );
+    this.#questionHeader.appendChild(
+      Dom.p(getQuestionType(question.t), "center"),
+    );
+    this.#questionHeader.appendChild(Dom.p(`${question.points} points`));
+    this.#wrap.appendChild(this.#questionHeader);
 
     const questionContent = Dom.div(
       renderMdLatexToP(question.text),
@@ -82,7 +97,8 @@ export default abstract class QuestionBoard {
     this.#wrap.appendChild(this.#submissionWrap);
 
     Dom.insertEl(this.#wrap, parent).then(() => {
-      this.#wrap.style.transform = "translateY(-25px)";
+      this.#wrap.style.transform = "translateY(-20px)";
+      this.#questionHeader.classList.add("show");
     });
   }
 
@@ -140,6 +156,7 @@ export default abstract class QuestionBoard {
   }
 
   async remove() {
+    this.#questionHeader.classList.remove("show");
     await Dom.deleteOuterwrap(this.#wrap);
     stopAudio();
 

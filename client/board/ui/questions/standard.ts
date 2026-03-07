@@ -12,9 +12,18 @@ export default class StandardQuestionBoard extends QuestionBoard {
       | Extract<Question, { t: "standard" }>
       | Extract<Question, { t: "multi" }>,
     numPlayers: number,
+    questionNum: number,
+    totalQuestions: number,
   ) {
     const answerContent = Dom.div();
-    super(parent, question, numPlayers, answerContent);
+    super(
+      parent,
+      question,
+      numPlayers,
+      questionNum,
+      totalQuestions,
+      answerContent,
+    );
 
     const answerRows = [];
     this.#answers = [];

@@ -64,6 +64,7 @@ function gameScreen(
 ): Promise<{ name: string; points: number }[]> {
   const { questions } = gameFile;
   const footer = new PersistentFooter(document.body, gameCode);
+  const totalQuestions = questions.filter((x) => x.t !== "text").length;
 
   return new Promise((r) => {
     let ui: { remove: () => Promise<void> } | undefined;
@@ -101,6 +102,8 @@ function gameScreen(
               document.body,
               question,
               payload.numPlayers,
+              payload.questionNum,
+              totalQuestions,
             );
             ui = questionUi;
             break;
@@ -113,6 +116,8 @@ function gameScreen(
                 document.body,
                 question,
                 payload.numPlayers,
+                payload.questionNum,
+                totalQuestions,
               );
               ui = questionUi;
               break;
@@ -123,6 +128,8 @@ function gameScreen(
                 document.body,
                 question,
                 payload.numPlayers,
+                payload.questionNum,
+                totalQuestions,
               );
               ui = questionUi;
               break;
@@ -143,6 +150,8 @@ function gameScreen(
                 document.body,
                 question,
                 payload.numPlayers,
+                payload.questionNum,
+                totalQuestions,
               );
               ui = questionUi;
               break;
@@ -153,6 +162,8 @@ function gameScreen(
                 document.body,
                 question,
                 payload.numPlayers,
+                payload.questionNum,
+                totalQuestions,
               );
               ui = questionUi;
               break;

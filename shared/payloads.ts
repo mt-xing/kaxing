@@ -69,6 +69,7 @@ export type GameStateBoardResponse =
     }
   | {
       t: "showQuestionBoard";
+      questionNum: number;
       numPlayers: number;
     }
   | {

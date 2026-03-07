@@ -10,7 +10,9 @@ export default class TextQuestionBoard extends QuestionBoard {
     question: Extract<Question, { t: "text" }>,
     numPlayers: number,
   ) {
-    super(parent, question, numPlayers, Dom.div());
+    super(parent, question, numPlayers, 0, 0, Dom.div(), undefined, [
+      "textSlide",
+    ]);
   }
 
   showAnswers() {}

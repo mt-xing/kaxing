@@ -25,6 +25,8 @@ export default class MapQuestionBoard extends QuestionBoard {
     parent: HTMLElement,
     question: Extract<Question, { t: "map" }>,
     numPlayers: number,
+    questionNum: number,
+    totalQuestions: number,
   ) {
     const answerContent = Dom.div(
       Dom.p("⬇️ Pin the location on your maps now ⬇️"),
@@ -36,10 +38,16 @@ export default class MapQuestionBoard extends QuestionBoard {
 
     const responseContent = Dom.div();
 
-    super(parent, question, numPlayers, answerContent, responseContent, [
-      "miniAnswer",
-      "typeResponseWrap",
-    ]);
+    super(
+      parent,
+      question,
+      numPlayers,
+      questionNum,
+      totalQuestions,
+      answerContent,
+      responseContent,
+      ["miniAnswer", "typeResponseWrap"],
+    );
 
     const map = Dom.div(undefined, "map");
     this.#mapId = `map-${Math.random()}`;
