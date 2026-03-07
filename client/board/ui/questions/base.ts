@@ -97,7 +97,7 @@ export default abstract class QuestionBoard {
     this.#wrap.appendChild(this.#submissionWrap);
 
     Dom.insertEl(this.#wrap, parent).then(() => {
-      this.#wrap.style.transform = "translateY(-20px)";
+      this.#wrap.style.transform = "translateY(0)";
       this.#questionHeader.classList.add("show");
     });
   }

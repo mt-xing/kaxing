@@ -259,7 +259,7 @@
     font-size: 2vw;
     text-align: center;
     margin: 0 10vw;
-    height: calc(45vh - 20px);
+    height: calc(45vh - 40px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -271,7 +271,7 @@
 
 .questionOuter {
     width: 100%;
-    height: calc(100vh - 40px);
+    height: calc(100vh - 80px);
     transform: translateY(100vh);
     transition: transform 0.75s cubic-bezier(0.680, -0.550, 0.265, 1.550) 0.2s;
 
@@ -305,7 +305,7 @@
 }
 
 .answerContent {
-    height: calc(45vh - 20px);
+    height: calc(45vh - 40px);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -365,7 +365,7 @@
 
 .miniAnswer .answerContent {
     height: 10vh;
-    margin-top: calc(30vh - 20px);
+    margin-top: calc(30vh - 40px);
     transition: transform 0.5s cubic-bezier(0.25, 0, 0.07, 1.000), opacity 0.5s ease-out;
     transform: translateY(30vh);
     opacity: 0;
@@ -377,7 +377,7 @@
 }
 
 .miniAnswer.showAnswers.hasImg .answerContent {
-    transform: translateY(5vh);
+    transform: translateY(8vh);
 }
 
 .miniAnswer.showAnswers.showResults .answerContent {
@@ -397,8 +397,8 @@
 
 .resultsContent {
     position: absolute;
-    top: calc(45vh - 20px);
-    height: calc(45vh - 20px);
+    top: calc(45vh - 40px);
+    height: calc(45vh - 40px);
     width: 100%;
     display: flex;
     flex-direction: column;
@@ -690,7 +690,7 @@ audio {
     box-sizing: border-box;
 
     position: fixed;
-    top: 0;
+    top: -40px;
     left: 0;
     right: 0;
 
