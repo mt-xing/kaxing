@@ -19,7 +19,7 @@ export default class ImgOnly extends QuestionBoard {
       totalQuestions,
       answerContent,
       undefined,
-      ["imgOnly"],
+      question.t === "text" ? ["imgOnly", "textSlide"] : ["imgOnly"],
     );
   }
 
