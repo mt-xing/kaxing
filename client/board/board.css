@@ -712,6 +712,7 @@ audio {
 .questionHeader .center {
     flex-grow: 1;
     font-weight: 900;
+    font-size: 25px;
 }
 
 .questionHeader.show {
