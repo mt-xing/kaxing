@@ -686,7 +686,7 @@ audio {
 }
 
 .questionHeader {
-    height: 40px;
+    height: calc(40px + 3vh);
     box-sizing: border-box;
 
     position: fixed;
@@ -698,7 +698,7 @@ audio {
     flex-direction: row;
     align-items: center;
     justify-content: center;
-    padding: 0 15px;
+    padding: 0 2vw;
 
     opacity: 0;
     transition: opacity 0.5s ease-in-out;
@@ -712,7 +712,7 @@ audio {
 .questionHeader .center {
     flex-grow: 1;
     font-weight: 900;
-    font-size: 25px;
+    font-size: calc(25px + 1vh);
 }
 
 .questionHeader.show {
