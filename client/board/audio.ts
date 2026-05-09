@@ -1,49 +1,50 @@
+import { KaXingSaveFile } from "../fileFormat";
+
 let audioState:
   | false
   | {
-      theme: HTMLAudioElement;
-      end: HTMLAudioElement;
-      gg: HTMLAudioElement;
+      theme?: HTMLAudioElement;
+      end?: HTMLAudioElement;
+      gg?: HTMLAudioElement;
       questions: Record<number, HTMLAudioElement[]>;
       currentlyPlaying?: HTMLAudioElement;
     } = false;
 
 const lastPlayedSongForTime = new Map<number, number>();
 
-function spawnAudioElement(src: string) {
+function spawnAudioElement(src?: string) {
+  if (!src) {
+    return undefined;
+  }
   const el = document.createElement("AUDIO") as HTMLAudioElement;
   el.src = src;
   document.body.appendChild(el);
   return el;
 }
 
-export async function startupAudio() {
-  const path = window.location.search.substring(1);
-  if (path.length > 0) {
-    console.log("Attempting to find audio");
-    const data = await fetch(path);
-    if (data.status === 200) {
-      const contents = await data.json();
-      const themeLocation = contents.theme as string;
-      const endLocation = contents.end as string;
-      const ggLocation = contents.gg as string;
-      const questionLocations = contents.q as Record<string, string[]>;
-      if (themeLocation && endLocation && ggLocation && questionLocations) {
-        console.log("Audio found");
-        audioState = {
-          theme: spawnAudioElement(themeLocation),
-          end: spawnAudioElement(endLocation),
-          gg: spawnAudioElement(ggLocation),
-          questions: Array.from(Object.keys(questionLocations)).reduce(
-            (a, x) => ({
-              ...a,
-              [parseInt(x, 10)]: questionLocations[x].map(spawnAudioElement),
-            }),
-            {},
-          ),
-        };
-        audioState.theme.loop = true;
-      }
+export async function startupAudio(musicData: KaXingSaveFile["music"]) {
+  if (musicData) {
+    console.log("Audio found");
+    const themeLocation = musicData.theme;
+    const endLocation = musicData.end;
+    const ggLocation = musicData.gg;
+    const questionLocations = musicData.q;
+    audioState = {
+      theme: spawnAudioElement(themeLocation),
+      end: spawnAudioElement(endLocation),
+      gg: spawnAudioElement(ggLocation),
+      questions: Array.from(Object.keys(questionLocations)).reduce(
+        (a, x) => ({
+          ...a,
+          [parseInt(x, 10)]: questionLocations[x]
+            .map(spawnAudioElement)
+            .filter((e) => e !== undefined),
+        }),
+        {},
+      ),
+    };
+    if (audioState.theme) {
+      audioState.theme.loop = true;
     }
   }
 }
@@ -56,9 +57,12 @@ export function stopAudio() {
   }
 }
 
-function playSong(song: HTMLAudioElement) {
+function playSong(song?: HTMLAudioElement) {
   if (audioState) {
     stopAudio();
+    if (!song) {
+      return;
+    }
     // eslint-disable-next-line no-param-reassign
     song.currentTime = 0;
     song.play();

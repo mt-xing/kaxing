@@ -7,4 +7,10 @@ export type KaXingSaveFile = {
   author?: string;
   addlQuestions?: string[];
   questions: Question[];
+  music?: {
+    theme?: string;
+    end?: string;
+    gg?: string;
+    q: Record<string, string[]>;
+  };
 };

@@ -67,6 +67,7 @@ function pairController(
 async function gameLoop() {
   const questions = await uploadQuestions();
   window.onbeforeunload = () => "Are you sure you want to leave the game?";
+  startupAudio(questions.music);
   const code = await getGameCode(questions);
   await pairController(questions, code);
   await mainGameLoop(socket, questions, code, false);
@@ -78,6 +79,5 @@ window.onload = () => {
   } catch (err) {
     console.error(err);
   }
-  startupAudio();
   gameLoop();
 };

@@ -17,6 +17,9 @@ function App() {
   const [addlQuestions, setAddlQuestions] = useState<string[] | undefined>(
     undefined,
   );
+  const [music, setMusic] = useState<KaXingSaveFile["music"]>(
+    undefined,
+  );
   const [selectedQuestion, setSelectedQuestion] = useState(0);
   const [fileHandle, setFileHandle] = useState<
     FileSystemFileHandle | undefined
@@ -30,6 +33,7 @@ function App() {
       setAddlQuestions(game.addlQuestions);
       setFileHandle(f);
       setShowSettings(false);
+      setMusic(game.music);
     },
     [],
   );
@@ -47,6 +51,7 @@ function App() {
       version: "1.0.0",
       title,
       author,
+      music,
       addlQuestions,
       questions,
     };
@@ -61,7 +66,7 @@ function App() {
       ws.write(JSON.stringify(saveFile));
       ws.close();
     });
-  }, [questions, author, fileHandle, title, addlQuestions]);
+  }, [questions, author, fileHandle, title, music, addlQuestions]);
 
   useEffect(() => {
     const saveHandler = (evt: KeyboardEvent) => {
@@ -118,9 +123,11 @@ function App() {
           startName={title}
           startAuthor={author}
           startAddlQuestions={addlQuestions}
-          close={(newName, author, additionalQuestions) => {
+          startMusic={music}
+          close={(newName, author, music, additionalQuestions) => {
             setTitle(newName);
             setAuthor(author);
+            setMusic(music);
             setAddlQuestions(additionalQuestions);
             setShowSettings(false);
           }}

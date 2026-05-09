@@ -5,8 +5,5 @@
 .settingsWrap input[type="text"] {
   margin: 0.5em 1em;
   text-align: left;
-}
-
-.settingsWrap ul input[type="text"] {
-  min-width: 60%;
+  min-width: 50vw;
 }
